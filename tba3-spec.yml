@@ -1,0 +1,652 @@
+openapi: '3.1.0'
+info:
+  title: TBA III
+  summary: Schnittstelle für den Zugriff auf Auswertungsdaten von VERA
+  version: '0.1'
+  license:
+    name: MIT
+    url: https://opensource.org/license/MIT
+tags:
+  - name: Lerngruppen
+    description: Ergebnisse auf Ebene einer Lerngruppe
+  - name: Teilnehmende
+    description: Einzelergebnisse der Schüler:innen einer Lerngruppe 
+  - name: Schulen
+    description: Ergebnisse zusammengefasst nach Schule
+  - name: Länder
+    description: Ergebnisse auf Landesebene
+paths:
+
+# ----
+# MARK: Lerngruppen
+# ----
+
+  /lerngruppen/{id}/kompetenzstufen:
+    description: Kompetenzstufenverteilung in der Lerngruppe
+    get:
+      tags:
+        - Lerngruppen
+      parameters:
+        - $ref: '#/components/parameters/LerngruppeId'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Kompetenzstufen'
+        '404':
+          description: Lerngruppe oder Kompetenzstufenverteilung für die Lerngruppe nicht gefunden
+
+  /lerngruppen/{id}/items:
+    get:
+      description: Lösungshäufigkeiten je Item in der Lerngruppe
+      tags:
+        - Lerngruppen
+      parameters:
+        - $ref: '#/components/parameters/LerngruppeId'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Items'       
+        '404':
+          description: Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht gefunden
+
+  /lerngruppen/{id}/merkmale:
+    get:
+      description: Lösungshäufigkeiten je Merkmal-Ausprägung in der Lerngruppe, z.B. Kompetenzen, Anforderungsbereiche, Geschlecht, ... (frei wählbar)
+      tags:
+        - Lerngruppen
+      parameters:
+        - $ref: '#/components/parameters/LerngruppeId'
+        - $ref: '#/components/parameters/Merkmal'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Merkmale'
+        '400':
+          description: Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht gefunden
+
+# ----
+# MARK: Teilnehmende
+# ----
+
+  /lerngruppen/{id}/schueler/kompetenzstufen:
+    description: Kompetenzstufe je Schüler:in
+    get:
+      tags:
+        - Teilnehmende
+      parameters:
+        - $ref: '#/components/parameters/LerngruppeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/Domaene'
+                      - type: object
+                        required:
+                          - schueler
+                        properties:
+                          schueler:
+                            type: array
+                            items:
+                              allOf:
+                                - $ref: '#/components/schemas/Schueler'
+                                - type: object
+                                  required:
+                                    - kompetenzstufe
+                                  properties:
+                                    kompetenzstufe:
+                                      $ref: '#/components/schemas/Kompetenzstufe'
+                                    merkmale:
+                                      $ref: '#/components/schemas/Merkmale'
+        '404':
+          description: Lerngruppe oder Kompetenz für die Schüler:innen der Lerngruppe nicht gefunden
+
+  /lerngruppen/{id}/schueler/items:
+    description: Lösungsquote je Schüler:in und Item
+    get:
+      tags:
+        - Teilnehmende
+      parameters:
+        - $ref: '#/components/parameters/LerngruppeId'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/Domaene'
+                      - type: object
+                        required:
+                          - schueler
+                        properties:
+                          schueler:
+                            type: array
+                            items:
+                              allOf:
+                                - $ref: '#/components/schemas/Schueler'
+                                - type: object
+                                  required:
+                                    - items
+                                  properties:
+                                    items:
+                                      type: array
+                                      items:
+                                        allOf:
+                                          - $ref: '#/components/schemas/Item'
+                                          - $ref: '#/components/schemas/Loesungsquote'
+                                    merkmale:
+                                      $ref: '#/components/schemas/Merkmale'
+        '404':
+          description: Lerngruppe oder Lösungshäufigkeiten für die Schüler:innen der Lerngruppe nicht gefunden
+
+  /lerngruppen/{id}/schueler/merkmale:
+    description: Lösungsquote je Schüler:in und Merkmal-Ausprägung
+    get:
+      tags:
+        - Teilnehmende
+      parameters:
+        - $ref: '#/components/parameters/LerngruppeId'
+        - $ref: '#/components/parameters/Merkmal'
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/Domaene'
+                      - type: object
+                        required:
+                          - schueler
+                        properties:
+                          schueler:
+                            type: array
+                            items:
+                              allOf:
+                                - $ref: '#/components/schemas/Schueler'
+                                - type: object
+                                  required:
+                                    - loesungsquoten
+                                  properties:
+                                    loesungsquoten:
+                                      type: array
+                                      items:
+                                        type: object
+                                        required:
+                                          - art
+                                          - werte
+                                        properties:
+                                          art:
+                                            type: string
+                                            description: Art des Merkmals
+                                          auspraegungen:
+                                            type: array
+                                            description: Ausprägungen des Merkmals mit Lösungsquote
+                                            items:
+                                              allOf:
+                                                - $ref: '#/components/schemas/Loesungsquote'
+                                                - type: object
+                                                  properties:
+                                                    auspraegung:
+                                                      type: string
+                                                      description: Wert des Merkmals
+                                                      examples:
+                                                        - '2.5.1'
+                                                        - AFBIII
+                                    merkmale:
+                                      $ref: '#/components/schemas/Merkmale'
+        '404':
+          description: Lerngruppe oder Lösungshäufigkeiten für die Schüler:innen der Lerngruppe nicht gefunden
+
+# ----
+# MARK: Schulen
+# ----
+
+  /schulen/{id}/kompetenzstufen:
+    get:
+      description: Kompetenzstufenverteilung an der Schule
+      tags:
+        - Schulen
+      parameters:
+        - $ref: '#/components/parameters/SchuleId'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Kompetenzstufen'
+        '404':
+          description: Schule oder Kompetensstufenverteilung für die Schule nicht gefunden
+
+  /schulen/{id}/items:
+    description: Lösungshäufigkeiten je Item an der Schule
+    get:
+      tags:
+        - Schulen
+      parameters:
+        - $ref: '#/components/parameters/SchuleId'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Items'
+        '404':
+          description: Schule oder Lösungshäufigkeit je Item für die Schule nicht gefunden
+
+  /schulen/{id}/merkmale:
+    get:
+      description: Lösungshäufigkeiten je Merkmal-Ausprägung an der Schule
+      tags:
+        - Schulen
+      parameters:
+        - $ref: '#/components/parameters/SchuleId'
+        - $ref: '#/components/parameters/Merkmal'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Merkmale'
+        '404':
+          description: Schule oder Lösungshäufigkeit je Merkmal für die Schule nicht gefunden
+
+# ----
+# MARK: Land
+# ----
+
+  /laender/{id}/kompetenzstufen:
+    get:
+      description: Kompetenzstufenverteilung im Bundesland
+      tags:
+        - Länder
+      parameters:
+        - $ref: '#/components/parameters/SchuleId'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Kompetenzstufen'
+        '404':
+          description: Bundesland oder Kompetensstufenverteilung für das Bundesland nicht gefunden
+
+  /laender/{id}/items:
+    description: Lösungshäufigkeiten je Item im Bundesland
+    get:
+      tags:
+        - Länder
+      parameters:
+        - $ref: '#/components/parameters/SchuleId'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Items'
+        '404':
+          description: Bundesland oder Lösungshäufigkeit je Item für das Bundesland nicht gefunden
+
+  /laender/{id}/merkmale:
+    get:
+      description: Lösungshäufigkeiten je Merkmal-Ausprägung im Bundesland
+      tags:
+        - Länder
+      parameters:
+        - $ref: '#/components/parameters/SchuleId'
+        - $ref: '#/components/parameters/Merkmal'
+        - $ref: '#/components/parameters/Vergleichsgruppe'
+      responses:
+        '200':
+          $ref: '#/components/responses/Merkmale'
+        '404':
+          description: Bundesland oder Lösungshäufigkeit je Merkmal für das Bundesland nicht gefunden
+
+components: 
+# ----
+# MARK: Parameter Refs
+# ----
+
+  parameters:
+    Domaene:
+      in: query
+      name: domaene
+      explode: false
+      schema:
+        type: string
+      description: Schränkt der Ergebnisse auf die gewählten Domänen ein
+      examples:
+        Deutsch:
+          value: de
+          description: Nur für die Domänen aus dem Fach Deutsch (bspw. Leseverstehen und Sprachgebrauch) sollen Ergebnisse geliefert werden
+    LerngruppeId:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: Id der Lerngruppe
+    Merkmal:
+      in: query
+      name: merkmal
+      explode: false
+      schema:
+        type: string
+      description: Filter für Merkmale oder Merkmalgruppen, deren Lösungsquoten ausgegeben werden sollen
+      examples:
+        Bildungsstandard:
+          value: bista
+          description: Lösungsquoten nach Bildungsstandard
+        Itemkennwerte:
+          value: item_merkmale
+          description: Lösungsquoten nach verschiedenen Item-Merkmalen (AFB, BiSta, Kompetenzstufe)
+        Itemkennwerte (Variante):
+          value: [afb, bista, Kompetenzstufe]
+          description: Lösungsquoten nach verschiedenen Item-Merkmalen (AFB, BiSta, Kompetenzstufe)
+    SchuleId:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      description: Id der Schule
+    Vergleichsgruppe:
+      in: query
+      name: vergleichsgruppe
+      explode: false
+      schema:
+        type: string
+      description: Filter für Vergleichsgruppen, die ausgegeben werden sollen
+      examples:
+        Schulklassen:
+          value: [3a, 3b, 3d]
+          description: Vergleich mit den Parallelklassen
+        Schulklassen (Variante):
+          value: parallelklassen
+          description: Vergleich mit den Parallelklassen
+        Fairer Vergleich:
+          value: fair
+          description: Vergleichsgruppen für den fairen Vergleich (Landesmittelwert, fairer Vergleichsmittelwert)
+  
+# ----
+# MARK: Response Refs
+# ----        
+  
+  responses:
+    Kompetenzstufen:
+      description: Kompetenzstufenverteilung im Kontext
+      content:
+        'application/json':
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/Domaene'
+                - type: object
+                  required:
+                    - kompetenzstufen
+                  properties:
+                    kompetenzstufen:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/Kompetenzstufe'
+                          - type: object
+                            required:
+                              - anzahl
+                            properties:
+                              anzahl:
+                                type: integer
+                                examples:
+                                  - 3 
+                          - type: object
+                            properties:
+                              vergleichswerte:
+                                type: array
+                                items: 
+                                  allOf:
+                                    - $ref: '#/components/schemas/Vergleichsgruppe'
+                                    - type: object
+                                      required:
+                                        - anzahl
+                                      properties:
+                                        anzahl:
+                                          type: integer
+                                          examples:
+                                            - 2
+    Items:
+      description: Lösungshäufigkeiten der Items im Kontext
+      content:
+        'application/json':
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/Domaene'
+                - type: object
+                  required:
+                    - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/Item'
+                          - $ref: '#/components/schemas/Loesungsquote'
+                          - type: object
+                            properties:
+                              vergleichswerte:
+                                type: array
+                                items: 
+                                  allOf:
+                                    - $ref: '#/components/schemas/Vergleichsgruppe'
+                                    - $ref: '#/components/schemas/Loesungsquote'
+    Merkmale:
+      description: Lösungshäufigkeiten der Merkmale im Kontext
+      content:
+        'application/json':
+          schema:
+            type: array
+            items:
+              allOf:
+                - $ref: '#/components/schemas/Domaene'
+                - type: object
+                  required:
+                    - merkmale
+                  properties:
+                    merkmale:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - art
+                        properties:
+                          art:
+                            type: string
+                            description: Art des Merkmals
+                          auspraegungen:
+                            type: array
+                            description: Ausprägungen des Merkmals mit Lösungshäufigkeiten
+                            items:
+                              allOf:
+                                - $ref: '#/components/schemas/Loesungsquote'
+                                - type: object
+                                  properties:
+                                    auspraegung:
+                                      type: string
+                                      description: Ausprägung des Merkmals, zu dem die Lösungshäufigkeit berechnet wurde
+                                    anzahl:
+                                      type: integer
+                                      description: Anzahl der Elemente mit dieser Ausprägung, aus der die Lösungshäufigkeit berechnet wurde
+                                    vergleichswerte:
+                                      type: array
+                                      items: 
+                                        allOf:
+                                          - $ref: '#/components/schemas/Vergleichsgruppe'
+                                          - $ref: '#/components/schemas/Loesungsquote'
+
+# ----
+# MARK: Schema Refs
+# ----
+
+  schemas:
+    Domaene:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db 
+        name:
+          type: string
+          description: Name der Domäne
+          examples:
+            - 'Deutsch Leseverständnis'
+            - 'Mathematik'
+        merkmale:
+          $ref: '#/components/schemas/Merkmale'
+    Item:
+      type: object
+      required:
+        - itemName
+        - itemId
+        - itemIqbId
+        - wert
+      properties:
+        id:
+          type: string
+          examples:
+            - b8d23653-3881-40de-a45a-d34e2dd191ed
+        name:
+          type: string
+          description: Bezeichnung des Items im Testheft
+          examples:
+            - '2.1'
+            - '2.2'
+        iqbId:
+          type: string
+          description: IQB Item-Id des Items
+          examples:
+            - 'AB1021'
+            - 'AB1022'
+        merkmale:
+          $ref: '#/components/schemas/Merkmale'
+    Loesungsquote:
+      type: object
+      properties:
+        anzahl:
+          type: integer
+          description: Gesamtzahl der Items
+        loesungsquote:
+          type: number
+          description: Lösungshäufigkeit der Items
+          minimum: 0
+          maximum: 1 
+          examples:
+            - 0.75
+        minLoesungsquote:
+          type: integer
+          description: Minimale Lösungsquote der Items
+        maxLoesungsquote:
+          type: integer
+          description: Maximale Lösungsquote der Items
+        loesungshaeufigkeit:
+          type: integer
+          description: Anzahl richtig gelöster Items
+          examples:
+            - 3
+        minLoesungshaeufigkeit:
+          type: integer
+          description: Minimale Anzahl richtig gelöster Items
+        maxLoesungshaeufigkeit:
+          type: integer
+          description: Maximale Anzahl richtig gelöster Items
+    Merkmal:
+      type: object
+      required:
+        - art
+        - wert
+      properties:
+        art:
+          type: string
+          description: Art des Merkmals
+          examples:
+            - SES
+            - geschlecht
+        auspraegung:
+          type: string
+          description: Ausprägung des Merkmals
+          examples:
+            - niedrig
+            - weiblich
+    Merkmale:
+      type: array
+      items:
+        $ref: '#/components/schemas/Merkmal'
+    Kompetenzstufe:
+      type: object
+      required:
+        - kuerzel
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - 18488a76-0cb6-4d16-9f7b-d2c69f73e058
+        name:
+          type: string
+          description: Name der Komptenzstufe
+          examples:
+            - Optimalstandard
+            - Regularstandard
+        kuerzel:
+          type: string
+          description: Kürzel der Kompetenzstufe
+          examples:
+            - V
+            - Ia
+            - A2.1
+        beschreibung:
+          type: string
+          description: Beschreibung der Kompetenzstufe
+          examples:
+            - Kann Aussagen zu zentralen Aspekten des Textes selbstständig begründen
+    Schueler:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - 0f35f3f0-eb76-4191-9ed3-2d8ea02b79e9
+        name:
+          type: string
+          examples:
+            - kopieren.pizza.71
+            - buv
+            - '9'
+    Vergleichsgruppe:
+      type: object
+      required:
+        - name
+        - id
+      properties:
+        id:
+          type: string
+          examples:
+            - 32fbeb80-224a-4d13-a23c-0eec6c0d3ea7
+        name:
+          type: string
+          description: Bezeichnung der Vergleichsgruppe
+          examples:
+            - Korrigierter Landesmittelwert
+            - Vergleichsschule
+            - männlich
+            - weiblich
+        anzahl:
+          type: integer
+          description: Anzahl der Elemente, aus der die Vergleichsgruppe gebildet wurde
+        merkmale:
+          $ref: '#/components/schemas/Merkmale'
