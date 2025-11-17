@@ -1,0 +1,21 @@
+type: object
+required:
+  - name
+properties:
+  id:
+    type: string
+    examples:
+      - 32fbeb80-224a-4d13-a23c-0eec6c0d3ea7
+  name:
+    type: string
+    description: Bezeichnung der Vergleichsgruppe
+    examples:
+      - Korrigierter Landesmittelwert
+      - Vergleichsschule
+      - männlich
+      - weiblich
+  size:
+    type: integer
+    description: Größe der Vergleichsgruppe
+  covariates:
+    $ref: './covariates.yml'

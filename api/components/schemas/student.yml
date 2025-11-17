@@ -1,0 +1,16 @@
+type: object
+required:
+  - name
+properties:
+  id:
+    type: string
+    examples:
+      - 0f35f3f0-eb76-4191-9ed3-2d8ea02b79e9
+  name:
+    type: string
+    examples:
+      - kopieren.pizza.71
+      - buv
+      - '9'
+  covariates:
+    $ref: './covariates.yml'

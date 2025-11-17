@@ -1,0 +1,13 @@
+get:
+  description: Lösungshäufigkeiten je Merkmal-Ausprägung im Bundesland
+  tags:
+    - states
+  parameters:
+    - $ref: '../../components/parameters.yml#/stateId'
+    - $ref: '../../components/parameters.yml#/type'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/aggregations.yml'
+    '404':
+      description: Bundesland oder Lösungshäufigkeit je Merkmal für das Bundesland nicht gefunden

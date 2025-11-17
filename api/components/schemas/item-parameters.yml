@@ -1,0 +1,11 @@
+type: object
+description: (importierte) Itemparameter aus den Itemkennwerten des IQB. Bisher unvollständige, exemplarische Liste.
+properties:
+  domain:
+    type: string
+  competenceLevel:
+    type: string
+  competenceStandard:
+    type: array
+    items:
+      type: string

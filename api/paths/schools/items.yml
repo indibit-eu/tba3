@@ -1,0 +1,12 @@
+description: Lösungshäufigkeiten je Item an der Schule
+get:
+  tags:
+    - schools
+  parameters:
+    - $ref: '../../components/parameters.yml#/schoolId'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/items.yml'
+    '404':
+      description: Schule oder Lösungshäufigkeit je Item für die Schule nicht gefunden

@@ -1,0 +1,36 @@
+description: Kompetenzstufenverteilung im Kontext
+content:
+  'application/json':
+    schema:
+      type: array
+      items:
+        allOf:
+          - $ref: '../schemas/domain.yml'
+          - type: object
+            required:
+              - competenceLevels
+            properties:
+              competenceLevels:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '../schemas/competence-level.yml'
+                    - type: object
+                      required:
+                        - frequency
+                      properties:
+                        frequency:
+                          type: integer
+                        comparison:
+                          type: array
+                          items: 
+                            allOf:
+                              - $ref: '../schemas/comparison-group.yml'
+                              - type: object
+                                required:
+                                  - frequency
+                                properties:
+                                  frequency:
+                                    type: integer
+                                    examples:
+                                      - 2

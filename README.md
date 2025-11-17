@@ -23,3 +23,7 @@ Die Datei [`tba3-spec.yml`](./tba3-spec.yml) ist eine im OpenAPI 3.1-Format gesc
 ![](docs/schulen-kompetenzstufen.png)
 ![](docs/schueler-items.png)
 ![](docs/schueler-kompetenzstufen.png)
+
+## Veränderung der Spezifikation
+
+Im Ordner `/api` liegen die Quelldateien für die Spezifikation. Aus diesen kann mit dem Befehl `npx @redocly/openapi-cli@latest bundle api/api.yml -o tba3-spec.yml` eine kombinierte Datei erzeugt werden, die alle Teile enthält.

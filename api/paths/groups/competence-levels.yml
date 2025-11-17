@@ -1,0 +1,12 @@
+get:
+  description: Kompetenzstufenverteilung in der Lerngruppe
+  tags:
+    - groups
+  parameters:
+    - $ref: '../..//components/parameters.yml#/groupId'
+    - $ref: '../..//components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/competence-levels.yml'
+    '404':
+      description: Lerngruppe oder Kompetenzstufenverteilung für die Lerngruppe nicht gefunden

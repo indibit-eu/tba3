@@ -1,0 +1,12 @@
+get:
+  description: Lösungshäufigkeiten je Item in der Lerngruppe
+  tags:
+    - groups
+  parameters:
+    - $ref: '../../components/parameters.yml#/groupId'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/items.yml'
+    '404':
+      description: Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht gefunden

@@ -1,0 +1,22 @@
+type: object
+properties:
+  total:
+    type: integer
+    description: Gesamtzahl der Items
+    examples:
+      - 4
+  mean:
+    type: number
+    description: Anteil richtig gelöster Items / Mittlere Lösungsquote
+    minimum: 0
+    maximum: 1 
+    examples:
+      - 0.75
+  frequency:
+    type: integer
+    description: Absolute Anzahl richtig gelöster Items
+    examples:
+      - 3
+  standardDeviation:
+    type: number
+    description: Standardabweichung der mittleren Lösungsquote

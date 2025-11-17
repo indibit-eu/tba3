@@ -1,0 +1,38 @@
+get:
+  description: Lösungshäufigkeiten je Merkmal-Ausprägung in der Lerngruppe, z.B. Kompetenzen, Anforderungsbereiche, Geschlecht, ...
+  tags:
+    - students
+  parameters:
+    - $ref: '../../components/parameters.yml#/groupId'
+    - $ref: '../../components/parameters.yml#/type'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      description: Lösungshäufigkeiten der Merkmale im Kontext
+      content:
+        'application/json':
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Aggregationsart (z.B. Domäne, Kompetenzstandard), eigene Aggregationsarten können definiert werden.
+                  enum: [total, domain, competenceStandard, custom]
+                value:
+                  type: string
+                  description: Einzelne aggregierte Gruppe, z.B. "Leseverstehen" und "Orthografie" bei Domänen.
+                students:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '../../components/schemas/student.yml'
+                      - type: object
+                        properties:
+                          descriptiveStatistics:
+                            $ref: '../../components/schemas/descriptive-statistics.yml'
+                          comparison:
+                            $ref: '../../components/schemas/comparison.yml'
+    '400':
+      description: Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht gefunden

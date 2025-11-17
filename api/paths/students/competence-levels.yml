@@ -1,0 +1,33 @@
+description: Kompetenzstufe je Schüler:in
+get:
+  tags:
+    - students
+  parameters:
+    - $ref: '../../components/parameters.yml#/groupId'
+  responses:
+    '200':
+      description: OK
+      content:
+        'application/json':
+          schema:
+              type: array
+              items:
+                allOf:
+                  - $ref: '../../components/schemas/domain.yml'
+                  - type: object
+                    required:
+                      - students
+                    properties:
+                      students:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '../../components/schemas/student.yml'
+                            - type: object
+                              required:
+                                - competenceLevel
+                              properties:
+                                kompetenzstufe:
+                                  $ref: '../../components/schemas/competence-level.yml'
+    '404':
+      description: Lerngruppe oder Kompetenz für die Schüler:innen der Lerngruppe nicht gefunden

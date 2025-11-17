@@ -1,0 +1,11 @@
+type: array
+description: Vergleichswerte mit Vergleichsgruppen
+items:
+  allOf:
+    - $ref: '../schemas/comparison-group.yml'
+    - type: object
+      required:
+        - descriptiveStatistics
+      properties:
+        descriptiveStatistics:
+          $ref: '../schemas/descriptive-statistics.yml'

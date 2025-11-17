@@ -1,0 +1,12 @@
+get:
+  description: Kompetenzstufenverteilung an der Schule
+  tags:
+    - schools
+  parameters:
+    - $ref: '../../components/parameters.yml#/schoolId'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/competence-levels.yml'
+    '404':
+      description: Schule oder Kompetensstufenverteilung für die Schule nicht gefunden

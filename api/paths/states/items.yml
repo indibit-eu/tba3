@@ -1,0 +1,12 @@
+get:
+  description: Lösungshäufigkeiten je Item im Bundesland
+  tags:
+    - states
+  parameters:
+    - $ref: '../../components/parameters.yml#/stateId'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/items.yml'
+    '404':
+      description: Bundesland oder Lösungshäufigkeit je Item für das Bundesland nicht gefunden

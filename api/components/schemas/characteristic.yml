@@ -1,0 +1,17 @@
+type: object
+required:
+  - type
+  - value
+properties:
+  type:
+    type: string
+    description: Art des Merkmals
+    examples:
+      - SES
+      - geschlecht
+  value:
+    type: string
+    description: Ausprägung des Merkmals
+    examples:
+      - niedrig
+      - weiblich

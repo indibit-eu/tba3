@@ -1,0 +1,60 @@
+domain:
+  in: query
+  name: domain
+  explode: false
+  schema:
+    type: string
+  description: Schränkt der Ergebnisse auf die gewählten Domänen ein
+  examples:
+    Deutsch:
+      value: de
+      description: Nur für die Domänen aus dem Fach Deutsch (bspw. Leseverstehen und Sprachgebrauch) sollen Ergebnisse geliefert werden
+groupId:
+  in: path
+  name: id
+  required: true
+  schema:
+    type: string
+  description: Id der Lerngruppe
+type:
+  in: query
+  name: type
+  explode: false
+  schema:
+    type: string
+  description: Filtert, welche Aggregationen berechnet werden soll
+  examples:
+    Bildungsstandard:
+      value: domain
+      description: Aggregation nach Domänen
+schoolId:
+  in: path
+  name: id
+  required: true
+  schema:
+    type: string
+  description: Id der Schule
+stateId:
+  in: path
+  name: id
+  required: true
+  schema:
+    type: string
+  description: Id des Bundeslandes
+comparison:
+  in: query
+  name: comparison
+  explode: false
+  schema:
+    type: string
+  description: Filter für Vergleichsgruppen, die ausgegeben werden sollen
+  examples:
+    Schulklassen:
+      value: [3a, 3b, 3d]
+      description: Vergleich mit den Parallelklassen
+    Schulklassen (Variante):
+      value: parallelklassen
+      description: Vergleich mit den Parallelklassen
+    Fairer Vergleich:
+      value: fair
+      description: Vergleichsgruppen für den fairen Vergleich (Landesmittelwert, fairer Vergleichsmittelwert)

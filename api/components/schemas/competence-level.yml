@@ -1,0 +1,26 @@
+type: object
+required:
+  - nameShort
+properties:
+  id:
+    type: string
+    examples:
+      - 18488a76-0cb6-4d16-9f7b-d2c69f73e058
+  name:
+    type: string
+    description: Name der Komptenzstufe
+    examples:
+      - Optimalstandard
+      - Regularstandard
+  nameShort:
+    type: string
+    description: Kürzel der Kompetenzstufe
+    examples:
+      - V
+      - Ia
+      - A2.1
+  description:
+    type: string
+    description: Beschreibung der Kompetenzstufe
+    examples:
+      - Kann Aussagen zu zentralen Aspekten des Textes selbstständig begründen

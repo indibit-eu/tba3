@@ -1,0 +1,13 @@
+get:
+  description: Lösungshäufigkeiten je Merkmal-Ausprägung in der Lerngruppe, z.B. Kompetenzen, Anforderungsbereiche, Geschlecht, ...
+  tags:
+    - groups
+  parameters:
+    - $ref: '../../components/parameters.yml#/groupId'
+    - $ref: '../../components/parameters.yml#/type'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/aggregations.yml'
+    '400':
+      description: Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht gefunden

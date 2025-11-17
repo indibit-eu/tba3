@@ -1,0 +1,13 @@
+get:
+  description: Lösungshäufigkeiten je Merkmal-Ausprägung an der Schule
+  tags:
+    - schools
+  parameters:
+    - $ref: '../../components/parameters.yml#/schoolId'
+    - $ref: '../../components/parameters.yml#/type'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/aggregations.yml'
+    '404':
+      description: Schule oder Lösungshäufigkeit je Merkmal für die Schule nicht gefunden

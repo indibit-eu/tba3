@@ -1,0 +1,12 @@
+get:
+  description: Kompetenzstufenverteilung im Bundesland
+  tags:
+    - states
+  parameters:
+    - $ref: '../../components/parameters.yml#/stateId'
+    - $ref: '../../components/parameters.yml#/comparison'
+  responses:
+    '200':
+      $ref: '../../components/responses/competence-levels.yml'
+    '404':
+      description: Bundesland oder Kompetensstufenverteilung für das Bundesland nicht gefunden

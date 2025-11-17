@@ -1,0 +1,14 @@
+type: object
+required:
+  - name
+properties:
+  id:
+    type: string
+    examples:
+      - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db 
+  name:
+    type: string
+    description: Name der Domäne
+    examples:
+      - 'Deutsch Leseverständnis'
+      - 'Mathematik'

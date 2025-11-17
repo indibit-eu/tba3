@@ -1,0 +1,23 @@
+type: object
+required:
+  - name
+  - iqbId
+properties:
+  id:
+    type: string
+    examples:
+      - b8d23653-3881-40de-a45a-d34e2dd191ed
+  name:
+    type: string
+    description: Bezeichnung des Items im Testheft
+    examples:
+      - '2.1'
+      - '2.2'
+  iqbId:
+    type: string
+    description: IQB Item-Id des Items
+    examples:
+      - 'AB1021'
+      - 'AB1022'
+  parameters:
+    $ref: './item-parameters.yml'

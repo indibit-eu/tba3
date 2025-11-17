@@ -1,0 +1,20 @@
+type: object
+description: Kovariaten der Testgruppe
+properties:
+  gender:
+    type: string
+    description: >
+      Geschlecht
+      `m`: männlich
+      `f`: weiblich
+      `d`: divers
+      `o`: ohne Angabe
+    enum: [m, f, d, o]
+  languageAtHome:
+    type: string
+    description: Gesprochene Sprache zu Hause
+    enum: [german, english, french, other]
+  other:
+    type: array
+    items:
+      $ref: './characteristic.yml'
