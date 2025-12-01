@@ -388,37 +388,23 @@ components:
           examples:
             - SES
             - geschlecht
+        label:
+          type: string
+          description: Bezeichnung des Merkmals
+          examples:
+            - Bücherfrage
+            - Geschlecht
         value:
           type: string
-          description: Ausprägung des Merkmals
+          description: Konkrete Ausprägung des Merkmals
           examples:
             - niedrig
             - weiblich
     covariates:
-      type: object
+      type: array
       description: Kovariaten der Testgruppe
-      properties:
-        gender:
-          type: string
-          description: |
-            Geschlecht `m`: männlich `f`: weiblich `d`: divers `o`: ohne Angabe
-          enum:
-            - m
-            - f
-            - d
-            - o
-        languageAtHome:
-          type: string
-          description: Gesprochene Sprache zu Hause
-          enum:
-            - german
-            - english
-            - french
-            - other
-        other:
-          type: array
-          items:
-            $ref: '#/components/schemas/characteristic'
+      items:
+        $ref: '#/components/schemas/characteristic'
     comparison-group:
       type: object
       required:
@@ -447,14 +433,58 @@ components:
         (importierte) Itemparameter aus den Itemkennwerten des IQB. Bisher
         unvollständige, exemplarische Liste.
       properties:
+        logit:
+          description: Schwierigkeit des Items in Logit
+          type: number
+        bistaPoints:
+          description: >-
+            Schwierigkeit des Items in Punkten nach deutscher
+            Bildungsstandardmetrik
+          type: number
+        solutionFrequencyGymnasium:
+          description: Mittlere Lösungshäufigkeit der Pilotierung an Gymnasien
+          type: number
+        solutionFrequencyNonGymnasium:
+          description: Mittlere Lösungshäufigkeit der Pilotierung an Nicht-Gymnasien
+          type: number
+        solutionFrequencyPrimarySchool:
+          description: Mittlere Lösungshäufigkeit der Pilotierung an Grundschulen
+          type: number
+        subject:
+          description: Fach des Items
+          type: string
         domain:
+          description: Kompetenzbereich des Items
           type: string
         competenceLevel:
+          description: Kompetenzstufe des Items
+          $ref: '#/components/schemas/competence-level'
+        cognitiveDemandLevel:
+          description: Anforderungsbereich des Items
           type: string
-        competenceStandard:
+        generalMathematicalCompetence:
+          description: Allgemeine Kompetenz des Items
           type: array
           items:
             type: string
+        coreIdea:
+          description: Leitideen des Items
+          type: array
+          items:
+            type: string
+        competenceStandard:
+          description: Liste der dem Item zugeordneten Kompetenzstandards
+          type: array
+          items:
+            type: string
+        listeningOrReadingStyle:
+          description: Hör- / Lesestil
+          type: string
+          enum:
+            - selektiv
+            - detailliert
+            - inferierend
+            - global
     item:
       type: object
       required:
@@ -612,11 +642,16 @@ components:
                     - domain
                     - competenceStandard
                     - custom
+                  examples:
+                    - domain
                 value:
                   type: string
                   description: >-
                     Einzelne aggregierte Gruppe, z.B. "Leseverstehen" und
                     "Orthografie" bei Domänen.
+                  examples:
+                    - Leseverstehen
+                    - Orthografie
                 descriptiveStatistics:
                   $ref: '#/components/schemas/descriptive-statistics'
                 comparison:
