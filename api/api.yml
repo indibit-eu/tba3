@@ -30,7 +30,6 @@ paths:
   /groups/{id}/students/aggregations:
     $ref: 'paths/students/aggregations.yml'
 
-
   /schools/{id}/competence-levels:
     $ref: 'paths/schools/competence-levels.yml'
   /schools/{id}/items:

@@ -9,9 +9,15 @@ properties:
     examples:
       - SES
       - geschlecht
+  label:
+    type: string
+    description: Bezeichnung des Merkmals
+    examples:
+      - Bücherfrage
+      - Geschlecht
   value:
     type: string
-    description: Ausprägung des Merkmals
+    description: Konkrete Ausprägung des Merkmals
     examples:
       - niedrig
       - weiblich

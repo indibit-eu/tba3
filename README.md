@@ -14,7 +14,7 @@ Die geschaffene Spezifikation soll es erleichtern, untereinander Berichtselement
 
 ## Konzepte und Begriffe
 
-Um die Aufgabe der Schnittstelle zu verstehen, werden im Nachfolgenden ein paar Begriffe erläutert und dabei um ihre Rolle im Kontext dieser Schnittstelle ergänzt.
+Um die Aufgabe und  spätere Implementation der Schnittstelle zu verstehen, werden im Nachfolgenden ein paar Begriffe mit ihrer Rolle im Kontext dieser Schnittstelle erläutert.
 
 ### Lerngruppe
 

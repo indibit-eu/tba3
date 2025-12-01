@@ -1,11 +1,53 @@
 type: object
 description: (importierte) Itemparameter aus den Itemkennwerten des IQB. Bisher unvollständige, exemplarische Liste.
 properties:
+  logit:
+    description: Schwierigkeit des Items in Logit
+    type: number
+  bistaPoints: 
+    description: Schwierigkeit des Items in Punkten nach deutscher Bildungsstandardmetrik
+    type: number
+  solutionFrequencyGymnasium:
+    description: Mittlere Lösungshäufigkeit der Pilotierung an Gymnasien
+    type: number
+  solutionFrequencyNonGymnasium:
+    description: Mittlere Lösungshäufigkeit der Pilotierung an Nicht-Gymnasien
+    type: number
+  solutionFrequencyPrimarySchool:
+    description: Mittlere Lösungshäufigkeit der Pilotierung an Grundschulen
+    type: number
+  subject:
+    description: Fach des Items
+    type: string
   domain:
+    description: Kompetenzbereich des Items
     type: string
   competenceLevel:
+    description: Kompetenzstufe des Items
+    $ref: './competence-level.yml'
+  cognitiveDemandLevel:
+    description: Anforderungsbereich des Items
     type: string
-  competenceStandard:
+  generalMathematicalCompetence:
+    description: Allgemeine Kompetenz des Items
     type: array
     items:
       type: string
+  coreIdea:
+    description: Leitideen des Items
+    type: array
+    items:
+      type: string
+  competenceStandard:
+    description: Liste der dem Item zugeordneten Kompetenzstandards
+    type: array
+    items:
+        type: string
+  listeningOrReadingStyle:
+    description: Hör- / Lesestil
+    type: string
+    enum:
+      - selektiv
+      - detailliert
+      - inferierend
+      - global
