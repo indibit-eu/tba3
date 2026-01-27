@@ -4,21 +4,34 @@ content:
     schema:
       type: array
       items:
-        type: object
-        properties:
-          type:
-            type: string
-            description: Aggregationsart (z.B. Domäne, Kompetenzstandard), eigene Aggregationsarten können definiert werden.
-            enum: [total, domain, competenceStandard, custom]
-            examples:
-              - domain
-          value:
-            type: string
-            description: Einzelne aggregierte Gruppe, z.B. "Leseverstehen" und "Orthografie" bei Domänen.
-            examples:
-              - Leseverstehen
-              - Orthografie
-          descriptiveStatistics:
-            $ref: '../schemas/descriptive-statistics.yml'
-          comparison:
-            $ref: '../schemas/comparison.yml'
+        allOf:
+          - $ref: '../schemas/value-group.yml'
+          - type: object
+            required:
+              - aggregations
+            properties:
+              aggregations:
+                type: array
+                description: Einzelne Aggregationen
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      description: Aggregationsart (z.B. Kompetenzstandard, Aufgabe), eigene Aggregationsarten können definiert werden.
+                      enum: [competenceStandard, custom]
+                      examples:
+                        - competenceStandard
+                        - total
+                    value:
+                      type: string
+                      description: Einzelne aggregierte Gruppe, z.B. "Leseverstehen" und "Orthografie" bei Domänen.
+                      examples:
+                        - "2.5.3"
+                    descriptiveStatistics:
+                      $ref: '../schemas/descriptive-statistics.yml'
+                    includedIqbIds:
+                      type: array
+                      description: Liste von IQB ItemIds, die in der Berechnung der Aggregation berücksichtigt wurden.
+                      items:
+                        type: string

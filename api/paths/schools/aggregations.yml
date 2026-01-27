@@ -1,10 +1,11 @@
 get:
-  description: Lösungshäufigkeiten je Merkmal-Ausprägung an der Schule
+  description: Aggregierte Lösungshäufigkeiten an der Schule
   tags:
     - schools
   parameters:
     - $ref: '../../components/parameters.yml#/schoolId'
     - $ref: '../../components/parameters.yml#/type'
+    - $ref: '../../components/parameters.yml#/aggregation'
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':

@@ -22,11 +22,25 @@ type:
   explode: false
   schema:
     type: string
-  description: Filtert, welche Aggregationen berechnet werden soll
+  description: Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen
   examples:
-    Bildungsstandard:
-      value: domain
-      description: Aggregation nach Domänen
+    Schüler und Vergleichsgruppen:
+      value: [ 'students', 'comparison']
+      description: Liefert zusätzlich noch Schüler und Vergleichswerte.
+    Bezirke:
+      value: ['districts']
+      description: (Nur auf Bundesland-Ebene) Liefert Werte nach Schulamtsbezirk gruppiert.
+aggregation:
+  in: query
+  name: aggregation
+  explode: false
+  schema:
+    type: string
+  description: Aggregationsarten, die berechnet werden sollen
+  examples:
+    Kompetenzstandard:
+      value: competenceStandard
+      description: Aggregation nach Kompetenzstandards
 schoolId:
   in: path
   name: id

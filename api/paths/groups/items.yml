@@ -4,6 +4,7 @@ get:
     - groups
   parameters:
     - $ref: '../../components/parameters.yml#/groupId'
+    - $ref: '../../components/parameters.yml#/type'
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':

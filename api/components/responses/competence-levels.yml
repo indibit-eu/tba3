@@ -5,13 +5,14 @@ content:
       type: array
       items:
         allOf:
-          - $ref: '../schemas/domain.yml'
+          - $ref: '../schemas/value-group.yml'
           - type: object
             required:
               - competenceLevels
             properties:
               competenceLevels:
                 type: array
+                description: Kompetenzstufenverteilung in der Wertegruppe
                 items:
                   allOf:
                     - $ref: '../schemas/competence-level.yml'
@@ -21,16 +22,3 @@ content:
                       properties:
                         frequency:
                           type: integer
-                        comparison:
-                          type: array
-                          items: 
-                            allOf:
-                              - $ref: '../schemas/comparison-group.yml'
-                              - type: object
-                                required:
-                                  - frequency
-                                properties:
-                                  frequency:
-                                    type: integer
-                                    examples:
-                                      - 2

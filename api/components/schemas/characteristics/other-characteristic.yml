@@ -1,0 +1,24 @@
+type: object
+required:
+  - type
+  - value
+properties:
+  type:
+    type: string
+    description: Type of characteristic (fallback for any other type)
+    examples:
+      - SES
+      - schoolType
+  label:
+    type: string
+    description: Label for the characteristic
+    examples:
+      - Socioeconomic Status
+      - School Type
+  value:
+    type: string
+    description: Specific value of the characteristic
+    examples:
+      - high
+      - low
+      - gymnasium

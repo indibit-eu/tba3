@@ -2,7 +2,7 @@ type: array
 description: Vergleichswerte mit Vergleichsgruppen
 items:
   allOf:
-    - $ref: '../schemas/comparison-group.yml'
+    - $ref: '../schemas/value-group.yml'
     - type: object
       required:
         - descriptiveStatistics

@@ -1,0 +1,32 @@
+type: object
+required:
+  - name
+properties:
+  id:
+    type: string
+    examples:
+      - 32fbeb80-224a-4d13-a23c-0eec6c0d3ea7
+  name:
+    type: string
+    description: Bezeichnung der Wertegruppe
+    examples:
+      - Klasse 8a
+      - Schüler 1
+      - Korrigierter Landesmittelwert
+  domain:
+    $ref: './domain.yml'
+    description: Domäne der Wertegruppe (optional)
+  covariates:
+    $ref: './covariates.yml'
+    description: Kovariaten der Wertegruppe
+  attributes:
+    type: array
+    description: Liste von Key-Value-Werten mit zusätzlichen Informationen
+    items:
+      type: object
+      required: ['key', 'value']
+      properties:
+        key:
+          type: string
+        value:
+          type: string

@@ -1,10 +1,11 @@
 get:
-  description: Lösungshäufigkeiten je Merkmal-Ausprägung in der Lerngruppe, z.B. Kompetenzen, Anforderungsbereiche, Geschlecht, ...
+  description: Aggregierte Lösungshäufigkeiten in der Lerngruppe
   tags:
     - groups
   parameters:
     - $ref: '../../components/parameters.yml#/groupId'
     - $ref: '../../components/parameters.yml#/type'
+    - $ref: '../../components/parameters.yml#/aggregation'
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':

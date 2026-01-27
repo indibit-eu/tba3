@@ -1,0 +1,21 @@
+type: object
+required:
+  - type
+  - value
+properties:
+  type:
+    type: string
+    enum: [languageAtHome]
+    description: Type of characteristic
+  label:
+    type: string
+    description: Label for the characteristic
+    examples:
+      - Language at Home
+      - Sprache zu Hause
+  value:
+    type: string
+    description: Specific value of the characteristic
+    examples:
+      - german
+      - other

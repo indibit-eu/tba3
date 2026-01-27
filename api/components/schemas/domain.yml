@@ -12,3 +12,19 @@ properties:
     examples:
       - 'Deutsch Leseverständnis'
       - 'Mathematik'
+  subject:
+    type: object
+    description: Fach der Domäne
+    required:
+      - name
+    properties:
+      id:
+        type: string
+        examples:
+          - d4a78f30-bf14-475d-8f81-a7ee98b5db4f
+      name:
+        type: string
+        description: Name des Fachs
+        examples:
+          - Deutsch
+          - Mathematik

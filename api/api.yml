@@ -2,15 +2,13 @@ openapi: '3.1.0'
 info:
   title: TBA III
   summary: Schnittstelle für den Zugriff auf Auswertungsdaten von VERA
-  version: '0.2'
+  version: '0.3'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
 tags:
   - name: groups
     description: Ergebnisse auf Ebene einer Lerngruppe
-  - name: students
-    description: Einzelergebnisse der Schüler:innen einer Lerngruppe 
   - name: schools
     description: Ergebnisse zusammengefasst nach Schule
   - name: states
@@ -22,13 +20,6 @@ paths:
     $ref: 'paths/groups/items.yml'
   /groups/{id}/aggregations:
     $ref: 'paths/groups/aggregations.yml'
-
-  /groups/{id}/students/competence-levels:
-    $ref: 'paths/students/competence-levels.yml'
-  /groups/{id}/students/items:
-    $ref: 'paths/students/items.yml'
-  /groups/{id}/students/aggregations:
-    $ref: 'paths/students/aggregations.yml'
 
   /schools/{id}/competence-levels:
     $ref: 'paths/schools/competence-levels.yml'

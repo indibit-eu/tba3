@@ -1,23 +1,10 @@
-type: object
-required:
-  - type
-  - value
-properties:
-  type:
-    type: string
-    description: Art des Merkmals
-    examples:
-      - SES
-      - geschlecht
-  label:
-    type: string
-    description: Bezeichnung des Merkmals
-    examples:
-      - Bücherfrage
-      - Geschlecht
-  value:
-    type: string
-    description: Konkrete Ausprägung des Merkmals
-    examples:
-      - niedrig
-      - weiblich
+oneOf:
+  - $ref: './characteristics/language-at-home-characteristic.yml'
+  - $ref: './characteristics/gender-characteristic.yml'
+  - $ref: './characteristics/other-characteristic.yml'
+discriminator:
+  propertyName: type
+  mapping:
+    languageAtHome: './characteristics/language-at-home-characteristic.yml'
+    gender: './characteristics/gender-characteristic.yml'
+    other: './characteristics/other-characteristic.yml'

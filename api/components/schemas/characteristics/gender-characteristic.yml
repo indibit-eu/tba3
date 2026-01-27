@@ -1,0 +1,22 @@
+type: object
+required:
+  - type
+  - value
+properties:
+  type:
+    type: string
+    enum: [gender]
+    description: Type of characteristic
+  label:
+    type: string
+    description: Label for the characteristic
+    examples:
+      - Gender
+      - Geschlecht
+  value:
+    type: string
+    description: Specific value of the characteristic
+    examples:
+      - male
+      - female
+      - diverse

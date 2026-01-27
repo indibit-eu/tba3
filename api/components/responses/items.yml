@@ -5,9 +5,9 @@ content:
       type: array
       items:
         allOf:
-          - $ref: '../schemas/domain.yml'
+          - $ref: '../schemas/value-group.yml'
           - type: object
             properties:
               items:
                 $ref: '../schemas/item-statistics.yml'
-
+                description: Statistiken für einzelne Items
