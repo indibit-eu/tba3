@@ -2,15 +2,13 @@ openapi: 3.1.0
 info:
   title: TBA III
   summary: Schnittstelle für den Zugriff auf Auswertungsdaten von VERA
-  version: '0.2'
+  version: '0.3'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
 tags:
   - name: groups
     description: Ergebnisse auf Ebene einer Lerngruppe
-  - name: students
-    description: Einzelergebnisse der Schüler:innen einer Lerngruppe
   - name: schools
     description: Ergebnisse zusammengefasst nach Schule
   - name: states
@@ -23,6 +21,7 @@ paths:
         - groups
       parameters:
         - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -38,6 +37,7 @@ paths:
         - groups
       parameters:
         - $ref: '#/components/parameters/groupId'
+        - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -48,141 +48,17 @@ paths:
             gefunden
   /groups/{id}/aggregations:
     get:
-      description: >-
-        Lösungshäufigkeiten je Merkmal-Ausprägung in der Lerngruppe, z.B.
-        Kompetenzen, Anforderungsbereiche, Geschlecht, ...
+      description: Aggregierte Lösungshäufigkeiten in der Lerngruppe
       tags:
         - groups
       parameters:
         - $ref: '#/components/parameters/groupId'
         - $ref: '#/components/parameters/type'
+        - $ref: '#/components/parameters/aggregation'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
           $ref: '#/components/responses/aggregations'
-        '400':
-          description: >-
-            Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht
-            gefunden
-  /groups/{id}/students/competence-levels:
-    description: Kompetenzstufe je Schüler:in
-    get:
-      tags:
-        - students
-      parameters:
-        - $ref: '#/components/parameters/groupId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/domain'
-                    - type: object
-                      required:
-                        - students
-                      properties:
-                        students:
-                          type: array
-                          items:
-                            allOf:
-                              - $ref: '#/components/schemas/student'
-                              - type: object
-                                required:
-                                  - competenceLevel
-                                properties:
-                                  kompetenzstufe:
-                                    $ref: '#/components/schemas/competence-level'
-        '404':
-          description: >-
-            Lerngruppe oder Kompetenz für die Schüler:innen der Lerngruppe nicht
-            gefunden
-  /groups/{id}/students/items:
-    description: Lösungsquote je Schüler:in und Item
-    get:
-      tags:
-        - students
-      parameters:
-        - $ref: '#/components/parameters/groupId'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/domain'
-                    - type: object
-                      required:
-                        - students
-                      properties:
-                        students:
-                          type: array
-                          items:
-                            allOf:
-                              - $ref: '#/components/schemas/student'
-                              - type: object
-                                required:
-                                  - items
-                                properties:
-                                  items:
-                                    $ref: '#/components/schemas/item-statistics'
-        '404':
-          description: >-
-            Lerngruppe oder Lösungshäufigkeiten für die Schüler:innen der
-            Lerngruppe nicht gefunden
-  /groups/{id}/students/aggregations:
-    get:
-      description: >-
-        Lösungshäufigkeiten je Merkmal-Ausprägung in der Lerngruppe, z.B.
-        Kompetenzen, Anforderungsbereiche, Geschlecht, ...
-      tags:
-        - students
-      parameters:
-        - $ref: '#/components/parameters/groupId'
-        - $ref: '#/components/parameters/type'
-        - $ref: '#/components/parameters/comparison'
-      responses:
-        '200':
-          description: Lösungshäufigkeiten der Merkmale im Kontext
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    type:
-                      type: string
-                      description: >-
-                        Aggregationsart (z.B. Domäne, Kompetenzstandard), eigene
-                        Aggregationsarten können definiert werden.
-                      enum:
-                        - total
-                        - domain
-                        - competenceStandard
-                        - custom
-                    value:
-                      type: string
-                      description: >-
-                        Einzelne aggregierte Gruppe, z.B. "Leseverstehen" und
-                        "Orthografie" bei Domänen.
-                    students:
-                      type: array
-                      items:
-                        allOf:
-                          - $ref: '#/components/schemas/student'
-                          - type: object
-                            properties:
-                              descriptiveStatistics:
-                                $ref: '#/components/schemas/descriptive-statistics'
-                              comparison:
-                                $ref: '#/components/schemas/comparison'
         '400':
           description: >-
             Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht
@@ -215,12 +91,13 @@ paths:
           description: Schule oder Lösungshäufigkeit je Item für die Schule nicht gefunden
   /schools/{id}/aggregations:
     get:
-      description: Lösungshäufigkeiten je Merkmal-Ausprägung an der Schule
+      description: Aggregierte Lösungshäufigkeiten an der Schule
       tags:
         - schools
       parameters:
         - $ref: '#/components/parameters/schoolId'
         - $ref: '#/components/parameters/type'
+        - $ref: '#/components/parameters/aggregation'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -261,12 +138,13 @@ paths:
             gefunden
   /states/{id}/aggregations:
     get:
-      description: Lösungshäufigkeiten je Merkmal-Ausprägung im Bundesland
+      description: Aggregierte Lösungshäufigkeiten im Bundesland
       tags:
         - states
       parameters:
         - $ref: '#/components/parameters/stateId'
         - $ref: '#/components/parameters/type'
+        - $ref: '#/components/parameters/aggregation'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -284,6 +162,27 @@ components:
       schema:
         type: string
       description: Id der Lerngruppe
+    type:
+      in: query
+      name: type
+      explode: false
+      schema:
+        type: string
+      description: >-
+        Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden
+        sollen
+      examples:
+        Schüler und Vergleichsgruppen:
+          value:
+            - students
+            - comparison
+          description: Liefert zusätzlich noch Schüler und Vergleichswerte.
+        Bezirke:
+          value:
+            - districts
+          description: >-
+            (Nur auf Bundesland-Ebene) Liefert Werte nach Schulamtsbezirk
+            gruppiert.
     comparison:
       in: query
       name: comparison
@@ -306,17 +205,17 @@ components:
           description: >-
             Vergleichsgruppen für den fairen Vergleich (Landesmittelwert, fairer
             Vergleichsmittelwert)
-    type:
+    aggregation:
       in: query
-      name: type
+      name: aggregation
       explode: false
       schema:
         type: string
-      description: Filtert, welche Aggregationen berechnet werden soll
+      description: Aggregationsarten, die berechnet werden sollen
       examples:
-        Bildungsstandard:
-          value: domain
-          description: Aggregation nach Domänen
+        Kompetenzstandard:
+          value: competenceStandard
+          description: Aggregation nach Kompetenzstandards
     schoolId:
       in: path
       name: id
@@ -347,6 +246,145 @@ components:
           examples:
             - Deutsch Leseverständnis
             - Mathematik
+        subject:
+          type: object
+          description: Fach der Domäne
+          required:
+            - name
+          properties:
+            id:
+              type: string
+              examples:
+                - d4a78f30-bf14-475d-8f81-a7ee98b5db4f
+            name:
+              type: string
+              description: Name des Fachs
+              examples:
+                - Deutsch
+                - Mathematik
+    language-at-home-characteristic:
+      type: object
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          enum:
+            - languageAtHome
+          description: Type of characteristic
+        label:
+          type: string
+          description: Label for the characteristic
+          examples:
+            - Language at Home
+            - Sprache zu Hause
+        value:
+          type: string
+          description: Specific value of the characteristic
+          examples:
+            - german
+            - other
+    gender-characteristic:
+      type: object
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          enum:
+            - gender
+          description: Type of characteristic
+        label:
+          type: string
+          description: Label for the characteristic
+          examples:
+            - Gender
+            - Geschlecht
+        value:
+          type: string
+          description: Specific value of the characteristic
+          examples:
+            - male
+            - female
+            - diverse
+    other-characteristic:
+      type: object
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          description: Type of characteristic (fallback for any other type)
+          examples:
+            - SES
+            - schoolType
+        label:
+          type: string
+          description: Label for the characteristic
+          examples:
+            - Socioeconomic Status
+            - School Type
+        value:
+          type: string
+          description: Specific value of the characteristic
+          examples:
+            - high
+            - low
+            - gymnasium
+    characteristic:
+      oneOf:
+        - $ref: '#/components/schemas/language-at-home-characteristic'
+        - $ref: '#/components/schemas/gender-characteristic'
+        - $ref: '#/components/schemas/other-characteristic'
+      discriminator:
+        propertyName: type
+        mapping:
+          languageAtHome: '#/components/schemas/language-at-home-characteristic'
+          gender: '#/components/schemas/gender-characteristic'
+          other: '#/components/schemas/other-characteristic'
+    covariates:
+      type: array
+      description: Kovariaten der Testgruppe
+      items:
+        $ref: '#/components/schemas/characteristic'
+    value-group:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - 32fbeb80-224a-4d13-a23c-0eec6c0d3ea7
+        name:
+          type: string
+          description: Bezeichnung der Wertegruppe
+          examples:
+            - Klasse 8a
+            - Schüler 1
+            - Korrigierter Landesmittelwert
+        domain:
+          $ref: '#/components/schemas/domain'
+          description: Domäne der Wertegruppe (optional)
+        covariates:
+          $ref: '#/components/schemas/covariates'
+          description: Kovariaten der Wertegruppe
+        attributes:
+          type: array
+          description: Liste von Key-Value-Werten mit zusätzlichen Informationen
+          items:
+            type: object
+            required:
+              - key
+              - value
+            properties:
+              key:
+                type: string
+              value:
+                type: string
     competence-level:
       type: object
       required:
@@ -376,57 +414,6 @@ components:
             - >-
               Kann Aussagen zu zentralen Aspekten des Textes selbstständig
               begründen
-    characteristic:
-      type: object
-      required:
-        - type
-        - value
-      properties:
-        type:
-          type: string
-          description: Art des Merkmals
-          examples:
-            - SES
-            - geschlecht
-        label:
-          type: string
-          description: Bezeichnung des Merkmals
-          examples:
-            - Bücherfrage
-            - Geschlecht
-        value:
-          type: string
-          description: Konkrete Ausprägung des Merkmals
-          examples:
-            - niedrig
-            - weiblich
-    covariates:
-      type: array
-      description: Kovariaten der Testgruppe
-      items:
-        $ref: '#/components/schemas/characteristic'
-    comparison-group:
-      type: object
-      required:
-        - name
-      properties:
-        id:
-          type: string
-          examples:
-            - 32fbeb80-224a-4d13-a23c-0eec6c0d3ea7
-        name:
-          type: string
-          description: Bezeichnung der Vergleichsgruppe
-          examples:
-            - Korrigierter Landesmittelwert
-            - Vergleichsschule
-            - männlich
-            - weiblich
-        size:
-          type: integer
-          description: Größe der Vergleichsgruppe
-        covariates:
-          $ref: '#/components/schemas/covariates'
     item-parameters:
       type: object
       description: >-
@@ -537,7 +524,7 @@ components:
       description: Vergleichswerte mit Vergleichsgruppen
       items:
         allOf:
-          - $ref: '#/components/schemas/comparison-group'
+          - $ref: '#/components/schemas/value-group'
           - type: object
             required:
               - descriptiveStatistics
@@ -555,23 +542,6 @@ components:
                 $ref: '#/components/schemas/descriptive-statistics'
               comparison:
                 $ref: '#/components/schemas/comparison'
-    student:
-      type: object
-      required:
-        - name
-      properties:
-        id:
-          type: string
-          examples:
-            - 0f35f3f0-eb76-4191-9ed3-2d8ea02b79e9
-        name:
-          type: string
-          examples:
-            - kopieren.pizza.71
-            - buv
-            - '9'
-        covariates:
-          $ref: '#/components/schemas/covariates'
   responses:
     competence-levels:
       description: Kompetenzstufenverteilung im Kontext
@@ -581,13 +551,14 @@ components:
             type: array
             items:
               allOf:
-                - $ref: '#/components/schemas/domain'
+                - $ref: '#/components/schemas/value-group'
                 - type: object
                   required:
                     - competenceLevels
                   properties:
                     competenceLevels:
                       type: array
+                      description: Kompetenzstufenverteilung in der Wertegruppe
                       items:
                         allOf:
                           - $ref: '#/components/schemas/competence-level'
@@ -597,19 +568,6 @@ components:
                             properties:
                               frequency:
                                 type: integer
-                              comparison:
-                                type: array
-                                items:
-                                  allOf:
-                                    - $ref: '#/components/schemas/comparison-group'
-                                    - type: object
-                                      required:
-                                        - frequency
-                                      properties:
-                                        frequency:
-                                          type: integer
-                                          examples:
-                                            - 2
     items:
       description: Lösungshäufigkeiten der Items im Kontext
       content:
@@ -618,11 +576,12 @@ components:
             type: array
             items:
               allOf:
-                - $ref: '#/components/schemas/domain'
+                - $ref: '#/components/schemas/value-group'
                 - type: object
                   properties:
                     items:
                       $ref: '#/components/schemas/item-statistics'
+                      description: Statistiken für einzelne Items
     aggregations:
       description: Lösungshäufigkeiten der Merkmale im Kontext
       content:
@@ -630,29 +589,42 @@ components:
           schema:
             type: array
             items:
-              type: object
-              properties:
-                type:
-                  type: string
-                  description: >-
-                    Aggregationsart (z.B. Domäne, Kompetenzstandard), eigene
-                    Aggregationsarten können definiert werden.
-                  enum:
-                    - total
-                    - domain
-                    - competenceStandard
-                    - custom
-                  examples:
-                    - domain
-                value:
-                  type: string
-                  description: >-
-                    Einzelne aggregierte Gruppe, z.B. "Leseverstehen" und
-                    "Orthografie" bei Domänen.
-                  examples:
-                    - Leseverstehen
-                    - Orthografie
-                descriptiveStatistics:
-                  $ref: '#/components/schemas/descriptive-statistics'
-                comparison:
-                  $ref: '#/components/schemas/comparison'
+              allOf:
+                - $ref: '#/components/schemas/value-group'
+                - type: object
+                  required:
+                    - aggregations
+                  properties:
+                    aggregations:
+                      type: array
+                      description: Einzelne Aggregationen
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            description: >-
+                              Aggregationsart (z.B. Kompetenzstandard, Aufgabe),
+                              eigene Aggregationsarten können definiert werden.
+                            enum:
+                              - competenceStandard
+                              - custom
+                            examples:
+                              - competenceStandard
+                              - total
+                          value:
+                            type: string
+                            description: >-
+                              Einzelne aggregierte Gruppe, z.B. "Leseverstehen"
+                              und "Orthografie" bei Domänen.
+                            examples:
+                              - 2.5.3
+                          descriptiveStatistics:
+                            $ref: '#/components/schemas/descriptive-statistics'
+                          includedIqbIds:
+                            type: array
+                            description: >-
+                              Liste von IQB ItemIds, die in der Berechnung der
+                              Aggregation berücksichtigt wurden.
+                            items:
+                              type: string
