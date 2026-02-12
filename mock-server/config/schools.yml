@@ -1,0 +1,34 @@
+schools:
+  # ── V3 Deutsch
+  - id: "gs-musterstadt"
+    name: "Grundschule Musterstadt"
+    groups:
+      [
+        "3a-deutsch",
+        "3b-deutsch",
+        "3c-deutsch",
+        "3d-deutsch",
+        "3a-mathe",
+        "3b-mathe",
+        "3c-mathe",
+        "3d-mathe",
+      ]
+
+  # ── V8 Deutsch
+  - id: "gym-beispielstadt"
+    name: "Gymnasium Beispielstadt"
+    groups:
+      [
+        "8a-deutsch",
+        "8b-deutsch",
+        "8c-deutsch",
+        "8a-englisch",
+        "8b-englisch",
+        "8c-englisch",
+        "8a-mathe",
+        "8b-mathe",
+        "8c-mathe",
+        "8d-mathe",
+        "8a-franzoesisch",
+        "8b-franzoesisch",
+      ]

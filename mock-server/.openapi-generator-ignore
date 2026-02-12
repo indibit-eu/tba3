@@ -1,0 +1,28 @@
+# OpenAPI Generator Ignore
+# Nur Python-Quelldateien behalten, alles andere ignorieren
+
+# Build/Config-Dateien
+Dockerfile
+docker-compose.yaml
+requirements.txt
+pyproject.toml
+setup.cfg
+setup.py
+.flake8
+.gitignore
+tox.ini
+
+# Dokumentation
+README.md
+docs/**
+
+# Tests (werden manuell verwaltet)
+tests/**
+
+# OpenAPI-Spec-Kopie
+openapi.yaml
+openapi.json
+
+# Generator-Metadaten
+.openapi-generator/**
+.openapi-generator-ignore

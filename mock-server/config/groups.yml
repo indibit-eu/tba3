@@ -1,0 +1,113 @@
+defaults:
+  covariates:
+    gender:
+      categories: ["f", "m", "d"]
+      probabilities: [0.49, 0.49, 0.02]
+    languageAtHome:
+      categories: ["german", "english", "french", "other"]
+      probabilities: [0.90, 0.02, 0.02, 0.06]
+
+groups:
+  # ── V8 Deutsch
+
+  - id: "8a-deutsch"
+    name: "8a Deutsch"
+    booklet: "V8-2024-DE-TH01"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 28
+    seed: "42"
+
+  - id: "8b-deutsch"
+    name: "8b Deutsch"
+    booklet: "V8-2024-DE-TH02"
+    ability_mean: 1.0
+    ability_std: 1.0
+    size: 25
+    seed: "42"
+
+  - id: "8c-deutsch"
+    name: "8c Deutsch"
+    booklet: "V8-2024-DE-TH03"
+    ability_mean: -1.0
+    ability_std: 1.0
+    size: 26
+    seed: "42"
+
+  # ── V8 Englisch
+
+  - id: "8a-englisch"
+    name: "8a Englisch"
+    booklet: "V8-2024-EN-TH01"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 27
+    seed: "42"
+
+  - id: "8b-englisch"
+    name: "8b Englisch"
+    booklet: "V8-2024-EN-TH02"
+    ability_mean: 1.0
+    ability_std: 1.0
+    size: 24
+    seed: "42"
+
+  - id: "8c-englisch"
+    name: "8c Englisch"
+    booklet: "V8-2024-EN-TH03"
+    ability_mean: -1.0
+    ability_std: 1.0
+    size: 26
+    seed: "42"
+
+  # ── V8 Französisch
+
+  - id: "8a-franzoesisch"
+    name: "8a Französisch"
+    booklet: "V8-2024-FR-TH01"
+    ability_mean: -0.2
+    ability_std: 1.0
+    size: 22
+    seed: "501"
+
+  - id: "8b-franzoesisch"
+    name: "8b Französisch"
+    booklet: "V8-2024-FR-TH02"
+    ability_mean: 0.1
+    ability_std: 0.9
+    size: 20
+    seed: "502"
+
+  # ── V8 Mathematik
+
+  - id: "8a-mathe"
+    name: "8a Mathematik"
+    booklet: "V8-2024-MA-TH01"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 28
+    seed: "42"
+
+  - id: "8b-mathe"
+    name: "8b Mathematik"
+    booklet: "V8-2024-MA-TH02"
+    ability_mean: 1.0
+    ability_std: 1.0
+    size: 25
+    seed: "42"
+
+  - id: "8c-mathe"
+    name: "8c Mathematik"
+    booklet: "V8-2024-MA-TH03"
+    ability_mean: -1.0
+    ability_std: 1.0
+    size: 26
+    seed: "42"
+
+  - id: "8d-mathe"
+    name: "8d Mathematik"
+    booklet: "V8-2024-MA-TH04"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 23
+    seed: "42"

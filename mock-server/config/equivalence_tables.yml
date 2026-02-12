@@ -1,0 +1,410 @@
+tables:
+  # ── V8 Deutsch
+
+  - booklet: "V8-2024-DE-TH01"
+    domain: "rs"
+    competence_levels:
+      - name_short: "Ia"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 19
+      - name_short: "Ib"
+        name: "Unter Mindeststandard"
+        min_score: 20
+        max_score: 30
+      - name_short: "II"
+        name: "Mindeststandard"
+        min_score: 31
+        max_score: 40
+      - name_short: "III"
+        name: "Regelstandard"
+        min_score: 41
+        max_score: 52
+      - name_short: "IV"
+        name: "Regelstandard plus"
+        min_score: 53
+        max_score: 62
+      - name_short: "V"
+        name: "Optimalstandard"
+        min_score: 63
+        max_score: 75
+
+  - booklet: "V8-2024-DE-TH01"
+    domain: "le"
+    competence_levels:
+      - name_short: "Ia"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 8
+      - name_short: "Ib"
+        name: "Unter Mindeststandard"
+        min_score: 9
+        max_score: 11
+      - name_short: "II"
+        name: "Mindeststandard"
+        min_score: 12
+        max_score: 14
+      - name_short: "III"
+        name: "Regelstandard"
+        min_score: 15
+        max_score: 18
+      - name_short: "IV"
+        name: "Regelstandard plus"
+        min_score: 19
+        max_score: 21
+      - name_short: "V"
+        name: "Optimalstandard"
+        min_score: 22
+        max_score: 26
+
+  - booklet: "V8-2024-DE-TH02"
+    domain: "rs"
+    competence_levels:
+      - name_short: "Ia"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 12
+      - name_short: "Ib"
+        name: "Unter Mindeststandard"
+        min_score: 13
+        max_score: 20
+      - name_short: "II"
+        name: "Mindeststandard"
+        min_score: 21
+        max_score: 30
+      - name_short: "III"
+        name: "Regelstandard"
+        min_score: 31
+        max_score: 42
+      - name_short: "IV"
+        name: "Regelstandard plus"
+        min_score: 43
+        max_score: 53
+      - name_short: "V"
+        name: "Optimalstandard"
+        min_score: 54
+        max_score: 69
+
+  - booklet: "V8-2024-DE-TH02"
+    domain: "le"
+    competence_levels:
+      - name_short: "Ia"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 8
+      - name_short: "Ib"
+        name: "Unter Mindeststandard"
+        min_score: 9
+        max_score: 12
+      - name_short: "II"
+        name: "Mindeststandard"
+        min_score: 13
+        max_score: 17
+      - name_short: "III"
+        name: "Regelstandard"
+        min_score: 18
+        max_score: 21
+      - name_short: "IV"
+        name: "Regelstandard plus"
+        min_score: 22
+        max_score: 25
+      - name_short: "V"
+        name: "Optimalstandard"
+        min_score: 26
+        max_score: 33
+
+  - booklet: "V8-2024-DE-TH03"
+    domain: "rs"
+    competence_levels:
+      - name_short: "Ia"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 9
+      - name_short: "Ib"
+        name: "Unter Mindeststandard"
+        min_score: 10
+        max_score: 16
+      - name_short: "II"
+        name: "Mindeststandard"
+        min_score: 17
+        max_score: 24
+      - name_short: "III"
+        name: "Regelstandard"
+        min_score: 25
+        max_score: 36
+      - name_short: "IV"
+        name: "Regelstandard plus"
+        min_score: 37
+        max_score: 50
+      - name_short: "V"
+        name: "Optimalstandard"
+        min_score: 51
+        max_score: 77
+
+  - booklet: "V8-2024-DE-TH03"
+    domain: "le"
+    competence_levels:
+      - name_short: "Ia"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 4
+      - name_short: "Ib"
+        name: "Unter Mindeststandard"
+        min_score: 5
+        max_score: 7
+      - name_short: "II"
+        name: "Mindeststandard"
+        min_score: 8
+        max_score: 10
+      - name_short: "III"
+        name: "Regelstandard"
+        min_score: 11
+        max_score: 13
+      - name_short: "IV"
+        name: "Regelstandard plus"
+        min_score: 14
+        max_score: 17
+      - name_short: "V"
+        name: "Optimalstandard"
+        min_score: 18
+        max_score: 26
+
+  # ── V8 Englisch
+
+  - booklet: "V8-2024-EN-TH01"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "A1.1", name: "A1.1", min_score: 0, max_score: 6 }
+      - { name_short: "A1.2", name: "A1.2", min_score: 7, max_score: 11 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 12, max_score: 16 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 17, max_score: 22 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 23, max_score: 27 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 28, max_score: 31 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 32, max_score: 33 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 34, max_score: 35 }
+      - { name_short: "C1", name: "C1", min_score: 36, max_score: 36 }
+
+  - booklet: "V8-2024-EN-TH01"
+    domain: "le"
+    competence_levels:
+      - { name_short: "A1.1", name: "A1.1", min_score: 0, max_score: 10 }
+      - { name_short: "A1.2", name: "A1.2", min_score: 11, max_score: 15 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 16, max_score: 21 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 22, max_score: 27 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 28, max_score: 32 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 33, max_score: 36 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 37, max_score: 39 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 40, max_score: 41 }
+      - { name_short: "C1", name: "C1", min_score: 42, max_score: 43 }
+
+  - booklet: "V8-2024-EN-TH02"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "A1.1", name: "A1.1", min_score: 0, max_score: 2 }
+      - { name_short: "A1.2", name: "A1.2", min_score: 3, max_score: 5 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 6, max_score: 9 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 10, max_score: 13 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 14, max_score: 19 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 20, max_score: 23 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 24, max_score: 27 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 28, max_score: 29 }
+      - { name_short: "C1", name: "C1", min_score: 30, max_score: 32 }
+
+  - booklet: "V8-2024-EN-TH02"
+    domain: "le"
+    competence_levels:
+      - { name_short: "A1.1", name: "A1.1", min_score: 0, max_score: 6 }
+      - { name_short: "A1.2", name: "A1.2", min_score: 7, max_score: 10 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 11, max_score: 14 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 15, max_score: 19 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 20, max_score: 24 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 25, max_score: 28 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 29, max_score: 31 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 32, max_score: 33 }
+      - { name_short: "C1", name: "C1", min_score: 34, max_score: 37 }
+
+  - booklet: "V8-2024-EN-TH03"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "A1.1", name: "A1.1", min_score: 0, max_score: 2 }
+      - { name_short: "A1.2", name: "A1.2", min_score: 3, max_score: 4 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 5, max_score: 6 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 7, max_score: 10 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 11, max_score: 14 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 15, max_score: 19 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 20, max_score: 22 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 23, max_score: 25 }
+      - { name_short: "C1", name: "C1", min_score: 26, max_score: 30 }
+
+  - booklet: "V8-2024-EN-TH03"
+    domain: "le"
+    competence_levels:
+      - { name_short: "A1.1", name: "A1.1", min_score: 0, max_score: 5 }
+      - { name_short: "A1.2", name: "A1.2", min_score: 6, max_score: 8 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 9, max_score: 12 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 13, max_score: 16 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 17, max_score: 20 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 21, max_score: 24 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 25, max_score: 28 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 29, max_score: 31 }
+      - { name_short: "C1", name: "C1", min_score: 32, max_score: 36 }
+
+  # ── V8 Französisch
+
+  - booklet: "V8-2024-FR-TH01"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "A1", name: "A1", min_score: 0, max_score: 17 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 18, max_score: 24 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 25, max_score: 31 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 32, max_score: 36 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 37, max_score: 39 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 40, max_score: 40 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 41, max_score: 41 }
+      - { name_short: "C1", name: "C1", min_score: 42, max_score: 42 }
+
+  - booklet: "V8-2024-FR-TH01"
+    domain: "le"
+    competence_levels:
+      - { name_short: "A1", name: "A1", min_score: 0, max_score: 21 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 22, max_score: 26 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 27, max_score: 31 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 32, max_score: 35 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 36, max_score: 38 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 39, max_score: 40 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 41, max_score: 42 }
+      - { name_short: "C1", name: "C1", min_score: 43, max_score: 44 }
+
+  - booklet: "V8-2024-FR-TH02"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "A1", name: "A1", min_score: 0, max_score: 10 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 11, max_score: 17 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 18, max_score: 24 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 25, max_score: 31 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 32, max_score: 36 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 37, max_score: 39 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 40, max_score: 41 }
+      - { name_short: "C1", name: "C1", min_score: 42, max_score: 43 }
+
+  - booklet: "V8-2024-FR-TH02"
+    domain: "le"
+    competence_levels:
+      - { name_short: "A1", name: "A1", min_score: 0, max_score: 12 }
+      - { name_short: "A2.1", name: "A2.1", min_score: 13, max_score: 16 }
+      - { name_short: "A2.2", name: "A2.2", min_score: 17, max_score: 20 }
+      - { name_short: "B1.1", name: "B1.1", min_score: 21, max_score: 24 }
+      - { name_short: "B1.2", name: "B1.2", min_score: 25, max_score: 28 }
+      - { name_short: "B2.1", name: "B2.1", min_score: 29, max_score: 30 }
+      - { name_short: "B2.2", name: "B2.2", min_score: 31, max_score: 32 }
+      - { name_short: "C1", name: "C1", min_score: 33, max_score: 36 }
+
+  # ── V8 Mathematik
+
+  - booklet: "V8-2024-MA-TH01"
+    competence_levels:
+      - name_short: "1a"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 15
+      - name_short: "1b"
+        name: "Unter Mindeststandard"
+        min_score: 16
+        max_score: 21
+      - name_short: "2"
+        name: "Mindeststandard"
+        min_score: 22
+        max_score: 27
+      - name_short: "3"
+        name: "Regelstandard"
+        min_score: 28
+        max_score: 32
+      - name_short: "4"
+        name: "Regelstandard plus"
+        min_score: 33
+        max_score: 35
+      - name_short: "5"
+        name: "Optimalstandard"
+        min_score: 36
+        max_score: 38
+
+  - booklet: "V8-2024-MA-TH02"
+    competence_levels:
+      - name_short: "1a"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 15
+      - name_short: "1b"
+        name: "Unter Mindeststandard"
+        min_score: 16
+        max_score: 21
+      - name_short: "2"
+        name: "Mindeststandard"
+        min_score: 22
+        max_score: 27
+      - name_short: "3"
+        name: "Regelstandard"
+        min_score: 28
+        max_score: 32
+      - name_short: "4"
+        name: "Regelstandard plus"
+        min_score: 33
+        max_score: 35
+      - name_short: "5"
+        name: "Optimalstandard"
+        min_score: 36
+        max_score: 38
+
+  - booklet: "V8-2024-MA-TH03"
+    competence_levels:
+      - name_short: "1a"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 7
+      - name_short: "1b"
+        name: "Unter Mindeststandard"
+        min_score: 8
+        max_score: 12
+      - name_short: "2"
+        name: "Mindeststandard"
+        min_score: 13
+        max_score: 18
+      - name_short: "3"
+        name: "Regelstandard"
+        min_score: 19
+        max_score: 24
+      - name_short: "4"
+        name: "Regelstandard plus"
+        min_score: 25
+        max_score: 28
+      - name_short: "5"
+        name: "Optimalstandard"
+        min_score: 29
+        max_score: 35
+
+  - booklet: "V8-2024-MA-TH04"
+    competence_levels:
+      - name_short: "1a"
+        name: "Unter Mindeststandard"
+        min_score: 0
+        max_score: 7
+      - name_short: "1b"
+        name: "Unter Mindeststandard"
+        min_score: 8
+        max_score: 13
+      - name_short: "2"
+        name: "Mindeststandard"
+        min_score: 14
+        max_score: 19
+      - name_short: "3"
+        name: "Regelstandard"
+        min_score: 20
+        max_score: 26
+      - name_short: "4"
+        name: "Regelstandard plus"
+        min_score: 27
+        max_score: 31
+      - name_short: "5"
+        name: "Optimalstandard"
+        min_score: 32
+        max_score: 38
