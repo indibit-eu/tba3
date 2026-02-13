@@ -99,6 +99,11 @@ class Item:
     solution_freq_primary_school: float | None = None
     solution_freq_gymnasium: float | None = None
     solution_freq_non_gymnasium: float | None = None
+    competence_standard: list[str] | None = None
+    listening_or_reading_style: str | None = None
+    general_mathematical_competence: list[str] | None = None
+    core_idea: list[str] | None = None
+    cognitive_demand_level: str | None = None
 
     @property
     def column_name(self) -> str:

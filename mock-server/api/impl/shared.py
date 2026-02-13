@@ -14,9 +14,12 @@ from generator.config import (
     GroupConfig,
     GroupsFileConfig,
     SchoolConfig,
+    StateConfig,
+    StatesFileConfig,
     load_equivalence_tables,
     load_groups_config,
     load_schools_config,
+    load_states_config,
 )
 from generator.core import GroupData, generate_group
 from generator.profiles import ClassProfile, CovariateDistribution
@@ -74,6 +77,17 @@ if _schools_path.exists():
 else:
     logger.warning("Schools config not found: %s", _schools_path)
 
+states_config: StatesFileConfig | None = None
+state_lookup: dict[str, StateConfig] = {}
+
+_states_path = _CONFIG_DIR / "states.yml"
+if _states_path.exists():
+    states_config = load_states_config(_states_path)
+    state_lookup = {s.id: s for s in states_config.states}
+    logger.info("Loaded %d states from %s", len(state_lookup), _states_path)
+else:
+    logger.warning("States config not found: %s", _states_path)
+
 
 # --- Helper functions ---
 
@@ -94,21 +108,16 @@ def resolve_requested_types(type_param: str | None) -> tuple[bool, bool]:
     return include_group, include_students
 
 
-def build_covariates(
-    group_cfg: GroupConfig,
+def _merge_covariates(
+    default_covariates: dict[str, CovariateConfig] | None,
+    entity_covariates: dict[str, CovariateConfig] | None,
 ) -> tuple[CovariateDistribution, ...]:
-    """Build covariate distributions, merging group-specific with defaults."""
-    defaults: dict[str, CovariateConfig] = {}
-    if (
-        groups_config
-        and groups_config.defaults
-        and groups_config.defaults.covariates
-    ):
-        defaults = dict(groups_config.defaults.covariates)
-
-    merged = dict(defaults)
-    if group_cfg.covariates:
-        merged.update(group_cfg.covariates)
+    """Build covariate distributions, merging entity-specific with defaults."""
+    merged: dict[str, CovariateConfig] = {}
+    if default_covariates:
+        merged.update(default_covariates)
+    if entity_covariates:
+        merged.update(entity_covariates)
 
     return tuple(
         CovariateDistribution(
@@ -118,6 +127,30 @@ def build_covariates(
         )
         for type_name, cov_cfg in merged.items()
     )
+
+
+def build_covariates(
+    group_cfg: GroupConfig,
+) -> tuple[CovariateDistribution, ...]:
+    """Build covariate distributions, merging group-specific with defaults."""
+    default_covariates = (
+        groups_config.defaults.covariates
+        if groups_config and groups_config.defaults
+        else None
+    )
+    return _merge_covariates(default_covariates, group_cfg.covariates)
+
+
+def build_state_covariates(
+    state_cfg: StateConfig,
+) -> tuple[CovariateDistribution, ...]:
+    """Build covariate distributions, merging state-specific with defaults."""
+    default_covariates = (
+        states_config.defaults.covariates
+        if states_config and states_config.defaults
+        else None
+    )
+    return _merge_covariates(default_covariates, state_cfg.covariates)
 
 
 def resolve_group(
@@ -191,3 +224,57 @@ def resolve_school(
         )
 
     return [resolve_group(gid) for gid in school_cfg.groups]
+
+
+def resolve_state(
+    state_id: str,
+) -> list[tuple[GroupData, list[EquivalenceTableEntry]]]:
+    """Generate one group per booklet for a state.
+
+    Returns:
+        List of (GroupData, equiv_tables) tuples, one per booklet.
+
+    Raises:
+        HTTPException(404): If state ID or any booklet is not found.
+    """
+    state_cfg = state_lookup.get(state_id)
+    if state_cfg is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"State not found: {state_id}",
+        )
+
+    covariates = build_state_covariates(state_cfg)
+    profile = ClassProfile(
+        name=state_cfg.display_name(),
+        ability_mean=state_cfg.ability_mean,
+        ability_std=state_cfg.ability_std,
+    )
+
+    results: list[tuple[GroupData, list[EquivalenceTableEntry]]] = []
+    for booklet_str in state_cfg.booklets:
+        booklet_key = BookletKey.from_str(booklet_str)
+        booklet = registry.get(booklet_key)
+        if booklet is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Booklet not found: {booklet_key}",
+            )
+
+        group_data = generate_group(
+            group_id=f"{state_id}:{booklet_str}",
+            booklet=booklet,
+            profile=profile,
+            student_count=state_cfg.size,
+            covariates=covariates,
+            seed=f"{state_cfg.seed}-{booklet_str}",
+        )
+
+        equiv_tables = [
+            entry
+            for (bk, _domain), entry in equiv_lookup.items()
+            if bk == booklet_key
+        ]
+        results.append((group_data, equiv_tables))
+
+    return results

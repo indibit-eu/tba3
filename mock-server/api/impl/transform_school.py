@@ -8,7 +8,7 @@ from api.impl.transform_group import build_group_competence_levels_response
 from api.impl.transform_helpers import (
     _safe_round,
     build_single_item_stats,
-    make_domain,
+    build_domain,
 )
 from api.models.descriptive_statistics import DescriptiveStatistics
 from api.models.domain import Domain
@@ -138,7 +138,7 @@ def build_school_items_response(
                 InlineObjectInner1(
                     id=school_id,
                     name=school_name,
-                    domain=make_domain(domain_name, subject),
+                    domain=build_domain(domain_name, subject),
                     items=items_stats,
                 )
             )
@@ -200,7 +200,7 @@ def build_school_aggregations_response(
             InlineObjectInner2(
                 id=school_id,
                 name=school_name,
-                domain=make_domain(key.domain, key.subject),
+                domain=build_domain(key.domain, key.subject),
                 aggregations=[aggregation],
             )
         )

@@ -29,6 +29,35 @@ def _parse_optional_float(value: str | float | int | None) -> float | None:
     return float(value)
 
 
+def _parse_optional_str(value: str | float | int | None) -> str | None:
+    """Parse a value as a stripped string, returning None for missing data."""
+    if value is None:
+        return None
+    s = str(value).strip()
+    return s if s else None
+
+
+def _parse_flag(value: str | float | int | None) -> bool:
+    """Parse a boolean flag column (1 or null → True/False)."""
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return value.strip() == "1"
+    return int(value) == 1
+
+
+def _collect_flags(
+    row: dict[str, object], columns: tuple[str, ...]
+) -> list[str] | None:
+    """Collect column names where the flag value is 1.
+
+    Returns None if no columns have a positive flag.
+    Only columns present in the row are checked.
+    """
+    result = [col for col in columns if col in row and _parse_flag(row[col])]
+    return result if result else None
+
+
 def load_items_from_csv(csv_path: Path) -> pl.DataFrame:
     """Load raw item data from a CSV file.
 
@@ -100,6 +129,41 @@ def build_booklets_from_dataframe(df: pl.DataFrame) -> dict[BookletKey, Booklet]
         domain_raw = row.get("domain")
         domain = str(domain_raw) if domain_raw is not None else None
 
+        # Parse competence_standard from kompstd1/2/3
+        kompstd_list = [
+            v
+            for col in ("kompstd1", "kompstd2", "kompstd3")
+            if (v := _parse_optional_str(row.get(col))) is not None
+        ]
+        competence_standard = kompstd_list if kompstd_list else None
+
+        # Parse listening_or_reading_style from boolean flag columns.
+        # Handle CSV spelling inconsistency: "detailliert" vs "detailiert"
+        _style_mapping: dict[str, str] = {
+            "selektiv": "selektiv",
+            "detailliert": "detailliert",
+            "detailiert": "detailliert",
+            "inferierend": "inferierend",
+            "global": "global",
+        }
+        listening_or_reading_style: str | None = None
+        for csv_col, canonical in _style_mapping.items():
+            if csv_col in row and _parse_flag(row[csv_col]):
+                listening_or_reading_style = canonical
+                break
+
+        # Parse general_mathematical_competence from K1-K6 and A1-A5 flags
+        general_mathematical_competence = _collect_flags(
+            row, ("K1", "K2", "K3", "K4", "K5", "K6", "A1", "A2", "A3", "A4", "A5")
+        )
+
+        # Parse core_idea from L1-L5 flags
+        core_idea = _collect_flags(row, ("L1", "L2", "L3", "L4", "L5"))
+
+        # Parse cognitive_demand_level from AFB column
+        afb_raw = row.get("AFB")
+        cognitive_demand_level = str(int(afb_raw)) if afb_raw is not None else None
+
         item = Item(
             iqbitem_id=str(row["iqbitem_id"]),
             name=str(row["name"]),
@@ -112,6 +176,11 @@ def build_booklets_from_dataframe(df: pl.DataFrame) -> dict[BookletKey, Booklet]
             solution_freq_primary_school=_parse_optional_float(row.get("lh_gs")),
             solution_freq_gymnasium=_parse_optional_float(row.get("lh_gy")),
             solution_freq_non_gymnasium=_parse_optional_float(row.get("lh_ng")),
+            competence_standard=competence_standard,
+            listening_or_reading_style=listening_or_reading_style,
+            general_mathematical_competence=general_mathematical_competence,
+            core_idea=core_idea,
+            cognitive_demand_level=cognitive_demand_level,
         )
 
         booklets[key].items.append(item)

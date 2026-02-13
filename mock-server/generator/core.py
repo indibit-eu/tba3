@@ -38,6 +38,11 @@ class GroupData:
         """Return list of student names from the responses DataFrame."""
         return self.responses["name"].to_list()
 
+    @property
+    def covariate_columns(self) -> list[str]:
+        """Return covariate column names (all student columns except id/name/ability)."""
+        return [c for c in self.students.columns if c not in {"id", "name", "ability"}]
+
 
 def generate_group(
     group_id: str,

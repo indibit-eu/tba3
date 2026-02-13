@@ -5,7 +5,7 @@ from __future__ import annotations
 from api.impl.transform_helpers import (
     _safe_round,
     build_single_item_stats,
-    make_domain,
+    build_domain,
 )
 from api.models.descriptive_statistics import DescriptiveStatistics
 from api.models.inline_object_inner import InlineObjectInner
@@ -43,7 +43,7 @@ def build_group_items_response(group_data: GroupData) -> list[InlineObjectInner1
             InlineObjectInner1(
                 id=group_data.group_id,
                 name=f"Lerngruppe {group_data.group_id}",
-                domain=make_domain(domain_name, subject),
+                domain=build_domain(domain_name, subject),
                 items=items_stats,
             )
         )
@@ -89,7 +89,7 @@ def build_group_aggregations_response(
             InlineObjectInner2(
                 id=group_data.group_id,
                 name=f"Lerngruppe {group_data.group_id}",
-                domain=make_domain(domain_name, subject),
+                domain=build_domain(domain_name, subject),
                 aggregations=[aggregation],
             )
         )
@@ -147,7 +147,7 @@ def build_group_competence_levels_response(
             InlineObjectInner(
                 id=group_data.group_id,
                 name=group_data.profile.name,
-                domain=make_domain(entry.domain, group_data.booklet.subject),
+                domain=build_domain(entry.domain, group_data.booklet.subject),
                 competence_levels=comp_levels,
             )
         )

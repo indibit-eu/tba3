@@ -161,6 +161,42 @@ class SchoolsFileConfig(BaseModel):
         return self
 
 
+class StateConfig(BaseModel):
+    """Configuration for a single state (generates one group per booklet)."""
+
+    id: str
+    name: str | None = None
+    booklets: list[str] = Field(min_length=1)
+    ability_mean: float
+    ability_std: float = Field(gt=0)
+    size: int = Field(ge=1)
+    seed: str
+    covariates: dict[str, CovariateConfig] | None = None
+
+    def display_name(self) -> str:
+        """Return the display name, falling back to the ID."""
+        return self.name or f"Bundesland {self.id}"
+
+    def booklet_keys(self) -> list[BookletKey]:
+        """Parse all booklet strings into BookletKey objects."""
+        return [BookletKey.from_str(b) for b in self.booklets]
+
+
+class StatesFileConfig(BaseModel):
+    """Root model for config/states.yml."""
+
+    defaults: DefaultsConfig | None = None
+    states: list[StateConfig]
+
+    @model_validator(mode="after")
+    def validate_unique_ids(self) -> Self:
+        """Ensure all state IDs are unique."""
+        duplicates = _find_duplicates([s.id for s in self.states])
+        if duplicates:
+            raise ValueError(f"Duplicate state IDs: {duplicates}")
+        return self
+
+
 class EquivalenceTablesFileConfig(BaseModel):
     """Root model for config/equivalence_tables.yml."""
 
@@ -228,3 +264,9 @@ def load_schools_config(path: Path) -> SchoolsFileConfig:
     """Load and validate schools configuration from a YAML file."""
     raw = yaml.safe_load(path.read_text())
     return SchoolsFileConfig.model_validate(raw)
+
+
+def load_states_config(path: Path) -> StatesFileConfig:
+    """Load and validate states configuration from a YAML file."""
+    raw = yaml.safe_load(path.read_text())
+    return StatesFileConfig.model_validate(raw)

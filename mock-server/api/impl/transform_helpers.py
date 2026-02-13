@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, NamedTuple
+from typing import Any
 
 import polars as pl
 
@@ -32,26 +32,46 @@ def _safe_round(value: Any, decimals: int = 4) -> float:
     return round(float(value), decimals)
 
 
-class _DomainAggInfo(NamedTuple):
-    """Pre-computed domain aggregation info for efficient batch processing."""
-
-    name: str | None
-    total: int
-    iqb_ids: list[str]
-    sum_col: str
-
-
-def make_domain(
+def build_domain(
     domain_name: str | None, subject_code: str
-) -> Domain | None:
-    """Create a Domain model, or None if domain_name is None."""
-    if domain_name is None:
-        return None
+) -> Domain:
+    """Create a Domain model. Uses subject name when domain_name is None."""
     subject_display = SUBJECT_NAMES.get(subject_code, subject_code)
     return Domain(
-        name=domain_name,
+        name=domain_name if domain_name is not None else subject_display,
         subject=DomainSubject(name=subject_display),
     )
+
+
+def build_item_parameters(item: Item) -> ItemParameters:
+    """Build an ItemParameters model from an Item dataclass."""
+    return ItemParameters(
+        logit=item.logit,
+        bista_points=item.bista,
+        solution_frequency_primary_school=item.solution_freq_primary_school,
+        solution_frequency_gymnasium=item.solution_freq_gymnasium,
+        solution_frequency_non_gymnasium=item.solution_freq_non_gymnasium,
+        subject=item.domain,
+        domain=item.domain,
+        competence_level=CompetenceLevel(name_short=item.competence_level),
+        competence_standard=item.competence_standard,
+        listening_or_reading_style=item.listening_or_reading_style,
+        general_mathematical_competence=item.general_mathematical_competence,
+        core_idea=item.core_idea,
+        cognitive_demand_level=item.cognitive_demand_level,
+    )
+
+
+def build_student_covariates(
+    row: dict[str, Any], covariate_columns: list[str]
+) -> list[dict[str, str]]:
+    """Build covariate dicts from a student's covariate values.
+
+    Returns plain dicts (not Characteristic models) because the generated
+    Characteristic oneOf wrapper is not serializable by Pydantic v2.
+    The dicts are assigned via __dict__ to bypass model validation.
+    """
+    return [{"type": col, "value": str(row[col])} for col in covariate_columns]
 
 
 def build_single_item_stats(
@@ -70,17 +90,7 @@ def build_single_item_stats(
     return ItemStatisticsInner(
         name=item.item_nr_booklet,
         iqb_id=item.iqbitem_id,
-        parameters=ItemParameters(
-            logit=item.logit,
-            bista_points=item.bista,
-            solution_frequency_primary_school=item.solution_freq_primary_school,
-            solution_frequency_gymnasium=item.solution_freq_gymnasium,
-            solution_frequency_non_gymnasium=item.solution_freq_non_gymnasium,
-            # TBA3 spec's ItemParameters.subject maps to our domain concept
-            subject=item.domain,
-            domain=item.domain,
-            competence_level=CompetenceLevel(name_short=item.competence_level),
-        ),
+        parameters=build_item_parameters(item),
         descriptive_statistics=DescriptiveStatistics(
             total=int(stats["total"]),
             mean=_safe_round(stats["mean"]),

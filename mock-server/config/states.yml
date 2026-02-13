@@ -1,0 +1,29 @@
+defaults:
+  covariates:
+    gender:
+      categories: ["f", "m", "d"]
+      probabilities: [0.49, 0.49, 0.02]
+    languageAtHome:
+      categories: ["german", "english", "french", "other"]
+      probabilities: [0.90, 0.02, 0.02, 0.06]
+
+states:
+  - id: "beispielland"
+    name: "Beispielland"
+    booklets:
+      - "V8-2024-DE-TH01"
+      - "V8-2024-DE-TH02"
+      - "V8-2024-DE-TH03"
+      - "V8-2024-EN-TH01"
+      - "V8-2024-EN-TH02"
+      - "V8-2024-EN-TH03"
+      - "V8-2024-FR-TH01"
+      - "V8-2024-FR-TH02"
+      - "V8-2024-MA-TH01"
+      - "V8-2024-MA-TH02"
+      - "V8-2024-MA-TH03"
+      - "V8-2024-MA-TH04"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 800
+    seed: "beispiel"

@@ -5,11 +5,11 @@ from __future__ import annotations
 import polars as pl
 
 from api.impl.transform_helpers import (
-    _DomainAggInfo,
     _safe_round,
-    make_domain,
+    build_item_parameters,
+    build_domain,
+    build_student_covariates,
 )
-from api.models.competence_level import CompetenceLevel
 from api.models.descriptive_statistics import DescriptiveStatistics
 from api.models.inline_object_inner import InlineObjectInner
 from api.models.inline_object_inner1 import InlineObjectInner1
@@ -20,7 +20,6 @@ from api.models.inline_object_inner2_all_of_aggregations_inner import (
 from api.models.inline_object_inner_all_of_competence_levels_inner import (
     InlineObjectInnerAllOfCompetenceLevelsInner,
 )
-from api.models.item_parameters import ItemParameters
 from api.models.item_statistics_inner import ItemStatisticsInner
 from generator.config import EquivalenceTableEntry
 from generator.core import GroupData
@@ -36,8 +35,8 @@ def build_student_competence_levels_response(
     the student's raw score is mapped to a competence level with frequency=1
     for the matched level and 0 for all others.
     """
-    student_ids = group_data.student_ids
-    student_names = group_data.student_names
+    cov_cols = group_data.covariate_columns
+    student_rows = group_data.responses.select("id", "name", *cov_cols).to_dicts()
 
     results: list[InlineObjectInner] = []
 
@@ -45,9 +44,9 @@ def build_student_competence_levels_response(
         item_cols = group_data.booklet.column_names_for_domain(entry.domain)
         raw_scores = group_data.responses.select(item_cols).sum_horizontal().to_list()
 
-        domain_model = make_domain(entry.domain, group_data.booklet.subject)
+        domain_model = build_domain(entry.domain, group_data.booklet.subject)
 
-        for i, (sid, sname) in enumerate(zip(student_ids, student_names, strict=True)):
+        for i, row in enumerate(student_rows):
             score_val = int(raw_scores[i])
             matched_level = entry.match_level(score_val)
 
@@ -61,14 +60,14 @@ def build_student_competence_levels_response(
                 for cl in entry.competence_levels
             ]
 
-            results.append(
-                InlineObjectInner(
-                    id=sid,
-                    name=sname,
-                    domain=domain_model,
-                    competence_levels=comp_levels,
-                )
+            vg = InlineObjectInner(
+                id=row["id"],
+                name=row["name"],
+                domain=domain_model,
+                competence_levels=comp_levels,
             )
+            vg.__dict__["covariates"] = build_student_covariates(row, cov_cols)
+            results.append(vg)
 
     return results
 
@@ -84,8 +83,8 @@ def build_student_items_response(
     domain_items = group_data.booklet.items_by_domain()
     subject = group_data.booklet.subject
 
-    student_ids = group_data.student_ids
-    student_names = group_data.student_names
+    cov_cols = group_data.covariate_columns
+    student_rows = group_data.responses.select("id", "name", *cov_cols).to_dicts()
 
     results: list[InlineObjectInner1] = []
 
@@ -94,24 +93,14 @@ def build_student_items_response(
         item_cols = [item.column_name for item in sorted_items]
 
         # Pre-build item parameters (same for all students)
-        item_params = [
-            ItemParameters(
-                logit=item.logit,
-                bista_points=item.bista,
-                # TBA3 spec's ItemParameters.subject maps to our domain concept
-                subject=item.domain,
-                domain=item.domain,
-                competence_level=CompetenceLevel(name_short=item.competence_level),
-            )
-            for item in sorted_items
-        ]
+        item_params = [build_item_parameters(item) for item in sorted_items]
 
         scores_rows = group_data.responses.select(item_cols).to_dicts()
 
-        domain_model = make_domain(domain_name, subject)
+        domain_model = build_domain(domain_name, subject)
 
-        for sid, sname, row in zip(
-            student_ids, student_names, scores_rows, strict=True
+        for student_row, scores_row in zip(
+            student_rows, scores_rows, strict=True
         ):
             items_stats = [
                 ItemStatisticsInner(
@@ -120,8 +109,8 @@ def build_student_items_response(
                     parameters=params,
                     descriptive_statistics=DescriptiveStatistics(
                         total=1,
-                        frequency=int(row[col]),
-                        mean=float(row[col]),
+                        frequency=int(scores_row[col]),
+                        mean=float(scores_row[col]),
                         standard_deviation=0.0,
                     ),
                 )
@@ -130,14 +119,14 @@ def build_student_items_response(
                 )
             ]
 
-            results.append(
-                InlineObjectInner1(
-                    id=sid,
-                    name=sname,
-                    domain=domain_model,
-                    items=items_stats,
-                )
+            vg = InlineObjectInner1(
+                id=student_row["id"],
+                name=student_row["name"],
+                domain=domain_model,
+                items=items_stats,
             )
+            vg.__dict__["covariates"] = build_student_covariates(student_row, cov_cols)
+            results.append(vg)
 
     return results
 
@@ -154,26 +143,28 @@ def build_student_aggregations_response(
     subject = group_data.booklet.subject
 
     # Pre-compute domain info and per-student domain sums
-    domain_info: list[_DomainAggInfo] = []
+    domain_info: list[tuple[str | None, int, list[str], str]] = []
     sum_exprs: list[pl.Expr] = []
 
     for domain_name, items in domain_items.items():
         cols = [item.column_name for item in items]
         iqb_ids = [item.iqbitem_id for item in items]
         sum_col = f"_sum_{domain_name or '_all'}"
-        domain_info.append(_DomainAggInfo(domain_name, len(cols), iqb_ids, sum_col))
+        domain_info.append((domain_name, len(cols), iqb_ids, sum_col))
         sum_exprs.append(pl.sum_horizontal(cols).alias(sum_col))
+
+    cov_cols = group_data.covariate_columns
 
     # Compute all domain sums in one Polars operation
     domain_sums_df = group_data.responses.select(
-        pl.col("id"), pl.col("name"), *sum_exprs
+        pl.col("id"), pl.col("name"), *[pl.col(c) for c in cov_cols], *sum_exprs
     )
     rows = domain_sums_df.to_dicts()
 
     results: list[InlineObjectInner2] = []
 
     for domain_name, total, iqb_ids, sum_col in domain_info:
-        domain_model = make_domain(domain_name, subject)
+        domain_model = build_domain(domain_name, subject)
 
         for row in rows:
             frequency = int(row[sum_col])
@@ -191,13 +182,13 @@ def build_student_aggregations_response(
                 included_iqb_ids=iqb_ids,
             )
 
-            results.append(
-                InlineObjectInner2(
-                    id=row["id"],
-                    name=row["name"],
-                    domain=domain_model,
-                    aggregations=[aggregation],
-                )
+            vg = InlineObjectInner2(
+                id=row["id"],
+                name=row["name"],
+                domain=domain_model,
+                aggregations=[aggregation],
             )
+            vg.__dict__["covariates"] = build_student_covariates(row, cov_cols)
+            results.append(vg)
 
     return results
