@@ -8,6 +8,12 @@ Es wird [uv](https://docs.astral.sh/uv/getting-started/installation/) als Paketm
 
 ## Projekt aufsetzen
 
+Zuerst muss der Projektordner `tba3/mock-server` im Terminal geöffnet werden.
+
+```bash
+cd /path/to/tba3/mock-server
+```
+
 Das Virtual Environment und alle Abhängigkeiten werden mit zwei Befehlen eingerichtet:
 
 ```bash
