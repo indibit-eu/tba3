@@ -68,7 +68,7 @@ type:
   explode: false
   schema:
     type: string
-  description: Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen
+  description: Wertegruppen, welche ausgegeben werden sollen
   examples:
     Lerngruppe:
       value:

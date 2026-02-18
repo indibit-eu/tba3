@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from pydantic import StrictStr
 
 from api.apis.schools_api_base import BaseSchoolsApi
-from api.impl.shared import resolve_school, school_lookup
+from api.impl.shared import resolve_requested_types, resolve_school, school_lookup
 from api.impl.transform_group import (
     build_group_aggregations_response,
     build_group_competence_levels_response,
@@ -15,6 +15,7 @@ from api.impl.transform_school import (
     build_school_competence_levels_response,
     build_school_items_response,
 )
+from api.impl.transform_student import build_student_aggregations_response
 from api.models.inline_object_inner import InlineObjectInner
 from api.models.inline_object_inner1 import InlineObjectInner1
 from api.models.inline_object_inner2 import InlineObjectInner2
@@ -86,17 +87,27 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
         groups_with_equiv = resolve_school(id)
         school_cfg = school_lookup[id]
         groups = [gd for gd, _ in groups_with_equiv]
+        include_group, include_students = resolve_requested_types(type)
         result: list[InlineObjectInner2] = []
 
-        # School-level aggregated
-        result.extend(
-            build_school_aggregations_response(
-                id, school_cfg.display_name(), groups
+        if include_group:
+            # School-level aggregated
+            result.extend(
+                build_school_aggregations_response(
+                    id, school_cfg.display_name(), groups
+                )
             )
-        )
 
-        # Per-group
-        for group_data in groups:
-            result.extend(build_group_aggregations_response(group_data))
+            # Per-group
+            for group_data in groups:
+                result.extend(build_group_aggregations_response(group_data))
+
+        if include_students:
+            for group_data in groups:
+                student_vgs = build_student_aggregations_response(group_data)
+                group_cov = {"type": "group", "value": group_data.profile.name}
+                for vg in student_vgs:
+                    vg.__dict__["covariates"].append(group_cov)
+                result.extend(student_vgs)
 
         return result
