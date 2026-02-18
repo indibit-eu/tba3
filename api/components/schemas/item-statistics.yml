@@ -1,10 +1,8 @@
 type: array
 items:
   allOf:
-    - $ref: '../schemas/item.yml'
+    - $ref: "../schemas/item.yml"
     - type: object
       properties:
         descriptiveStatistics:
-          $ref: '../schemas/descriptive-statistics.yml'
-        comparison:
-          $ref: '../schemas/comparison.yml'
+          $ref: "../schemas/descriptive-statistics.yml"

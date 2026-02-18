@@ -7,11 +7,9 @@ schools:
         "3a-deutsch",
         "3b-deutsch",
         "3c-deutsch",
-        "3d-deutsch",
         "3a-mathe",
         "3b-mathe",
         "3c-mathe",
-        "3d-mathe",
       ]
 
   # ── V8 Deutsch
@@ -31,4 +29,5 @@ schools:
         "8d-mathe",
         "8a-franzoesisch",
         "8b-franzoesisch",
+        "8c-franzoesisch",
       ]

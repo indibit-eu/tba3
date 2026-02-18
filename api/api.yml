@@ -1,8 +1,9 @@
-openapi: '3.1.0'
+openapi: "3.1.0"
 info:
   title: TBA III
   summary: Schnittstelle für den Zugriff auf Auswertungsdaten von VERA
-  version: '0.3'
+  description: Diese API ermöglicht den Zugriff auf Auswertungsdaten von VERA. Sie bietet Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten (Kompetenzstufen, Item-Statistiken, Aggregationen).
+  version: "1.0"
   license:
     name: MIT
     url: https://opensource.org/license/MIT
@@ -15,22 +16,22 @@ tags:
     description: Ergebnisse auf Landesebene
 paths:
   /groups/{id}/competence-levels:
-    $ref: 'paths/groups/competence-levels.yml'
+    $ref: "paths/groups/competence-levels.yml"
   /groups/{id}/items:
-    $ref: 'paths/groups/items.yml'
+    $ref: "paths/groups/items.yml"
   /groups/{id}/aggregations:
-    $ref: 'paths/groups/aggregations.yml'
+    $ref: "paths/groups/aggregations.yml"
 
   /schools/{id}/competence-levels:
-    $ref: 'paths/schools/competence-levels.yml'
+    $ref: "paths/schools/competence-levels.yml"
   /schools/{id}/items:
-    $ref: 'paths/schools/items.yml'
+    $ref: "paths/schools/items.yml"
   /schools/{id}/aggregations:
-    $ref: 'paths/schools/aggregations.yml'
-    
+    $ref: "paths/schools/aggregations.yml"
+
   /states/{id}/competence-levels:
-    $ref: 'paths/states/competence-levels.yml'
+    $ref: "paths/states/competence-levels.yml"
   /states/{id}/items:
-    $ref: 'paths/states/items.yml'
+    $ref: "paths/states/items.yml"
   /states/{id}/aggregations:
-    $ref: 'paths/states/aggregations.yml'
+    $ref: "paths/states/aggregations.yml"

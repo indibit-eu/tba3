@@ -20,7 +20,7 @@ class BaseGroupsApi:
         self,
         id: Annotated[StrictStr, Field(description="Id der Lerngruppe")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner]:
         """Kompetenzstufenverteilung in der Lerngruppe"""
         ...
@@ -30,7 +30,7 @@ class BaseGroupsApi:
         self,
         id: Annotated[StrictStr, Field(description="Id der Lerngruppe")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner1]:
         """Lösungshäufigkeiten je Item in der Lerngruppe"""
         ...
@@ -41,7 +41,7 @@ class BaseGroupsApi:
         id: Annotated[StrictStr, Field(description="Id der Lerngruppe")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")],
         aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner2]:
         """Aggregierte Lösungshäufigkeiten in der Lerngruppe"""
         ...

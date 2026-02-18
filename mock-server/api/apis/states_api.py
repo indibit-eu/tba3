@@ -49,7 +49,7 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
 )
 async def states_id_competence_levels_get(
     id: Annotated[StrictStr, Field(description="Id des Bundeslandes")] = Path(..., description="Id des Bundeslandes"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[InlineObjectInner]:
     """Kompetenzstufenverteilung im Bundesland"""
     if not BaseStatesApi.subclasses:
@@ -68,7 +68,7 @@ async def states_id_competence_levels_get(
 )
 async def states_id_items_get(
     id: Annotated[StrictStr, Field(description="Id des Bundeslandes")] = Path(..., description="Id des Bundeslandes"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[InlineObjectInner1]:
     """Lösungshäufigkeiten je Item im Bundesland"""
     if not BaseStatesApi.subclasses:
@@ -89,7 +89,7 @@ async def states_id_aggregations_get(
     id: Annotated[StrictStr, Field(description="Id des Bundeslandes")] = Path(..., description="Id des Bundeslandes"),
     type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen", alias="type"),
     aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")] = Query(None, description="Aggregationsarten, die berechnet werden sollen", alias="aggregation"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[InlineObjectInner2]:
     """Aggregierte Lösungshäufigkeiten im Bundesland"""
     if not BaseStatesApi.subclasses:

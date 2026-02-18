@@ -1,4 +1,60 @@
 tables:
+  # ── V3 Deutsch
+
+  - booklet: "V3-2024-DE-TH01"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "I", name: "Unter Mindeststandard", min_score: 0, max_score: 13 }
+      - { name_short: "II", name: "Mindeststandard", min_score: 14, max_score: 16 }
+      - { name_short: "III", name: "Regelstandard", min_score: 17, max_score: 19 }
+      - { name_short: "IV", name: "Regelstandard plus", min_score: 20, max_score: 22 }
+      - { name_short: "V", name: "Optimalstandard", min_score: 23, max_score: 25 }
+
+  - booklet: "V3-2024-DE-TH01"
+    domain: "le"
+    competence_levels:
+      - { name_short: "I", name: "Unter Mindeststandard", min_score: 0, max_score: 13 }
+      - { name_short: "II", name: "Mindeststandard", min_score: 14, max_score: 17 }
+      - { name_short: "III", name: "Regelstandard", min_score: 18, max_score: 21 }
+      - { name_short: "IV", name: "Regelstandard plus", min_score: 22, max_score: 23 }
+      - { name_short: "V", name: "Optimalstandard", min_score: 24, max_score: 27 }
+
+  - booklet: "V3-2024-DE-TH02"
+    domain: "ho"
+    competence_levels:
+      - { name_short: "I", name: "Unter Mindeststandard", min_score: 0, max_score: 13 }
+      - { name_short: "II", name: "Mindeststandard", min_score: 14, max_score: 16 }
+      - { name_short: "III", name: "Regelstandard", min_score: 17, max_score: 19 }
+      - { name_short: "IV", name: "Regelstandard plus", min_score: 20, max_score: 22 }
+      - { name_short: "V", name: "Optimalstandard", min_score: 23, max_score: 25 }
+
+  - booklet: "V3-2024-DE-TH02"
+    domain: "le"
+    competence_levels:
+      - { name_short: "I", name: "Unter Mindeststandard", min_score: 0, max_score: 8 }
+      - { name_short: "II", name: "Mindeststandard", min_score: 9, max_score: 12 }
+      - { name_short: "III", name: "Regelstandard", min_score: 13, max_score: 15 }
+      - { name_short: "IV", name: "Regelstandard plus", min_score: 16, max_score: 18 }
+      - { name_short: "V", name: "Optimalstandard", min_score: 19, max_score: 23 }
+
+  # ── V3 Mathematik
+
+  - booklet: "V3-2024-MA-THA"
+    competence_levels:
+      - { name_short: "I", name: "Unter Mindeststandard", min_score: 0, max_score: 26 }
+      - { name_short: "II", name: "Mindeststandard", min_score: 27, max_score: 34 }
+      - { name_short: "III", name: "Regelstandard", min_score: 35, max_score: 41 }
+      - { name_short: "IV", name: "Regelstandard plus", min_score: 42, max_score: 47 }
+      - { name_short: "V", name: "Optimalstandard", min_score: 48, max_score: 55 }
+
+  - booklet: "V3-2024-MA-THB"
+    competence_levels:
+      - { name_short: "I", name: "Unter Mindeststandard", min_score: 0, max_score: 19 }
+      - { name_short: "II", name: "Mindeststandard", min_score: 20, max_score: 27 }
+      - { name_short: "III", name: "Regelstandard", min_score: 28, max_score: 34 }
+      - { name_short: "IV", name: "Regelstandard plus", min_score: 35, max_score: 40 }
+      - { name_short: "V", name: "Optimalstandard", min_score: 41, max_score: 52 }
+
   # ── V8 Deutsch
 
   - booklet: "V8-2024-DE-TH01"

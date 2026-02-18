@@ -30,7 +30,7 @@ Außerdem müssen entsprechende Itemkennwerttabellen des IQB (als modularisierte
 Der API-Server wird mit folgendem Befehl gestartet:
 
 ```bash
-uv run uvicorn api.main:app --reload
+uv run uvicorn server:app --reload
 ```
 
 Die API ist danach unter `http://localhost:8000` erreichbar. Die interaktive Dokumentation (SwaggerUI) befindet sich unter `http://localhost:8000/docs`.

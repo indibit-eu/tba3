@@ -19,7 +19,7 @@ class BaseStatesApi:
     async def states_id_competence_levels_get(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner]:
         """Kompetenzstufenverteilung im Bundesland"""
         ...
@@ -28,7 +28,7 @@ class BaseStatesApi:
     async def states_id_items_get(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner1]:
         """Lösungshäufigkeiten je Item im Bundesland"""
         ...
@@ -39,7 +39,7 @@ class BaseStatesApi:
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")],
         aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner2]:
         """Aggregierte Lösungshäufigkeiten im Bundesland"""
         ...

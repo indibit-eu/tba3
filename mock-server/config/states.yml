@@ -11,6 +11,10 @@ states:
   - id: "beispielland"
     name: "Beispielland"
     booklets:
+      - "V3-2024-DE-TH01"
+      - "V3-2024-DE-TH02"
+      - "V3-2024-MA-THA"
+      - "V3-2024-MA-THB"
       - "V8-2024-DE-TH01"
       - "V8-2024-DE-TH02"
       - "V8-2024-DE-TH03"

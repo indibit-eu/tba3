@@ -19,7 +19,7 @@ class BaseSchoolsApi:
     async def schools_id_competence_levels_get(
         self,
         id: Annotated[StrictStr, Field(description="Id der Schule")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner]:
         """Kompetenzstufenverteilung an der Schule"""
         ...
@@ -28,7 +28,7 @@ class BaseSchoolsApi:
     async def schools_id_items_get(
         self,
         id: Annotated[StrictStr, Field(description="Id der Schule")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner1]:
         ...
 
@@ -38,7 +38,7 @@ class BaseSchoolsApi:
         id: Annotated[StrictStr, Field(description="Id der Schule")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")],
         aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[InlineObjectInner2]:
         """Aggregierte Lösungshäufigkeiten an der Schule"""
         ...

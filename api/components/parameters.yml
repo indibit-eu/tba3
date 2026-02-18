@@ -16,6 +16,52 @@ groupId:
   schema:
     type: string
   description: Id der Lerngruppe
+  examples:
+    Deutsch Grundschule (mittel):
+      value: 3a-deutsch
+      description: Lerngruppe 3a (mittel), Fach Deutsch
+    Deutsch Grundschule (gut):
+      value: 3b-deutsch
+      description: Lerngruppe 3b (gut), Fach Deutsch
+    Deutsch Grundschule (schlecht):
+      value: 3c-deutsch
+      description: Lerngruppe 3c (schlecht), Fach Deutsch
+    Mathematik Grundschule (mittel):
+      value: 3a-mathe
+      description: Lerngruppe 3a (mittel), Fach Mathematik
+    Mathematik Grundschule (gut):
+      value: 3b-mathe
+      description: Lerngruppe 3b (gut), Fach Mathematik
+    Mathematik Grundschule (schlecht):
+      value: 3c-mathe
+      description: Lerngruppe 3c (schlecht), Fach Mathematik
+    Deutsch (mittel):
+      value: 8a-deutsch
+      description: Lerngruppe 8a (mittel), Fach Deutsch
+    Deutsch (gut):
+      value: 8b-deutsch
+      description: Lerngruppe 8b (gut), Fach Deutsch
+    Deutsch (schlecht):
+      value: 8c-deutsch
+      description: Lerngruppe 8c (schlecht), Fach Deutsch
+    Englisch (mittel):
+      value: 8a-englisch
+      description: Lerngruppe 8a (mittel), Fach Englisch
+    Englisch (gut):
+      value: 8b-englisch
+      description: Lerngruppe 8b (gut), Fach Englisch
+    Englisch (schlecht):
+      value: 8c-englisch
+      description: Lerngruppe 8c (schlecht), Fach Englisch
+    Mathematik (mittel):
+      value: 8a-mathe
+      description: Lerngruppe 8a (mittel), Fach Mathematik
+    Mathematik (gut):
+      value: 8b-mathe
+      description: Lerngruppe 8b (gut), Fach Mathematik
+    Mathematik (schlecht):
+      value: 8c-mathe
+      description: Lerngruppe 8c (schlecht), Fach Mathematik
 type:
   in: query
   name: type
@@ -24,12 +70,12 @@ type:
     type: string
   description: Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen
   examples:
-    Schüler und Vergleichsgruppen:
-      value: [ 'students', 'comparison']
-      description: Liefert zusätzlich noch Schüler und Vergleichswerte.
-    Bezirke:
-      value: ['districts']
-      description: (Nur auf Bundesland-Ebene) Liefert Werte nach Schulamtsbezirk gruppiert.
+    Schüler:
+      value: students
+      description: Liefert Leistungsdaten auf Schülerebene.
+    Lerngruppe und Schüler:
+      value: group,students
+      description: Liefert Leistungsdaten auf Gruppen- und Schülerebene.
 aggregation:
   in: query
   name: aggregation
@@ -37,10 +83,6 @@ aggregation:
   schema:
     type: string
   description: Aggregationsarten, die berechnet werden sollen
-  examples:
-    Kompetenzstandard:
-      value: competenceStandard
-      description: Aggregation nach Kompetenzstandards
 schoolId:
   in: path
   name: id
@@ -48,6 +90,13 @@ schoolId:
   schema:
     type: string
   description: Id der Schule
+  examples:
+    Grundschule:
+      value: gs-musterstadt
+      description: Beispielhafte Grundschule
+    Gymnasium:
+      value: gym-beispielstadt
+      description: Beispielhaftes Gymnasium
 stateId:
   in: path
   name: id
@@ -61,14 +110,4 @@ comparison:
   explode: false
   schema:
     type: string
-  description: Filter für Vergleichsgruppen, die ausgegeben werden sollen
-  examples:
-    Schulklassen:
-      value: [3a, 3b, 3d]
-      description: Vergleich mit den Parallelklassen
-    Schulklassen (Variante):
-      value: parallelklassen
-      description: Vergleich mit den Parallelklassen
-    Fairer Vergleich:
-      value: fair
-      description: Vergleichsgruppen für den fairen Vergleich (Landesmittelwert, fairer Vergleichsmittelwert)
+  description: Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen

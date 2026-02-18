@@ -8,6 +8,62 @@ defaults:
       probabilities: [0.90, 0.02, 0.02, 0.06]
 
 groups:
+  # ── V3 Deutsch
+
+  - id: "3a-deutsch"
+    name: "3a Deutsch"
+    booklet: "V3-2024-DE-TH01"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 25
+    seed: "42"
+
+  - id: "3b-deutsch"
+    name: "3b Deutsch"
+    booklet: "V3-2024-DE-TH01"
+    ability_mean: -1.0
+    ability_std: 1.0
+    size: 22
+    seed: "Hallo Welt!"
+    covariates:
+      gender:
+        categories: ["f", "m", "d"]
+        probabilities: [0.55, 0.40, 0.05]
+
+  - id: "3c-deutsch"
+    name: "3c Deutsch"
+    booklet: "V3-2024-DE-TH02"
+    ability_mean: 1.0
+    ability_std: 1.0
+    size: 24
+    seed: "42"
+
+  # ── V3 Mathematik
+
+  - id: "3a-mathe"
+    name: "3a Mathematik"
+    booklet: "V3-2024-MA-THA"
+    ability_mean: 0.0
+    ability_std: 1.0
+    size: 25
+    seed: "42"
+
+  - id: "3b-mathe"
+    name: "3b Mathematik"
+    booklet: "V3-2024-MA-THA"
+    ability_mean: -1.0
+    ability_std: 1.0
+    size: 23
+    seed: "42"
+
+  - id: "3c-mathe"
+    name: "3c Mathematik"
+    booklet: "V3-2024-MA-THB"
+    ability_mean: 1.0
+    ability_std: 1.0
+    size: 27
+    seed: "42"
+
   # ── V8 Deutsch
 
   - id: "8a-deutsch"
@@ -65,18 +121,26 @@ groups:
   - id: "8a-franzoesisch"
     name: "8a Französisch"
     booklet: "V8-2024-FR-TH01"
-    ability_mean: -0.2
+    ability_mean: 0.0
     ability_std: 1.0
     size: 22
-    seed: "501"
+    seed: "111"
 
   - id: "8b-franzoesisch"
     name: "8b Französisch"
     booklet: "V8-2024-FR-TH02"
-    ability_mean: 0.1
-    ability_std: 0.9
+    ability_mean: 1.0
+    ability_std: 1.0
     size: 20
-    seed: "502"
+    seed: "222"
+
+  - id: "8c-franzoesisch"
+    name: "8c Französisch"
+    booklet: "V8-2024-FR-TH02"
+    ability_mean: -1.0
+    ability_std: 1.0
+    size: 20
+    seed: "333"
 
   # ── V8 Mathematik
 

@@ -49,7 +49,7 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
 )
 async def schools_id_competence_levels_get(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[InlineObjectInner]:
     """Kompetenzstufenverteilung an der Schule"""
     if not BaseSchoolsApi.subclasses:
@@ -68,7 +68,7 @@ async def schools_id_competence_levels_get(
 )
 async def schools_id_items_get(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[InlineObjectInner1]:
     if not BaseSchoolsApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
@@ -88,7 +88,7 @@ async def schools_id_aggregations_get(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
     type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen", alias="type"),
     aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")] = Query(None, description="Aggregationsarten, die berechnet werden sollen", alias="aggregation"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[InlineObjectInner2]:
     """Aggregierte Lösungshäufigkeiten an der Schule"""
     if not BaseSchoolsApi.subclasses:
