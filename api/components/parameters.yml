@@ -70,6 +70,9 @@ type:
     type: string
   description: Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen
   examples:
+    Lerngruppe:
+      value:
+      description: Liefert Leistungsdaten auf Gruppenebene (Standard).
     Schüler:
       value: students
       description: Liefert Leistungsdaten auf Schülerebene.
@@ -104,6 +107,10 @@ stateId:
   schema:
     type: string
   description: Id des Bundeslandes
+  examples:
+    Beispielland:
+      value: beispielland
+      description: Beispielhaftes Bundesland
 comparison:
   in: query
   name: comparison
