@@ -7,7 +7,7 @@ info:
     Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen
     (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten
     (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '1.0'
+  version: '1.1'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
@@ -535,6 +535,37 @@ components:
             - AB1022
         parameters:
           $ref: '#/components/schemas/item-parameters'
+    competence-level-statistics:
+      type: array
+      items:
+        allOf:
+          - $ref: '#/components/schemas/item'
+          - type: object
+            properties:
+              descriptiveStatistics:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    description: Gesamtzahl der Schüler:innen in der Wertegruppe
+                    examples:
+                      - 4
+                  mean:
+                    type: number
+                    description: >-
+                      Anteil der Schüler:innen an der Gesamtzahl, die diese
+                      Kompetenzstufe erreicht haben.
+                    minimum: 0
+                    maximum: 1
+                    examples:
+                      - 0.75
+                  frequency:
+                    type: integer
+                    description: >-
+                      Anzahl der Schüler:innen, die diese Kompetenzstufe
+                      erreicht haben.
+                    examples:
+                      - 3
     descriptive-statistics:
       type: object
       properties:
@@ -585,14 +616,7 @@ components:
                       type: array
                       description: Kompetenzstufenverteilung in der Wertegruppe
                       items:
-                        allOf:
-                          - $ref: '#/components/schemas/competence-level'
-                          - type: object
-                            required:
-                              - frequency
-                            properties:
-                              frequency:
-                                type: integer
+                        - $ref: '#/components/schemas/competence-level-statistics'
     items:
       description: Lösungshäufigkeiten der Items im Kontext
       content:

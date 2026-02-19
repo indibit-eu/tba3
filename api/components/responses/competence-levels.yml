@@ -14,11 +14,4 @@ content:
                 type: array
                 description: Kompetenzstufenverteilung in der Wertegruppe
                 items:
-                  allOf:
-                    - $ref: '../schemas/competence-level.yml'
-                    - type: object
-                      required:
-                        - frequency
-                      properties:
-                        frequency:
-                          type: integer
+                  - $ref: '../schemas/competence-level-statistics.yml'
