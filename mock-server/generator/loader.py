@@ -170,6 +170,7 @@ def build_booklets_from_dataframe(df: pl.DataFrame) -> dict[BookletKey, Booklet]
             logit=logit,
             bista=bista,
             competence_level=str(row["kstufe"]),
+            subject=subject,
             domain=domain,
             item_nr_booklet=str(row["itemnr_th"]),
             item_order_booklet=item_order,

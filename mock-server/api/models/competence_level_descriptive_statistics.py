@@ -20,33 +20,20 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List, Optional
-from api.models.descriptive_statistics import DescriptiveStatistics
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Any, ClassVar, Dict, List
+from api.models.competence_level_descriptive_statistics_descriptive_statistics import CompetenceLevelDescriptiveStatisticsDescriptiveStatistics
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class InlineObjectInner2AllOfAggregationsInner(BaseModel):
+class CompetenceLevelDescriptiveStatistics(BaseModel):
     """
-    InlineObjectInner2AllOfAggregationsInner
+    CompetenceLevelDescriptiveStatistics
     """ # noqa: E501
-    type: Optional[StrictStr] = Field(default=None, description="Aggregationsart (z.B. Kompetenzstandard, Aufgabe), eigene Aggregationsarten können definiert werden.")
-    value: Optional[StrictStr] = Field(default=None, description="Einzelne aggregierte Gruppe, z.B. \"Leseverstehen\" und \"Orthografie\" bei Domänen.")
-    descriptive_statistics: Optional[DescriptiveStatistics] = Field(default=None, alias="descriptiveStatistics")
-    included_iqb_ids: Optional[List[StrictStr]] = Field(default=None, description="Liste von IQB ItemIds, die in der Berechnung der Aggregation berücksichtigt wurden.", alias="includedIqbIds")
-    __properties: ClassVar[List[str]] = ["type", "value", "descriptiveStatistics", "includedIqbIds"]
-
-    @field_validator('type')
-    def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in ('competenceStandard', 'custom',):
-            raise ValueError("must be one of enum values ('competenceStandard', 'custom')")
-        return value
+    descriptive_statistics: CompetenceLevelDescriptiveStatisticsDescriptiveStatistics = Field(alias="descriptiveStatistics")
+    __properties: ClassVar[List[str]] = ["descriptiveStatistics"]
 
     model_config = {
         "populate_by_name": True,
@@ -66,7 +53,7 @@ class InlineObjectInner2AllOfAggregationsInner(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of InlineObjectInner2AllOfAggregationsInner from a JSON string"""
+        """Create an instance of CompetenceLevelDescriptiveStatistics from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -92,7 +79,7 @@ class InlineObjectInner2AllOfAggregationsInner(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of InlineObjectInner2AllOfAggregationsInner from a dict"""
+        """Create an instance of CompetenceLevelDescriptiveStatistics from a dict"""
         if obj is None:
             return None
 
@@ -100,10 +87,7 @@ class InlineObjectInner2AllOfAggregationsInner(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "type": obj.get("type"),
-            "value": obj.get("value"),
-            "descriptiveStatistics": DescriptiveStatistics.from_dict(obj.get("descriptiveStatistics")) if obj.get("descriptiveStatistics") is not None else None,
-            "includedIqbIds": obj.get("includedIqbIds")
+            "descriptiveStatistics": CompetenceLevelDescriptiveStatisticsDescriptiveStatistics.from_dict(obj.get("descriptiveStatistics")) if obj.get("descriptiveStatistics") is not None else None
         })
         return _obj
 

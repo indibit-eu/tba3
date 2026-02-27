@@ -20,20 +20,23 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from typing import Any, ClassVar, Dict, List, Union
+from typing_extensions import Annotated
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class ValueGroupAttributesInner(BaseModel):
+class DescriptiveStatisticsDescriptiveStatistics(BaseModel):
     """
-    ValueGroupAttributesInner
+    DescriptiveStatisticsDescriptiveStatistics
     """ # noqa: E501
-    key: StrictStr
-    value: StrictStr
-    __properties: ClassVar[List[str]] = ["key", "value"]
+    total: StrictInt = Field(description="Gesamtzahl der Items")
+    mean: Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]] = Field(description="Anteil richtig gelöster Items / Mittlere Lösungsquote")
+    frequency: StrictInt = Field(description="Absolute Anzahl richtig gelöster Items")
+    standard_deviation: Union[StrictFloat, StrictInt] = Field(description="Standardabweichung der mittleren Lösungsquote", alias="standardDeviation")
+    __properties: ClassVar[List[str]] = ["total", "mean", "frequency", "standardDeviation"]
 
     model_config = {
         "populate_by_name": True,
@@ -53,7 +56,7 @@ class ValueGroupAttributesInner(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of ValueGroupAttributesInner from a JSON string"""
+        """Create an instance of DescriptiveStatisticsDescriptiveStatistics from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,7 +79,7 @@ class ValueGroupAttributesInner(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of ValueGroupAttributesInner from a dict"""
+        """Create an instance of DescriptiveStatisticsDescriptiveStatistics from a dict"""
         if obj is None:
             return None
 
@@ -84,8 +87,10 @@ class ValueGroupAttributesInner(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "key": obj.get("key"),
-            "value": obj.get("value")
+            "total": obj.get("total"),
+            "mean": obj.get("mean"),
+            "frequency": obj.get("frequency"),
+            "standardDeviation": obj.get("standardDeviation")
         })
         return _obj
 

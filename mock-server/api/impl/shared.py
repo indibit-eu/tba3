@@ -56,8 +56,7 @@ _equiv_path = _CONFIG_DIR / "equivalence_tables.yml"
 if _equiv_path.exists():
     _equiv_config = load_equivalence_tables(_equiv_path, registry=registry)
     equiv_lookup = {
-        (entry.booklet_key(), entry.domain): entry
-        for entry in _equiv_config.tables
+        (entry.booklet_key(), entry.domain): entry for entry in _equiv_config.tables
     }
     logger.info(
         "Loaded %d equivalence tables from %s",
@@ -197,9 +196,7 @@ def resolve_group(
 
     # Collect all equivalence tables for this booklet
     equiv_tables = [
-        entry
-        for (bk, _domain), entry in equiv_lookup.items()
-        if bk == booklet_key
+        entry for (bk, _domain), entry in equiv_lookup.items() if bk == booklet_key
     ]
 
     return group_data, equiv_tables
@@ -271,9 +268,7 @@ def resolve_state(
         )
 
         equiv_tables = [
-            entry
-            for (bk, _domain), entry in equiv_lookup.items()
-            if bk == booklet_key
+            entry for (bk, _domain), entry in equiv_lookup.items() if bk == booklet_key
         ]
         results.append((group_data, equiv_tables))
 

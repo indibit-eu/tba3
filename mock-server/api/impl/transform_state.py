@@ -11,29 +11,30 @@ from api.impl.transform_group import (
     build_group_competence_levels_response,
     build_group_items_response,
 )
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
+from api.models.aggregations_inner import AggregationsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.items_inner import ItemsInner
 from generator.config import EquivalenceTableEntry
 from generator.core import GroupData
 
 
 def build_state_competence_levels_response(
     groups_with_equiv: list[tuple[GroupData, list[EquivalenceTableEntry]]],
-) -> list[InlineObjectInner]:
+) -> list[CompetenceLevelsInner]:
     """Build state-level competence-levels response.
 
     One ValueGroup per booklet per domain, identified by booklet key.
     """
-    results: list[InlineObjectInner] = []
+    results: list[CompetenceLevelsInner] = []
     for group_data, equiv_tables in groups_with_equiv:
         booklet_id = str(group_data.booklet.key)
         for vg in build_group_competence_levels_response(group_data, equiv_tables):
             results.append(
-                InlineObjectInner(
+                CompetenceLevelsInner(
                     id=booklet_id,
                     name=booklet_id,
                     domain=vg.domain,
+                    subject=vg.subject,
                     competence_levels=vg.competence_levels,
                 )
             )
@@ -42,20 +43,21 @@ def build_state_competence_levels_response(
 
 def build_state_items_response(
     groups: list[GroupData],
-) -> list[InlineObjectInner1]:
+) -> list[ItemsInner]:
     """Build state-level items response.
 
     One ValueGroup per booklet per domain, identified by booklet key.
     """
-    results: list[InlineObjectInner1] = []
+    results: list[ItemsInner] = []
     for group_data in groups:
         booklet_id = str(group_data.booklet.key)
         for vg in build_group_items_response(group_data):
             results.append(
-                InlineObjectInner1(
+                ItemsInner(
                     id=booklet_id,
                     name=booklet_id,
                     domain=vg.domain,
+                    subject=vg.subject,
                     items=vg.items,
                 )
             )
@@ -64,20 +66,21 @@ def build_state_items_response(
 
 def build_state_aggregations_response(
     groups: list[GroupData],
-) -> list[InlineObjectInner2]:
+) -> list[AggregationsInner]:
     """Build state-level aggregations response.
 
     One ValueGroup per booklet per domain, identified by booklet key.
     """
-    results: list[InlineObjectInner2] = []
+    results: list[AggregationsInner] = []
     for group_data in groups:
         booklet_id = str(group_data.booklet.key)
         for vg in build_group_aggregations_response(group_data):
             results.append(
-                InlineObjectInner2(
+                AggregationsInner(
                     id=booklet_id,
                     name=booklet_id,
                     domain=vg.domain,
+                    subject=vg.subject,
                     aggregations=vg.aggregations,
                 )
             )

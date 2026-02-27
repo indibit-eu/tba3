@@ -20,20 +20,20 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
-from api.models.descriptive_statistics_descriptive_statistics import DescriptiveStatisticsDescriptiveStatistics
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class DescriptiveStatistics(BaseModel):
+class Exercise(BaseModel):
     """
-    DescriptiveStatistics
+    Exercise
     """ # noqa: E501
-    descriptive_statistics: DescriptiveStatisticsDescriptiveStatistics = Field(alias="descriptiveStatistics")
-    __properties: ClassVar[List[str]] = ["descriptiveStatistics"]
+    id: Optional[StrictStr] = None
+    name: StrictStr = Field(description="Name der Aufgabe")
+    __properties: ClassVar[List[str]] = ["id", "name"]
 
     model_config = {
         "populate_by_name": True,
@@ -53,7 +53,7 @@ class DescriptiveStatistics(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of DescriptiveStatistics from a JSON string"""
+        """Create an instance of Exercise from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,14 +72,11 @@ class DescriptiveStatistics(BaseModel):
             },
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of descriptive_statistics
-        if self.descriptive_statistics:
-            _dict['descriptiveStatistics'] = self.descriptive_statistics.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of DescriptiveStatistics from a dict"""
+        """Create an instance of Exercise from a dict"""
         if obj is None:
             return None
 
@@ -87,7 +84,8 @@ class DescriptiveStatistics(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "descriptiveStatistics": DescriptiveStatisticsDescriptiveStatistics.from_dict(obj.get("descriptiveStatistics")) if obj.get("descriptiveStatistics") is not None else None
+            "id": obj.get("id"),
+            "name": obj.get("name")
         })
         return _obj
 

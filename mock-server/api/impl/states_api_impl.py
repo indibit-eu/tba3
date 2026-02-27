@@ -10,19 +10,19 @@ from api.impl.transform_state import (
     build_state_competence_levels_response,
     build_state_items_response,
 )
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
+from api.models.aggregations_inner import AggregationsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.items_inner import ItemsInner
 
 
 class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
     """Implementation of the States API endpoints."""
 
-    async def states_id_competence_levels_get(
+    async def get_state_competence_levels(
         self,
         id: StrictStr,
         comparison: StrictStr | None,
-    ) -> list[InlineObjectInner]:
+    ) -> list[CompetenceLevelsInner]:
         groups_with_equiv = resolve_state(id)
 
         if not any(eq for _, eq in groups_with_equiv):
@@ -33,22 +33,22 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
 
         return build_state_competence_levels_response(groups_with_equiv)
 
-    async def states_id_items_get(
+    async def get_state_items(
         self,
         id: StrictStr,
         comparison: StrictStr | None,
-    ) -> list[InlineObjectInner1]:
+    ) -> list[ItemsInner]:
         groups_with_equiv = resolve_state(id)
         groups = [gd for gd, _ in groups_with_equiv]
         return build_state_items_response(groups)
 
-    async def states_id_aggregations_get(
+    async def get_state_aggregations(
         self,
         id: StrictStr,
         type: StrictStr | None,
         aggregation: StrictStr | None,
         comparison: StrictStr | None,
-    ) -> list[InlineObjectInner2]:
+    ) -> list[AggregationsInner]:
         groups_with_equiv = resolve_state(id)
         groups = [gd for gd, _ in groups_with_equiv]
         return build_state_aggregations_response(groups)

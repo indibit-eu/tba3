@@ -20,8 +20,9 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from api.models.competence import Competence
 from api.models.competence_level import CompetenceLevel
 try:
     from typing import Self
@@ -40,22 +41,8 @@ class ItemParameters(BaseModel):
     subject: Optional[StrictStr] = Field(default=None, description="Fach des Items")
     domain: Optional[StrictStr] = Field(default=None, description="Kompetenzbereich des Items")
     competence_level: Optional[CompetenceLevel] = Field(default=None, description="Kompetenzstufe des Items", alias="competenceLevel")
-    cognitive_demand_level: Optional[StrictStr] = Field(default=None, description="Anforderungsbereich des Items", alias="cognitiveDemandLevel")
-    general_mathematical_competence: Optional[List[StrictStr]] = Field(default=None, description="Allgemeine Kompetenz des Items", alias="generalMathematicalCompetence")
-    core_idea: Optional[List[StrictStr]] = Field(default=None, description="Leitideen des Items", alias="coreIdea")
-    competence_standard: Optional[List[StrictStr]] = Field(default=None, description="Liste der dem Item zugeordneten Kompetenzstandards", alias="competenceStandard")
-    listening_or_reading_style: Optional[StrictStr] = Field(default=None, description="Hör- / Lesestil", alias="listeningOrReadingStyle")
-    __properties: ClassVar[List[str]] = ["logit", "bistaPoints", "solutionFrequencyGymnasium", "solutionFrequencyNonGymnasium", "solutionFrequencyPrimarySchool", "subject", "domain", "competenceLevel", "cognitiveDemandLevel", "generalMathematicalCompetence", "coreIdea", "competenceStandard", "listeningOrReadingStyle"]
-
-    @field_validator('listening_or_reading_style')
-    def listening_or_reading_style_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in ('selektiv', 'detailliert', 'inferierend', 'global',):
-            raise ValueError("must be one of enum values ('selektiv', 'detailliert', 'inferierend', 'global')")
-        return value
+    competences: Optional[List[Competence]] = Field(default=None, description="Liste der dem Item zugeordneten Kompetenzen")
+    __properties: ClassVar[List[str]] = ["logit", "bistaPoints", "solutionFrequencyGymnasium", "solutionFrequencyNonGymnasium", "solutionFrequencyPrimarySchool", "subject", "domain", "competenceLevel", "competences"]
 
     model_config = {
         "populate_by_name": True,
@@ -97,6 +84,13 @@ class ItemParameters(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of competence_level
         if self.competence_level:
             _dict['competenceLevel'] = self.competence_level.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in competences (list)
+        _items = []
+        if self.competences:
+            for _item in self.competences:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['competences'] = _items
         return _dict
 
     @classmethod
@@ -117,11 +111,7 @@ class ItemParameters(BaseModel):
             "subject": obj.get("subject"),
             "domain": obj.get("domain"),
             "competenceLevel": CompetenceLevel.from_dict(obj.get("competenceLevel")) if obj.get("competenceLevel") is not None else None,
-            "cognitiveDemandLevel": obj.get("cognitiveDemandLevel"),
-            "generalMathematicalCompetence": obj.get("generalMathematicalCompetence"),
-            "coreIdea": obj.get("coreIdea"),
-            "competenceStandard": obj.get("competenceStandard"),
-            "listeningOrReadingStyle": obj.get("listeningOrReadingStyle")
+            "competences": [Competence.from_dict(_item) for _item in obj.get("competences")] if obj.get("competences") is not None else None
         })
         return _obj
 

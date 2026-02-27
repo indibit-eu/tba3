@@ -26,9 +26,9 @@ from api.models.extra_models import TokenModel  # noqa: F401
 from pydantic import Field, StrictStr
 from typing import Any, List, Optional
 from typing_extensions import Annotated
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
+from api.models.aggregations_inner import AggregationsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.items_inner import ItemsInner
 
 
 router = APIRouter()
@@ -41,57 +41,60 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
 @router.get(
     "/states/{id}/competence-levels",
     responses={
-        200: {"model": List[InlineObjectInner], "description": "Kompetenzstufenverteilung im Kontext"},
+        200: {"model": List[CompetenceLevelsInner], "description": "Kompetenzstufenverteilung im Bundesland"},
+        400: {"description": "Ungültige Anfrage, z.B. ungültige Werte für die Parameter"},
         404: {"description": "Bundesland oder Kompetensstufenverteilung für das Bundesland nicht gefunden"},
     },
     tags=["states"],
+    summary="Kompetenzstufenverteilung im Bundesland",
     response_model_by_alias=True,
 )
-async def states_id_competence_levels_get(
+async def get_state_competence_levels(
     id: Annotated[StrictStr, Field(description="Id des Bundeslandes")] = Path(..., description="Id des Bundeslandes"),
     comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
-) -> List[InlineObjectInner]:
-    """Kompetenzstufenverteilung im Bundesland"""
+) -> List[CompetenceLevelsInner]:
     if not BaseStatesApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BaseStatesApi.subclasses[0]().states_id_competence_levels_get(id, comparison)
+    return await BaseStatesApi.subclasses[0]().get_state_competence_levels(id, comparison)
 
 
 @router.get(
     "/states/{id}/items",
     responses={
-        200: {"model": List[InlineObjectInner1], "description": "Lösungshäufigkeiten der Items im Kontext"},
+        200: {"model": List[ItemsInner], "description": "Lösungshäufigkeiten je Item im Bundesland"},
+        400: {"description": "Ungültige Anfrage, z.B. ungültige Werte für die Parameter"},
         404: {"description": "Bundesland oder Lösungshäufigkeit je Item für das Bundesland nicht gefunden"},
     },
     tags=["states"],
+    summary="Lösungshäufigkeiten je Item im Bundesland",
     response_model_by_alias=True,
 )
-async def states_id_items_get(
+async def get_state_items(
     id: Annotated[StrictStr, Field(description="Id des Bundeslandes")] = Path(..., description="Id des Bundeslandes"),
     comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
-) -> List[InlineObjectInner1]:
-    """Lösungshäufigkeiten je Item im Bundesland"""
+) -> List[ItemsInner]:
     if not BaseStatesApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BaseStatesApi.subclasses[0]().states_id_items_get(id, comparison)
+    return await BaseStatesApi.subclasses[0]().get_state_items(id, comparison)
 
 
 @router.get(
     "/states/{id}/aggregations",
     responses={
-        200: {"model": List[InlineObjectInner2], "description": "Lösungshäufigkeiten der Merkmale im Kontext"},
-        404: {"description": "Bundesland oder Lösungshäufigkeit je Merkmal für das Bundesland nicht gefunden"},
+        200: {"model": List[AggregationsInner], "description": "Abhängig vom Typ berechnete Aggregation für das Bundesland"},
+        400: {"description": "Ungültige Anfrage, z.B. ungültige Werte für die Parameter"},
+        404: {"description": "Bundesland oder Werte für das Bundesland nicht gefunden"},
     },
     tags=["states"],
+    summary="Aggregierte Werte (z.B. Lösungshäufigkeiten) im Bundesland",
     response_model_by_alias=True,
 )
-async def states_id_aggregations_get(
+async def get_state_aggregations(
     id: Annotated[StrictStr, Field(description="Id des Bundeslandes")] = Path(..., description="Id des Bundeslandes"),
-    type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen", alias="type"),
+    type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche ausgegeben werden sollen", alias="type"),
     aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")] = Query(None, description="Aggregationsarten, die berechnet werden sollen", alias="aggregation"),
     comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
-) -> List[InlineObjectInner2]:
-    """Aggregierte Lösungshäufigkeiten im Bundesland"""
+) -> List[AggregationsInner]:
     if not BaseStatesApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BaseStatesApi.subclasses[0]().states_id_aggregations_get(id, type, aggregation, comparison)
+    return await BaseStatesApi.subclasses[0]().get_state_aggregations(id, type, aggregation, comparison)

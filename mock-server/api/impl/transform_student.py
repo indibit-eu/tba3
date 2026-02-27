@@ -6,21 +6,26 @@ import polars as pl
 
 from api.impl.transform_helpers import (
     _safe_round,
-    build_item_parameters,
     build_domain,
+    build_item_parameters,
     build_student_covariates,
+    build_subject,
 )
-from api.models.descriptive_statistics import DescriptiveStatistics
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
-from api.models.inline_object_inner2_all_of_aggregations_inner import (
-    InlineObjectInner2AllOfAggregationsInner,
+from api.models.aggregations_inner import AggregationsInner
+from api.models.aggregations_inner_all_of_aggregations_inner import (
+    AggregationsInnerAllOfAggregationsInner,
 )
-from api.models.inline_object_inner_all_of_competence_levels_inner import (
-    InlineObjectInnerAllOfCompetenceLevelsInner,
+from api.models.competence_level_descriptive_statistics_descriptive_statistics import (
+    CompetenceLevelDescriptiveStatisticsDescriptiveStatistics,
 )
+from api.models.competence_level_statistics_inner import CompetenceLevelStatisticsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.descriptive_statistics_descriptive_statistics import (
+    DescriptiveStatisticsDescriptiveStatistics,
+)
+from api.models.exercise import Exercise
 from api.models.item_statistics_inner import ItemStatisticsInner
+from api.models.items_inner import ItemsInner
 from generator.config import EquivalenceTableEntry
 from generator.core import GroupData
 
@@ -28,7 +33,7 @@ from generator.core import GroupData
 def build_student_competence_levels_response(
     group_data: GroupData,
     equiv_tables: list[EquivalenceTableEntry],
-) -> list[InlineObjectInner]:
+) -> list[CompetenceLevelsInner]:
     """Build per-student competence-level value groups.
 
     Each student becomes a value group. For each equivalence table entry,
@@ -38,32 +43,39 @@ def build_student_competence_levels_response(
     cov_cols = group_data.covariate_columns
     student_rows = group_data.responses.select("id", "name", *cov_cols).to_dicts()
 
-    results: list[InlineObjectInner] = []
+    results: list[CompetenceLevelsInner] = []
 
     for entry in equiv_tables:
         item_cols = group_data.booklet.column_names_for_domain(entry.domain)
         raw_scores = group_data.responses.select(item_cols).sum_horizontal().to_list()
 
-        domain_model = build_domain(entry.domain, group_data.booklet.subject)
+        domain_model = build_domain(entry.domain)
+        subject_model = build_subject(group_data.booklet.subject)
 
         for i, row in enumerate(student_rows):
             score_val = int(raw_scores[i])
             matched_level = entry.match_level(score_val)
 
             comp_levels = [
-                InlineObjectInnerAllOfCompetenceLevelsInner(
+                CompetenceLevelStatisticsInner(
                     name_short=cl.name_short,
                     name=cl.name,
                     description=cl.description,
-                    frequency=1 if cl.name_short == matched_level else 0,
+                    descriptive_statistics=CompetenceLevelDescriptiveStatisticsDescriptiveStatistics(
+                        total=1,
+                        mean=1.0 if cl.name_short == matched_level else 0.0,
+                        frequency=1 if cl.name_short == matched_level else 0,
+                    ),
                 )
                 for cl in entry.competence_levels
+                if cl.name_short == matched_level
             ]
 
-            vg = InlineObjectInner(
+            vg = CompetenceLevelsInner(
                 id=row["id"],
                 name=row["name"],
                 domain=domain_model,
+                subject=subject_model,
                 competence_levels=comp_levels,
             )
             vg.__dict__["covariates"] = build_student_covariates(row, cov_cols)
@@ -74,7 +86,7 @@ def build_student_competence_levels_response(
 
 def build_student_items_response(
     group_data: GroupData,
-) -> list[InlineObjectInner1]:
+) -> list[ItemsInner]:
     """Build per-student item value groups.
 
     Each student gets one value group per domain, with per-item statistics
@@ -86,7 +98,7 @@ def build_student_items_response(
     cov_cols = group_data.covariate_columns
     student_rows = group_data.responses.select("id", "name", *cov_cols).to_dicts()
 
-    results: list[InlineObjectInner1] = []
+    results: list[ItemsInner] = []
 
     for domain_name, items in domain_items.items():
         sorted_items = sorted(items, key=lambda i: i.item_order_booklet)
@@ -97,17 +109,18 @@ def build_student_items_response(
 
         scores_rows = group_data.responses.select(item_cols).to_dicts()
 
-        domain_model = build_domain(domain_name, subject)
+        domain_model = build_domain(domain_name)
+        subject_model = build_subject(subject)
 
-        for student_row, scores_row in zip(
-            student_rows, scores_rows, strict=True
-        ):
+        for student_row, scores_row in zip(student_rows, scores_rows, strict=True):
             items_stats = [
                 ItemStatisticsInner(
                     name=item.item_nr_booklet,
                     iqb_id=item.iqbitem_id,
+                    exercise=Exercise(name=item.name),
+                    position=int(item.item_order_booklet),  # TODO: use counted position
                     parameters=params,
-                    descriptive_statistics=DescriptiveStatistics(
+                    descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
                         total=1,
                         frequency=int(scores_row[col]),
                         mean=float(scores_row[col]),
@@ -119,10 +132,11 @@ def build_student_items_response(
                 )
             ]
 
-            vg = InlineObjectInner1(
+            vg = ItemsInner(
                 id=student_row["id"],
                 name=student_row["name"],
                 domain=domain_model,
+                subject=subject_model,
                 items=items_stats,
             )
             vg.__dict__["covariates"] = build_student_covariates(student_row, cov_cols)
@@ -133,7 +147,7 @@ def build_student_items_response(
 
 def build_student_aggregations_response(
     group_data: GroupData,
-) -> list[InlineObjectInner2]:
+) -> list[AggregationsInner]:
     """Build per-student aggregation value groups.
 
     Each student gets one value group per domain, with a single aggregation
@@ -161,19 +175,20 @@ def build_student_aggregations_response(
     )
     rows = domain_sums_df.to_dicts()
 
-    results: list[InlineObjectInner2] = []
+    results: list[AggregationsInner] = []
 
     for domain_name, total, iqb_ids, sum_col in domain_info:
-        domain_model = build_domain(domain_name, subject)
+        domain_model = build_domain(domain_name)
+        subject_model = build_subject(subject)
 
         for row in rows:
             frequency = int(row[sum_col])
             mean = frequency / total if total > 0 else 0.0
 
-            aggregation = InlineObjectInner2AllOfAggregationsInner(
+            aggregation = AggregationsInnerAllOfAggregationsInner(
                 type="custom",
                 value=domain_name or subject,
-                descriptive_statistics=DescriptiveStatistics(
+                descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
                     total=total,
                     frequency=frequency,
                     mean=_safe_round(mean),
@@ -182,10 +197,11 @@ def build_student_aggregations_response(
                 included_iqb_ids=iqb_ids,
             )
 
-            vg = InlineObjectInner2(
+            vg = AggregationsInner(
                 id=row["id"],
                 name=row["name"],
                 domain=domain_model,
+                subject=subject_model,
                 aggregations=[aggregation],
             )
             vg.__dict__["covariates"] = build_student_covariates(row, cov_cols)

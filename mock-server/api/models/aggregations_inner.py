@@ -22,26 +22,28 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from api.models.aggregations_inner_all_of_aggregations_inner import AggregationsInnerAllOfAggregationsInner
 from api.models.characteristic import Characteristic
 from api.models.domain import Domain
-from api.models.inline_object_inner_all_of_competence_levels_inner import InlineObjectInnerAllOfCompetenceLevelsInner
-from api.models.value_group_attributes_inner import ValueGroupAttributesInner
+from api.models.subject import Subject
+from api.models.value_group_properties_inner import ValueGroupPropertiesInner
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class InlineObjectInner(BaseModel):
+class AggregationsInner(BaseModel):
     """
-    InlineObjectInner
+    AggregationsInner
     """ # noqa: E501
     id: Optional[StrictStr] = None
     name: StrictStr = Field(description="Bezeichnung der Wertegruppe")
     domain: Optional[Domain] = Field(default=None, description="Domäne der Wertegruppe (optional)")
+    subject: Optional[Subject] = Field(default=None, description="Fach der Wertegruppe (optional)")
     covariates: Optional[List[Characteristic]] = Field(default=None, description="Kovariaten der Testgruppe")
-    attributes: Optional[List[ValueGroupAttributesInner]] = Field(default=None, description="Liste von Key-Value-Werten mit zusätzlichen Informationen")
-    competence_levels: List[InlineObjectInnerAllOfCompetenceLevelsInner] = Field(description="Kompetenzstufenverteilung in der Wertegruppe", alias="competenceLevels")
-    __properties: ClassVar[List[str]] = ["id", "name", "domain", "covariates", "attributes", "competenceLevels"]
+    properties: Optional[List[ValueGroupPropertiesInner]] = Field(default=None, description="Liste von Key-Value-Werten mit zusätzlichen Informationen, z.B. Testdauer, andere systemspezifische Attribute")
+    aggregations: List[AggregationsInnerAllOfAggregationsInner] = Field(description="Einzelne Aggregationen")
+    __properties: ClassVar[List[str]] = ["id", "name", "domain", "subject", "covariates", "properties", "aggregations"]
 
     model_config = {
         "populate_by_name": True,
@@ -61,7 +63,7 @@ class InlineObjectInner(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of InlineObjectInner from a JSON string"""
+        """Create an instance of AggregationsInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -83,6 +85,9 @@ class InlineObjectInner(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of domain
         if self.domain:
             _dict['domain'] = self.domain.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of subject
+        if self.subject:
+            _dict['subject'] = self.subject.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in covariates (list)
         _items = []
         if self.covariates:
@@ -90,25 +95,25 @@ class InlineObjectInner(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['covariates'] = _items
-        # override the default output from pydantic by calling `to_dict()` of each item in attributes (list)
+        # override the default output from pydantic by calling `to_dict()` of each item in properties (list)
         _items = []
-        if self.attributes:
-            for _item in self.attributes:
+        if self.properties:
+            for _item in self.properties:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['attributes'] = _items
-        # override the default output from pydantic by calling `to_dict()` of each item in competence_levels (list)
+            _dict['properties'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in aggregations (list)
         _items = []
-        if self.competence_levels:
-            for _item in self.competence_levels:
+        if self.aggregations:
+            for _item in self.aggregations:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['competenceLevels'] = _items
+            _dict['aggregations'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of InlineObjectInner from a dict"""
+        """Create an instance of AggregationsInner from a dict"""
         if obj is None:
             return None
 
@@ -119,9 +124,10 @@ class InlineObjectInner(BaseModel):
             "id": obj.get("id"),
             "name": obj.get("name"),
             "domain": Domain.from_dict(obj.get("domain")) if obj.get("domain") is not None else None,
+            "subject": Subject.from_dict(obj.get("subject")) if obj.get("subject") is not None else None,
             "covariates": [Characteristic.from_dict(_item) for _item in obj.get("covariates")] if obj.get("covariates") is not None else None,
-            "attributes": [ValueGroupAttributesInner.from_dict(_item) for _item in obj.get("attributes")] if obj.get("attributes") is not None else None,
-            "competenceLevels": [InlineObjectInnerAllOfCompetenceLevelsInner.from_dict(_item) for _item in obj.get("competenceLevels")] if obj.get("competenceLevels") is not None else None
+            "properties": [ValueGroupPropertiesInner.from_dict(_item) for _item in obj.get("properties")] if obj.get("properties") is not None else None,
+            "aggregations": [AggregationsInnerAllOfAggregationsInner.from_dict(_item) for _item in obj.get("aggregations")] if obj.get("aggregations") is not None else None
         })
         return _obj
 

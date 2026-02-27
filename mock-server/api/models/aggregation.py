@@ -20,23 +20,21 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class InlineObjectInnerAllOfCompetenceLevelsInner(BaseModel):
+class Aggregation(BaseModel):
     """
-    InlineObjectInnerAllOfCompetenceLevelsInner
+    Aggregation
     """ # noqa: E501
-    id: Optional[StrictStr] = None
-    name: Optional[StrictStr] = Field(default=None, description="Name der Komptenzstufe")
-    name_short: StrictStr = Field(description="Kürzel der Kompetenzstufe", alias="nameShort")
-    description: Optional[StrictStr] = Field(default=None, description="Beschreibung der Kompetenzstufe")
-    frequency: StrictInt
-    __properties: ClassVar[List[str]] = ["id", "name", "nameShort", "description", "frequency"]
+    type: StrictStr = Field(description="Aggregationsart (z.B. Kompetenzstandard, Aufgabe), eigene Aggregationsarten können definiert werden.")
+    value: StrictStr = Field(description="Einzelne aggregierte Gruppe, z.B. der Aufgabenname, die Bezeichnung der Kompetenz, ...")
+    included_iqb_ids: Optional[List[StrictStr]] = Field(default=None, description="Liste von IQB ItemIds, die in der Berechnung der Aggregation berücksichtigt wurden.", alias="includedIqbIds")
+    __properties: ClassVar[List[str]] = ["type", "value", "includedIqbIds"]
 
     model_config = {
         "populate_by_name": True,
@@ -56,7 +54,7 @@ class InlineObjectInnerAllOfCompetenceLevelsInner(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of InlineObjectInnerAllOfCompetenceLevelsInner from a JSON string"""
+        """Create an instance of Aggregation from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,7 +77,7 @@ class InlineObjectInnerAllOfCompetenceLevelsInner(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of InlineObjectInnerAllOfCompetenceLevelsInner from a dict"""
+        """Create an instance of Aggregation from a dict"""
         if obj is None:
             return None
 
@@ -87,11 +85,9 @@ class InlineObjectInnerAllOfCompetenceLevelsInner(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "nameShort": obj.get("nameShort"),
-            "description": obj.get("description"),
-            "frequency": obj.get("frequency")
+            "type": obj.get("type"),
+            "value": obj.get("value"),
+            "includedIqbIds": obj.get("includedIqbIds")
         })
         return _obj
 

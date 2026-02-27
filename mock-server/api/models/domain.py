@@ -22,7 +22,6 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from api.models.domain_subject import DomainSubject
 try:
     from typing import Self
 except ImportError:
@@ -34,8 +33,7 @@ class Domain(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = None
     name: StrictStr = Field(description="Name der Domäne")
-    subject: Optional[DomainSubject] = None
-    __properties: ClassVar[List[str]] = ["id", "name", "subject"]
+    __properties: ClassVar[List[str]] = ["id", "name"]
 
     model_config = {
         "populate_by_name": True,
@@ -74,9 +72,6 @@ class Domain(BaseModel):
             },
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of subject
-        if self.subject:
-            _dict['subject'] = self.subject.to_dict()
         return _dict
 
     @classmethod
@@ -90,8 +85,7 @@ class Domain(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "name": obj.get("name"),
-            "subject": DomainSubject.from_dict(obj.get("subject")) if obj.get("subject") is not None else None
+            "name": obj.get("name")
         })
         return _obj
 

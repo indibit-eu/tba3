@@ -5,9 +5,9 @@ from typing import ClassVar, Dict, List, Tuple  # noqa: F401
 from pydantic import Field, StrictStr
 from typing import Any, List, Optional
 from typing_extensions import Annotated
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
+from api.models.aggregations_inner import AggregationsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.items_inner import ItemsInner
 
 
 class BaseStatesApi:
@@ -16,30 +16,27 @@ class BaseStatesApi:
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         BaseStatesApi.subclasses = BaseStatesApi.subclasses + (cls,)
-    async def states_id_competence_levels_get(
+    async def get_state_competence_levels(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
         comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
-    ) -> List[InlineObjectInner]:
-        """Kompetenzstufenverteilung im Bundesland"""
+    ) -> List[CompetenceLevelsInner]:
         ...
 
 
-    async def states_id_items_get(
+    async def get_state_items(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
         comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
-    ) -> List[InlineObjectInner1]:
-        """Lösungshäufigkeiten je Item im Bundesland"""
+    ) -> List[ItemsInner]:
         ...
 
 
-    async def states_id_aggregations_get(
+    async def get_state_aggregations(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
-        type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche zusätzlich zur Standardgruppe ausgegeben werden sollen")],
+        type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")],
         aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")],
         comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
-    ) -> List[InlineObjectInner2]:
-        """Aggregierte Lösungshäufigkeiten im Bundesland"""
+    ) -> List[AggregationsInner]:
         ...

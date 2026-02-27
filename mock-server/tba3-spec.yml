@@ -7,10 +7,14 @@ info:
     Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen
     (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten
     (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '0.4'
+  version: '1.0'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
+servers:
+  - url: https://apps.indibit.eu/tba3-api
+    description: Mock-Server von indibit
+security: []
 tags:
   - name: groups
     description: Ergebnisse auf Ebene einer Lerngruppe
@@ -21,7 +25,8 @@ tags:
 paths:
   /groups/{id}/competence-levels:
     get:
-      description: Kompetenzstufenverteilung in der Lerngruppe
+      operationId: getGroupCompetenceLevels
+      summary: Kompetenzstufenverteilung in der Lerngruppe
       tags:
         - groups
       parameters:
@@ -30,14 +35,21 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/competence-levels'
+          description: Kompetenzstufenverteilung in der Lerngruppe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/competence-levels'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
           description: >-
             Lerngruppe oder Kompetenzstufenverteilung für die Lerngruppe nicht
             gefunden
   /groups/{id}/items:
     get:
-      description: Lösungshäufigkeiten je Item in der Lerngruppe
+      operationId: getGroupItems
+      summary: Lösungshäufigkeiten je Item in der Lerngruppe
       tags:
         - groups
       parameters:
@@ -46,14 +58,21 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/items'
+          description: Lösungshäufigkeiten je Item in der Lerngruppe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/items'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
           description: >-
             Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht
             gefunden
   /groups/{id}/aggregations:
     get:
-      description: Aggregierte Lösungshäufigkeiten in der Lerngruppe
+      operationId: getGroupAggregations
+      summary: Aggregierte Werte (z.B. Lösungshäufigkeiten) in der Lerngruppe
       tags:
         - groups
       parameters:
@@ -63,14 +82,19 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/aggregations'
+          description: Abhängig vom Typ berechnete Aggregation für die Lerngruppe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/aggregations'
         '400':
-          description: >-
-            Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht
-            gefunden
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
+        '404':
+          description: Lerngruppe oder Werte für die Lerngruppe nicht gefunden
   /schools/{id}/competence-levels:
     get:
-      description: Kompetenzstufenverteilung an der Schule
+      operationId: getSchoolCompetenceLevels
+      summary: Kompetenzstufenverteilung an der Schule
       tags:
         - schools
       parameters:
@@ -78,12 +102,19 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/competence-levels'
+          description: Kompetenzstufenverteilung an der Schule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/competence-levels'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
           description: Schule oder Kompetensstufenverteilung für die Schule nicht gefunden
   /schools/{id}/items:
-    description: Lösungshäufigkeiten je Item an der Schule
     get:
+      operationId: getSchoolItems
+      summary: Lösungshäufigkeiten je Item an der Schule
       tags:
         - schools
       parameters:
@@ -91,12 +122,19 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/items'
+          description: Lösungshäufigkeiten je Item an der Schule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/items'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
           description: Schule oder Lösungshäufigkeit je Item für die Schule nicht gefunden
   /schools/{id}/aggregations:
     get:
-      description: Aggregierte Lösungshäufigkeiten an der Schule
+      operationId: getSchoolAggregations
+      summary: Aggregierte Werte (z.B. Lösungshäufigkeiten) an der Schule
       tags:
         - schools
       parameters:
@@ -106,14 +144,19 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/aggregations'
+          description: Abhängig vom Typ berechnete Aggregation für die Schule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/aggregations'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
-          description: >-
-            Schule oder Lösungshäufigkeit je Merkmal für die Schule nicht
-            gefunden
+          description: Schule oder Werte für die Schule nicht gefunden
   /states/{id}/competence-levels:
     get:
-      description: Kompetenzstufenverteilung im Bundesland
+      operationId: getStateCompetenceLevels
+      summary: Kompetenzstufenverteilung im Bundesland
       tags:
         - states
       parameters:
@@ -121,14 +164,21 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/competence-levels'
+          description: Kompetenzstufenverteilung im Bundesland
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/competence-levels'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
           description: >-
             Bundesland oder Kompetensstufenverteilung für das Bundesland nicht
             gefunden
   /states/{id}/items:
     get:
-      description: Lösungshäufigkeiten je Item im Bundesland
+      operationId: getStateItems
+      summary: Lösungshäufigkeiten je Item im Bundesland
       tags:
         - states
       parameters:
@@ -136,14 +186,21 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/items'
+          description: Lösungshäufigkeiten je Item im Bundesland
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/items'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
           description: >-
             Bundesland oder Lösungshäufigkeit je Item für das Bundesland nicht
             gefunden
   /states/{id}/aggregations:
     get:
-      description: Aggregierte Lösungshäufigkeiten im Bundesland
+      operationId: getStateAggregations
+      summary: Aggregierte Werte (z.B. Lösungshäufigkeiten) im Bundesland
       tags:
         - states
       parameters:
@@ -153,11 +210,15 @@ paths:
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
-          $ref: '#/components/responses/aggregations'
+          description: Abhängig vom Typ berechnete Aggregation für das Bundesland
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/aggregations'
+        '400':
+          description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
         '404':
-          description: >-
-            Bundesland oder Lösungshäufigkeit je Merkmal für das Bundesland
-            nicht gefunden
+          description: Bundesland oder Werte für das Bundesland nicht gefunden
 components:
   parameters:
     groupId:
@@ -222,7 +283,7 @@ components:
       description: Wertegruppen, welche ausgegeben werden sollen
       examples:
         Lerngruppe:
-          value: null
+          value: ''
           description: Liefert Leistungsdaten auf Gruppenebene (Standard).
         Schüler:
           value: students
@@ -283,24 +344,23 @@ components:
           type: string
           description: Name der Domäne
           examples:
-            - Deutsch Leseverständnis
+            - Rechtschreibung
+            - Leseverstehen
+    subject:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db
+        name:
+          type: string
+          description: Name des Fachs
+          examples:
+            - Deutsch
             - Mathematik
-        subject:
-          type: object
-          description: Fach der Domäne
-          required:
-            - name
-          properties:
-            id:
-              type: string
-              examples:
-                - d4a78f30-bf14-475d-8f81-a7ee98b5db4f
-            name:
-              type: string
-              description: Name des Fachs
-              examples:
-                - Deutsch
-                - Mathematik
     language-at-home-characteristic:
       type: object
       required:
@@ -408,12 +468,17 @@ components:
         domain:
           $ref: '#/components/schemas/domain'
           description: Domäne der Wertegruppe (optional)
+        subject:
+          $ref: '#/components/schemas/subject'
+          description: Fach der Wertegruppe (optional)
         covariates:
           $ref: '#/components/schemas/covariates'
           description: Kovariaten der Wertegruppe
-        attributes:
+        properties:
           type: array
-          description: Liste von Key-Value-Werten mit zusätzlichen Informationen
+          description: >-
+            Liste von Key-Value-Werten mit zusätzlichen Informationen, z.B.
+            Testdauer, andere systemspezifische Attribute
           items:
             type: object
             required:
@@ -453,6 +518,97 @@ components:
             - >-
               Kann Aussagen zu zentralen Aspekten des Textes selbstständig
               begründen
+    competence-level-descriptive-statistics:
+      type: object
+      required:
+        - descriptiveStatistics
+      properties:
+        descriptiveStatistics:
+          type: object
+          required:
+            - total
+            - mean
+            - frequency
+          properties:
+            total:
+              type: integer
+              description: Gesamtzahl der Schüler:innen in der Wertegruppe
+              examples:
+                - 4
+            mean:
+              type: number
+              description: >-
+                Anteil der Schüler:innen an der Gesamtzahl, die diese
+                Kompetenzstufe erreicht haben.
+              minimum: 0
+              maximum: 1
+              examples:
+                - 0.75
+            frequency:
+              type: integer
+              description: >-
+                Anzahl der Schüler:innen, die diese Kompetenzstufe erreicht
+                haben.
+              examples:
+                - 3
+    competence-level-statistics:
+      type: array
+      description: Kompetenzstufenverteilung in der Wertegruppe
+      items:
+        allOf:
+          - $ref: '#/components/schemas/competence-level'
+          - $ref: '#/components/schemas/competence-level-descriptive-statistics'
+    competence-levels:
+      type: array
+      items:
+        allOf:
+          - $ref: '#/components/schemas/value-group'
+          - type: object
+            required:
+              - competenceLevels
+            properties:
+              competenceLevels:
+                $ref: '#/components/schemas/competence-level-statistics'
+    exercise:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          examples:
+            - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db
+        name:
+          type: string
+          description: Name der Aufgabe
+          examples:
+            - At the Summer Camp
+    competence:
+      type: object
+      properties:
+        id:
+          type: string
+          examples:
+            - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db
+        type:
+          type: string
+          description: Art der Kompetenz
+          examples:
+            - Kompetenz
+            - Leitidee
+            - Allgemeine Kompetenz
+        name:
+          type: string
+          description: Name der Kompetenz
+          examples:
+            - 2.5.1
+            - L1
+        description:
+          type: string
+          description: Beschreibung der Kompetenz
+          examples:
+            - Richtig schreiben
+            - Leitidee Zahl
     item-parameters:
       type: object
       description: >-
@@ -485,37 +641,17 @@ components:
         competenceLevel:
           description: Kompetenzstufe des Items
           $ref: '#/components/schemas/competence-level'
-        cognitiveDemandLevel:
-          description: Anforderungsbereich des Items
-          type: string
-        generalMathematicalCompetence:
-          description: Allgemeine Kompetenz des Items
+        competences:
+          description: Liste der dem Item zugeordneten Kompetenzen
           type: array
           items:
-            type: string
-        coreIdea:
-          description: Leitideen des Items
-          type: array
-          items:
-            type: string
-        competenceStandard:
-          description: Liste der dem Item zugeordneten Kompetenzstandards
-          type: array
-          items:
-            type: string
-        listeningOrReadingStyle:
-          description: Hör- / Lesestil
-          type: string
-          enum:
-            - selektiv
-            - detailliert
-            - inferierend
-            - global
+            $ref: '#/components/schemas/competence'
     item:
       type: object
       required:
         - name
         - iqbId
+        - exercise
       properties:
         id:
           type: string
@@ -523,133 +659,121 @@ components:
             - b8d23653-3881-40de-a45a-d34e2dd191ed
         name:
           type: string
-          description: Bezeichnung des Items im Testheft
+          description: Bezeichnung des Items im Testheft (oft die Fragennummer)
           examples:
             - '2.1'
             - '2.2'
+        position:
+          type: integer
+          description: Position des Items im Testheft
+          examples:
+            - 1
+            - 2
         iqbId:
           type: string
           description: IQB Item-Id des Items
           examples:
             - AB1021
             - AB1022
+        exercise:
+          description: Aufgabe, der das Item zugeordnet ist
+          $ref: '#/components/schemas/exercise'
         parameters:
+          description: Itemkennwerte des IQB für das Item
           $ref: '#/components/schemas/item-parameters'
     descriptive-statistics:
       type: object
+      required:
+        - descriptiveStatistics
       properties:
-        total:
-          type: integer
-          description: Gesamtzahl der Items
-          examples:
-            - 4
-        mean:
-          type: number
-          description: Anteil richtig gelöster Items / Mittlere Lösungsquote
-          minimum: 0
-          maximum: 1
-          examples:
-            - 0.75
-        frequency:
-          type: integer
-          description: Absolute Anzahl richtig gelöster Items
-          examples:
-            - 3
-        standardDeviation:
-          type: number
-          description: Standardabweichung der mittleren Lösungsquote
+        descriptiveStatistics:
+          type: object
+          required:
+            - total
+            - mean
+            - frequency
+            - standardDeviation
+          properties:
+            total:
+              type: integer
+              description: Gesamtzahl der Items
+              examples:
+                - 4
+            mean:
+              type: number
+              description: Anteil richtig gelöster Items / Mittlere Lösungsquote
+              minimum: 0
+              maximum: 1
+              examples:
+                - 0.75
+            frequency:
+              type: integer
+              description: Absolute Anzahl richtig gelöster Items
+              examples:
+                - 3
+            standardDeviation:
+              type: number
+              description: Standardabweichung der mittleren Lösungsquote
     item-statistics:
       type: array
+      description: Statistiken für einzelne Items in der Wertegruppe
       items:
         allOf:
           - $ref: '#/components/schemas/item'
-          - type: object
-            properties:
-              descriptiveStatistics:
-                $ref: '#/components/schemas/descriptive-statistics'
-  responses:
-    competence-levels:
-      description: Kompetenzstufenverteilung im Kontext
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              allOf:
-                - $ref: '#/components/schemas/value-group'
-                - type: object
-                  required:
-                    - competenceLevels
-                  properties:
-                    competenceLevels:
-                      type: array
-                      description: Kompetenzstufenverteilung in der Wertegruppe
-                      items:
-                        allOf:
-                          - $ref: '#/components/schemas/competence-level'
-                          - type: object
-                            required:
-                              - frequency
-                            properties:
-                              frequency:
-                                type: integer
+          - $ref: '#/components/schemas/descriptive-statistics'
     items:
-      description: Lösungshäufigkeiten der Items im Kontext
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              allOf:
-                - $ref: '#/components/schemas/value-group'
-                - type: object
-                  properties:
-                    items:
-                      $ref: '#/components/schemas/item-statistics'
-                      description: Statistiken für einzelne Items
+      type: array
+      items:
+        allOf:
+          - $ref: '#/components/schemas/value-group'
+          - type: object
+            required:
+              - items
+            properties:
+              items:
+                $ref: '#/components/schemas/item-statistics'
+    aggregation:
+      type: object
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          description: >-
+            Aggregationsart (z.B. Kompetenzstandard, Aufgabe), eigene
+            Aggregationsarten können definiert werden.
+          examples:
+            - competences
+            - exercise
+            - gender
+        value:
+          type: string
+          description: >-
+            Einzelne aggregierte Gruppe, z.B. der Aufgabenname, die Bezeichnung
+            der Kompetenz, ...
+          examples:
+            - 2.5.3
+        includedIqbIds:
+          type: array
+          description: >-
+            Liste von IQB ItemIds, die in der Berechnung der Aggregation
+            berücksichtigt wurden.
+          items:
+            type: string
     aggregations:
-      description: Lösungshäufigkeiten der Merkmale im Kontext
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              allOf:
-                - $ref: '#/components/schemas/value-group'
-                - type: object
-                  required:
-                    - aggregations
-                  properties:
-                    aggregations:
-                      type: array
-                      description: Einzelne Aggregationen
-                      items:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                            description: >-
-                              Aggregationsart (z.B. Kompetenzstandard, Aufgabe),
-                              eigene Aggregationsarten können definiert werden.
-                            enum:
-                              - competenceStandard
-                              - custom
-                            examples:
-                              - competenceStandard
-                              - total
-                          value:
-                            type: string
-                            description: >-
-                              Einzelne aggregierte Gruppe, z.B. "Leseverstehen"
-                              und "Orthografie" bei Domänen.
-                            examples:
-                              - 2.5.3
-                          descriptiveStatistics:
-                            $ref: '#/components/schemas/descriptive-statistics'
-                          includedIqbIds:
-                            type: array
-                            description: >-
-                              Liste von IQB ItemIds, die in der Berechnung der
-                              Aggregation berücksichtigt wurden.
-                            items:
-                              type: string
+      type: array
+      items:
+        allOf:
+          - $ref: '#/components/schemas/value-group'
+          - type: object
+            required:
+              - aggregations
+            properties:
+              aggregations:
+                type: array
+                description: Einzelne Aggregationen
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/aggregation'
+                    - $ref: '#/components/schemas/descriptive-statistics'

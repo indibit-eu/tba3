@@ -20,20 +20,24 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
-from api.models.descriptive_statistics_descriptive_statistics import DescriptiveStatisticsDescriptiveStatistics
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
+from api.models.competence_level_descriptive_statistics_descriptive_statistics import CompetenceLevelDescriptiveStatisticsDescriptiveStatistics
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class DescriptiveStatistics(BaseModel):
+class CompetenceLevelStatisticsInner(BaseModel):
     """
-    DescriptiveStatistics
+    CompetenceLevelStatisticsInner
     """ # noqa: E501
-    descriptive_statistics: DescriptiveStatisticsDescriptiveStatistics = Field(alias="descriptiveStatistics")
-    __properties: ClassVar[List[str]] = ["descriptiveStatistics"]
+    id: Optional[StrictStr] = None
+    name: Optional[StrictStr] = Field(default=None, description="Name der Komptenzstufe")
+    name_short: StrictStr = Field(description="Kürzel der Kompetenzstufe", alias="nameShort")
+    description: Optional[StrictStr] = Field(default=None, description="Beschreibung der Kompetenzstufe")
+    descriptive_statistics: CompetenceLevelDescriptiveStatisticsDescriptiveStatistics = Field(alias="descriptiveStatistics")
+    __properties: ClassVar[List[str]] = ["id", "name", "nameShort", "description", "descriptiveStatistics"]
 
     model_config = {
         "populate_by_name": True,
@@ -53,7 +57,7 @@ class DescriptiveStatistics(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of DescriptiveStatistics from a JSON string"""
+        """Create an instance of CompetenceLevelStatisticsInner from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,7 +83,7 @@ class DescriptiveStatistics(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of DescriptiveStatistics from a dict"""
+        """Create an instance of CompetenceLevelStatisticsInner from a dict"""
         if obj is None:
             return None
 
@@ -87,7 +91,11 @@ class DescriptiveStatistics(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "descriptiveStatistics": DescriptiveStatisticsDescriptiveStatistics.from_dict(obj.get("descriptiveStatistics")) if obj.get("descriptiveStatistics") is not None else None
+            "id": obj.get("id"),
+            "name": obj.get("name"),
+            "nameShort": obj.get("nameShort"),
+            "description": obj.get("description"),
+            "descriptiveStatistics": CompetenceLevelDescriptiveStatisticsDescriptiveStatistics.from_dict(obj.get("descriptiveStatistics")) if obj.get("descriptiveStatistics") is not None else None
         })
         return _obj
 

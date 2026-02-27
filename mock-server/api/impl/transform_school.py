@@ -7,20 +7,23 @@ import polars as pl
 from api.impl.transform_group import build_group_competence_levels_response
 from api.impl.transform_helpers import (
     _safe_round,
-    build_single_item_stats,
     build_domain,
+    build_single_item_stats,
+    build_subject,
 )
-from api.models.descriptive_statistics import DescriptiveStatistics
-from api.models.domain import Domain
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
-from api.models.inline_object_inner2_all_of_aggregations_inner import (
-    InlineObjectInner2AllOfAggregationsInner,
+from api.models.aggregations_inner import AggregationsInner
+from api.models.aggregations_inner_all_of_aggregations_inner import (
+    AggregationsInnerAllOfAggregationsInner,
 )
-from api.models.inline_object_inner_all_of_competence_levels_inner import (
-    InlineObjectInnerAllOfCompetenceLevelsInner,
+from api.models.competence_level_descriptive_statistics_descriptive_statistics import (
+    CompetenceLevelDescriptiveStatisticsDescriptiveStatistics,
 )
+from api.models.competence_level_statistics_inner import CompetenceLevelStatisticsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.descriptive_statistics_descriptive_statistics import (
+    DescriptiveStatisticsDescriptiveStatistics,
+)
+from api.models.items_inner import ItemsInner
 from generator.booklets import BookletKey, DomainKey
 from generator.config import EquivalenceTableEntry
 from generator.core import GroupData
@@ -30,14 +33,14 @@ def build_school_competence_levels_response(
     school_id: str,
     school_name: str,
     groups_with_equiv: list[tuple[GroupData, list[EquivalenceTableEntry]]],
-) -> list[InlineObjectInner]:
+) -> list[CompetenceLevelsInner]:
     """Build school-level competence-levels response.
 
     Calls per-group competence level computation, then merges results
     by domain: frequencies per level are summed across all groups.
     """
     # Collect per-group results and map group_id -> subject
-    all_results: list[InlineObjectInner] = []
+    all_results: list[CompetenceLevelsInner] = []
     group_subject = {gd.group_id: gd.booklet.subject for gd, _ in groups_with_equiv}
     for group_data, equiv_tables in groups_with_equiv:
         all_results.extend(
@@ -45,7 +48,7 @@ def build_school_competence_levels_response(
         )
 
     # Group by (subject, domain) to keep domains from different subjects separate
-    by_key: dict[DomainKey, list[InlineObjectInner]] = {}
+    by_key: dict[DomainKey, list[CompetenceLevelsInner]] = {}
     for result in all_results:
         assert result.id is not None
         subject = group_subject[result.id]
@@ -56,40 +59,46 @@ def build_school_competence_levels_response(
         by_key.setdefault(dk, []).append(result)
 
     # Merge each (subject, domain) group
-    merged: list[InlineObjectInner] = []
-    for _key, entries in by_key.items():
+    merged: list[CompetenceLevelsInner] = []
+    for key, entries in by_key.items():
         # Sum frequencies per level, preserve order from first entry
         level_freq: dict[str, int] = {}
         level_meta: dict[str, tuple[str | None, str | None]] = {}
         for entry in entries:
             for cl in entry.competence_levels:
                 level_freq[cl.name_short] = (
-                    level_freq.get(cl.name_short, 0) + cl.frequency
+                    level_freq.get(cl.name_short, 0)
+                    + cl.descriptive_statistics.frequency
                 )
                 if cl.name_short not in level_meta:
                     level_meta[cl.name_short] = (cl.name, cl.description)
 
+        total_students = sum(level_freq.values())
+
         comp_levels = [
-            InlineObjectInnerAllOfCompetenceLevelsInner(
+            CompetenceLevelStatisticsInner(
                 name_short=cl.name_short,
                 name=level_meta.get(cl.name_short, (None, None))[0],
                 description=level_meta.get(cl.name_short, (None, None))[1],
-                frequency=level_freq.get(cl.name_short, 0),
+                descriptive_statistics=CompetenceLevelDescriptiveStatisticsDescriptiveStatistics(
+                    total=total_students,
+                    mean=(
+                        _safe_round(level_freq.get(cl.name_short, 0) / total_students)
+                        if total_students > 0
+                        else 0.0
+                    ),
+                    frequency=level_freq.get(cl.name_short, 0),
+                ),
             )
             for cl in entries[0].competence_levels
         ]
 
-        first_domain = entries[0].domain
-        domain_model = (
-            Domain(name=first_domain.name, subject=first_domain.subject)
-            if first_domain is not None
-            else None
-        )
         merged.append(
-            InlineObjectInner(
+            CompetenceLevelsInner(
                 id=school_id,
                 name=school_name,
-                domain=domain_model,
+                domain=build_domain(entries[0].domain),
+                subject=build_subject(key.subject),
                 competence_levels=comp_levels,
             )
         )
@@ -101,7 +110,7 @@ def build_school_items_response(
     school_id: str,
     school_name: str,
     groups: list[GroupData],
-) -> list[InlineObjectInner1]:
+) -> list[ItemsInner]:
     """Build school-level items response.
 
     Groups are grouped by booklet, then by domain. For each
@@ -113,7 +122,7 @@ def build_school_items_response(
     for gd in groups:
         by_booklet.setdefault(gd.booklet.key, []).append(gd)
 
-    results: list[InlineObjectInner1] = []
+    results: list[ItemsInner] = []
     for _booklet_key, booklet_groups in by_booklet.items():
         booklet = booklet_groups[0].booklet
         subject = booklet.subject
@@ -130,15 +139,15 @@ def build_school_items_response(
             sorted_items = sorted(items, key=lambda i: i.item_order_booklet)
 
             items_stats = [
-                build_single_item_stats(item, merged_responses)
-                for item in sorted_items
+                build_single_item_stats(item, merged_responses) for item in sorted_items
             ]
 
             results.append(
-                InlineObjectInner1(
+                ItemsInner(
                     id=school_id,
                     name=school_name,
-                    domain=build_domain(domain_name, subject),
+                    domain=build_domain(domain_name),
+                    subject=build_subject(subject),
                     items=items_stats,
                 )
             )
@@ -150,7 +159,7 @@ def build_school_aggregations_response(
     school_id: str,
     school_name: str,
     groups: list[GroupData],
-) -> list[InlineObjectInner2]:
+) -> list[AggregationsInner]:
     """Build school-level aggregations response.
 
     For each domain across all groups, per-student means are computed
@@ -178,16 +187,16 @@ def build_school_aggregations_response(
             iqb_ids.setdefault(key, set()).update(item.iqbitem_id for item in items)
 
     # Build school-level value groups (one per subject+domain)
-    results: list[InlineObjectInner2] = []
+    results: list[AggregationsInner] = []
     for key, means in student_means.items():
         means_series = pl.Series("m", means)
         mean_val = means_series.mean()
         std_val = means_series.std()
 
-        aggregation = InlineObjectInner2AllOfAggregationsInner(
+        aggregation = AggregationsInnerAllOfAggregationsInner(
             type="custom",
             value=key.domain or key.subject,
-            descriptive_statistics=DescriptiveStatistics(
+            descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
                 total=len(iqb_ids.get(key, set())),
                 frequency=int(frequencies.get(key, 0)),
                 mean=_safe_round(mean_val),
@@ -197,10 +206,11 @@ def build_school_aggregations_response(
         )
 
         results.append(
-            InlineObjectInner2(
+            AggregationsInner(
                 id=school_id,
                 name=school_name,
-                domain=build_domain(key.domain, key.subject),
+                domain=build_domain(key.domain),
+                subject=build_subject(key.subject),
                 aggregations=[aggregation],
             )
         )

@@ -93,6 +93,7 @@ class Item:
     logit: float
     bista: float
     competence_level: str
+    subject: str
     domain: str | None
     item_nr_booklet: str
     item_order_booklet: float

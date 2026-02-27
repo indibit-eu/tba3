@@ -15,20 +15,20 @@ from api.impl.transform_student import (
     build_student_competence_levels_response,
     build_student_items_response,
 )
-from api.models.inline_object_inner import InlineObjectInner
-from api.models.inline_object_inner1 import InlineObjectInner1
-from api.models.inline_object_inner2 import InlineObjectInner2
+from api.models.aggregations_inner import AggregationsInner
+from api.models.competence_levels_inner import CompetenceLevelsInner
+from api.models.items_inner import ItemsInner
 
 
 class GroupsApiImpl(BaseGroupsApi):  # type: ignore[no-untyped-call]
     """Implementation of the Groups API endpoints."""
 
-    async def groups_id_competence_levels_get(
+    async def get_group_competence_levels(
         self,
         id: StrictStr,
         type: StrictStr | None,
         comparison: StrictStr | None,
-    ) -> list[InlineObjectInner]:
+    ) -> list[CompetenceLevelsInner]:
         group_data, equiv_tables = resolve_group(id)
         if not equiv_tables:
             raise HTTPException(
@@ -38,48 +38,46 @@ class GroupsApiImpl(BaseGroupsApi):  # type: ignore[no-untyped-call]
 
         include_group, include_students = resolve_requested_types(type)
 
-        result: list[InlineObjectInner] = []
+        result: list[CompetenceLevelsInner] = []
         if include_group:
             result.extend(
                 build_group_competence_levels_response(group_data, equiv_tables)
             )
         if include_students:
             result.extend(
-                build_student_competence_levels_response(
-                    group_data, equiv_tables
-                )
+                build_student_competence_levels_response(group_data, equiv_tables)
             )
         return result
 
-    async def groups_id_items_get(
+    async def get_group_items(
         self,
         id: StrictStr,
         type: StrictStr | None,
         comparison: StrictStr | None,
-    ) -> list[InlineObjectInner1]:
+    ) -> list[ItemsInner]:
         group_data, _ = resolve_group(id)
 
         include_group, include_students = resolve_requested_types(type)
 
-        result: list[InlineObjectInner1] = []
+        result: list[ItemsInner] = []
         if include_group:
             result.extend(build_group_items_response(group_data))
         if include_students:
             result.extend(build_student_items_response(group_data))
         return result
 
-    async def groups_id_aggregations_get(
+    async def get_group_aggregations(
         self,
         id: StrictStr,
         type: StrictStr | None,
         aggregation: StrictStr | None,
         comparison: StrictStr | None,
-    ) -> list[InlineObjectInner2]:
+    ) -> list[AggregationsInner]:
         group_data, _ = resolve_group(id)
 
         include_group, include_students = resolve_requested_types(type)
 
-        result: list[InlineObjectInner2] = []
+        result: list[AggregationsInner] = []
         if include_group:
             result.extend(build_group_aggregations_response(group_data))
         if include_students:

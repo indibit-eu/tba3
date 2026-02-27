@@ -24,7 +24,8 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from api.models.characteristic import Characteristic
 from api.models.domain import Domain
-from api.models.value_group_attributes_inner import ValueGroupAttributesInner
+from api.models.subject import Subject
+from api.models.value_group_properties_inner import ValueGroupPropertiesInner
 try:
     from typing import Self
 except ImportError:
@@ -37,9 +38,10 @@ class ValueGroup(BaseModel):
     id: Optional[StrictStr] = None
     name: StrictStr = Field(description="Bezeichnung der Wertegruppe")
     domain: Optional[Domain] = Field(default=None, description="Domäne der Wertegruppe (optional)")
+    subject: Optional[Subject] = Field(default=None, description="Fach der Wertegruppe (optional)")
     covariates: Optional[List[Characteristic]] = Field(default=None, description="Kovariaten der Testgruppe")
-    attributes: Optional[List[ValueGroupAttributesInner]] = Field(default=None, description="Liste von Key-Value-Werten mit zusätzlichen Informationen")
-    __properties: ClassVar[List[str]] = ["id", "name", "domain", "covariates", "attributes"]
+    properties: Optional[List[ValueGroupPropertiesInner]] = Field(default=None, description="Liste von Key-Value-Werten mit zusätzlichen Informationen, z.B. Testdauer, andere systemspezifische Attribute")
+    __properties: ClassVar[List[str]] = ["id", "name", "domain", "subject", "covariates", "properties"]
 
     model_config = {
         "populate_by_name": True,
@@ -81,6 +83,9 @@ class ValueGroup(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of domain
         if self.domain:
             _dict['domain'] = self.domain.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of subject
+        if self.subject:
+            _dict['subject'] = self.subject.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in covariates (list)
         _items = []
         if self.covariates:
@@ -88,13 +93,13 @@ class ValueGroup(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['covariates'] = _items
-        # override the default output from pydantic by calling `to_dict()` of each item in attributes (list)
+        # override the default output from pydantic by calling `to_dict()` of each item in properties (list)
         _items = []
-        if self.attributes:
-            for _item in self.attributes:
+        if self.properties:
+            for _item in self.properties:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['attributes'] = _items
+            _dict['properties'] = _items
         return _dict
 
     @classmethod
@@ -110,8 +115,9 @@ class ValueGroup(BaseModel):
             "id": obj.get("id"),
             "name": obj.get("name"),
             "domain": Domain.from_dict(obj.get("domain")) if obj.get("domain") is not None else None,
+            "subject": Subject.from_dict(obj.get("subject")) if obj.get("subject") is not None else None,
             "covariates": [Characteristic.from_dict(_item) for _item in obj.get("covariates")] if obj.get("covariates") is not None else None,
-            "attributes": [ValueGroupAttributesInner.from_dict(_item) for _item in obj.get("attributes")] if obj.get("attributes") is not None else None
+            "properties": [ValueGroupPropertiesInner.from_dict(_item) for _item in obj.get("properties")] if obj.get("properties") is not None else None
         })
         return _obj
 

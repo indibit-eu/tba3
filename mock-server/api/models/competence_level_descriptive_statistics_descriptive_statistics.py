@@ -20,20 +20,22 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from typing import Any, ClassVar, Dict, List, Union
+from typing_extensions import Annotated
 try:
     from typing import Self
 except ImportError:
     from typing_extensions import Self
 
-class DomainSubject(BaseModel):
+class CompetenceLevelDescriptiveStatisticsDescriptiveStatistics(BaseModel):
     """
-    Fach der Domäne
+    CompetenceLevelDescriptiveStatisticsDescriptiveStatistics
     """ # noqa: E501
-    id: Optional[StrictStr] = None
-    name: StrictStr = Field(description="Name des Fachs")
-    __properties: ClassVar[List[str]] = ["id", "name"]
+    total: StrictInt = Field(description="Gesamtzahl der Schüler:innen in der Wertegruppe")
+    mean: Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]] = Field(description="Anteil der Schüler:innen an der Gesamtzahl, die diese Kompetenzstufe erreicht haben.")
+    frequency: StrictInt = Field(description="Anzahl der Schüler:innen, die diese Kompetenzstufe erreicht haben.")
+    __properties: ClassVar[List[str]] = ["total", "mean", "frequency"]
 
     model_config = {
         "populate_by_name": True,
@@ -53,7 +55,7 @@ class DomainSubject(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of DomainSubject from a JSON string"""
+        """Create an instance of CompetenceLevelDescriptiveStatisticsDescriptiveStatistics from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,7 +78,7 @@ class DomainSubject(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of DomainSubject from a dict"""
+        """Create an instance of CompetenceLevelDescriptiveStatisticsDescriptiveStatistics from a dict"""
         if obj is None:
             return None
 
@@ -84,8 +86,9 @@ class DomainSubject(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name")
+            "total": obj.get("total"),
+            "mean": obj.get("mean"),
+            "frequency": obj.get("frequency")
         })
         return _obj
 

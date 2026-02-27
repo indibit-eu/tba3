@@ -20,8 +20,9 @@ import json
 
 
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from api.models.exercise import Exercise
 from api.models.item_parameters import ItemParameters
 try:
     from typing import Self
@@ -33,10 +34,12 @@ class Item(BaseModel):
     Item
     """ # noqa: E501
     id: Optional[StrictStr] = None
-    name: StrictStr = Field(description="Bezeichnung des Items im Testheft")
+    name: StrictStr = Field(description="Bezeichnung des Items im Testheft (oft die Fragennummer)")
+    position: Optional[StrictInt] = Field(default=None, description="Position des Items im Testheft")
     iqb_id: StrictStr = Field(description="IQB Item-Id des Items", alias="iqbId")
-    parameters: Optional[ItemParameters] = None
-    __properties: ClassVar[List[str]] = ["id", "name", "iqbId", "parameters"]
+    exercise: Exercise = Field(description="Aufgabe, der das Item zugeordnet ist")
+    parameters: Optional[ItemParameters] = Field(default=None, description="Itemkennwerte des IQB für das Item")
+    __properties: ClassVar[List[str]] = ["id", "name", "position", "iqbId", "exercise", "parameters"]
 
     model_config = {
         "populate_by_name": True,
@@ -75,6 +78,9 @@ class Item(BaseModel):
             },
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of exercise
+        if self.exercise:
+            _dict['exercise'] = self.exercise.to_dict()
         # override the default output from pydantic by calling `to_dict()` of parameters
         if self.parameters:
             _dict['parameters'] = self.parameters.to_dict()
@@ -92,7 +98,9 @@ class Item(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "name": obj.get("name"),
+            "position": obj.get("position"),
             "iqbId": obj.get("iqbId"),
+            "exercise": Exercise.from_dict(obj.get("exercise")) if obj.get("exercise") is not None else None,
             "parameters": ItemParameters.from_dict(obj.get("parameters")) if obj.get("parameters") is not None else None
         })
         return _obj
