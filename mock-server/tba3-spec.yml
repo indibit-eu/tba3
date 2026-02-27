@@ -7,7 +7,7 @@ info:
     Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen
     (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten
     (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '1.0'
+  version: '0.4'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
