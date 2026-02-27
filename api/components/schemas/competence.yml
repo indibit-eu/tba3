@@ -1,0 +1,25 @@
+type: object
+properties:
+  id:
+    type: string
+    examples:
+      - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db
+  type:
+    type: string
+    description: Art der Kompetenz
+    examples:
+      - 'Kompetenz'
+      - 'Leitidee'
+      - 'Allgemeine Kompetenz'
+  name:
+    type: string
+    description: Name der Kompetenz
+    examples:
+      - '2.5.1'
+      - 'L1'
+  description:
+    type: string
+    description: Beschreibung der Kompetenz
+    examples:
+      - 'Richtig schreiben'
+      - 'Leitidee Zahl'

@@ -1,5 +1,6 @@
 get:
-  description: Kompetenzstufenverteilung in der Lerngruppe
+  operationId: getGroupCompetenceLevels
+  summary: Kompetenzstufenverteilung in der Lerngruppe
   tags:
     - groups
   parameters:
@@ -8,6 +9,12 @@ get:
     - $ref: '../..//components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/competence-levels.yml'
+      description: Kompetenzstufenverteilung in der Lerngruppe
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/competence-levels.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
       description: Lerngruppe oder Kompetenzstufenverteilung für die Lerngruppe nicht gefunden

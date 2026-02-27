@@ -71,7 +71,7 @@ type:
   description: Wertegruppen, welche ausgegeben werden sollen
   examples:
     Lerngruppe:
-      value:
+      value: ''
       description: Liefert Leistungsdaten auf Gruppenebene (Standard).
     Schüler:
       value: students

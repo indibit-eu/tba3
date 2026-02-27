@@ -4,7 +4,7 @@ properties:
   logit:
     description: Schwierigkeit des Items in Logit
     type: number
-  bistaPoints: 
+  bistaPoints:
     description: Schwierigkeit des Items in Punkten nach deutscher Bildungsstandardmetrik
     type: number
   solutionFrequencyGymnasium:
@@ -25,29 +25,8 @@ properties:
   competenceLevel:
     description: Kompetenzstufe des Items
     $ref: './competence-level.yml'
-  cognitiveDemandLevel:
-    description: Anforderungsbereich des Items
-    type: string
-  generalMathematicalCompetence:
-    description: Allgemeine Kompetenz des Items
+  competences:
+    description: Liste der dem Item zugeordneten Kompetenzen
     type: array
     items:
-      type: string
-  coreIdea:
-    description: Leitideen des Items
-    type: array
-    items:
-      type: string
-  competenceStandard:
-    description: Liste der dem Item zugeordneten Kompetenzstandards
-    type: array
-    items:
-        type: string
-  listeningOrReadingStyle:
-    description: Hör- / Lesestil
-    type: string
-    enum:
-      - selektiv
-      - detailliert
-      - inferierend
-      - global
+      $ref: './competence.yml'

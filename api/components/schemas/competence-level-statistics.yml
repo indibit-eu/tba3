@@ -1,26 +1,6 @@
 type: array
+description: Kompetenzstufenverteilung in der Wertegruppe
 items:
   allOf:
-    - $ref: '../schemas/item.yml'
-    - type: object
-      properties:
-        descriptiveStatistics:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: Gesamtzahl der Schüler:innen in der Wertegruppe
-              examples:
-                - 4
-            mean:
-              type: number
-              description: Anteil der Schüler:innen an der Gesamtzahl, die diese Kompetenzstufe erreicht haben.
-              minimum: 0
-              maximum: 1
-              examples:
-                - 0.75
-            frequency:
-              type: integer
-              description: Anzahl der Schüler:innen, die diese Kompetenzstufe erreicht haben.
-              examples:
-                - 3
+    - $ref: '../schemas/competence-level.yml'
+    - $ref: '../schemas/competence-level-descriptive-statistics.yml'

@@ -16,12 +16,15 @@ properties:
   domain:
     $ref: './domain.yml'
     description: Domäne der Wertegruppe (optional)
+  subject:
+    $ref: './subject.yml'
+    description: Fach der Wertegruppe (optional)
   covariates:
     $ref: './covariates.yml'
     description: Kovariaten der Wertegruppe
-  attributes:
+  properties:
     type: array
-    description: Liste von Key-Value-Werten mit zusätzlichen Informationen
+    description: Liste von Key-Value-Werten mit zusätzlichen Informationen, z.B. Testdauer, andere systemspezifische Attribute
     items:
       type: object
       required: ['key', 'value']

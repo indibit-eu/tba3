@@ -1,5 +1,6 @@
 get:
-  description: Aggregierte Lösungshäufigkeiten an der Schule
+  operationId: getSchoolAggregations
+  summary: Aggregierte Werte (z.B. Lösungshäufigkeiten) an der Schule
   tags:
     - schools
   parameters:
@@ -9,6 +10,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/aggregations.yml'
+      description: Abhängig vom Typ berechnete Aggregation für die Schule
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/aggregations.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
-      description: Schule oder Lösungshäufigkeit je Merkmal für die Schule nicht gefunden
+      description: Schule oder Werte für die Schule nicht gefunden

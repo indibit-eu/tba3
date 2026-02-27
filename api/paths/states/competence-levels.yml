@@ -1,5 +1,6 @@
 get:
-  description: Kompetenzstufenverteilung im Bundesland
+  operationId: getStateCompetenceLevels
+  summary: Kompetenzstufenverteilung im Bundesland
   tags:
     - states
   parameters:
@@ -7,6 +8,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/competence-levels.yml'
+      description: Kompetenzstufenverteilung im Bundesland
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/competence-levels.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
       description: Bundesland oder Kompetensstufenverteilung für das Bundesland nicht gefunden

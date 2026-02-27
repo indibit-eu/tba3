@@ -8,25 +8,21 @@ properties:
       - total
       - mean
       - frequency
-      - standardDeviation
     properties:
       total:
         type: integer
-        description: Gesamtzahl der Items
+        description: Gesamtzahl der Schüler:innen in der Wertegruppe
         examples:
           - 4
       mean:
         type: number
-        description: Anteil richtig gelöster Items / Mittlere Lösungsquote
+        description: Anteil der Schüler:innen an der Gesamtzahl, die diese Kompetenzstufe erreicht haben.
         minimum: 0
         maximum: 1
         examples:
           - 0.75
       frequency:
         type: integer
-        description: Absolute Anzahl richtig gelöster Items
+        description: Anzahl der Schüler:innen, die diese Kompetenzstufe erreicht haben.
         examples:
           - 3
-      standardDeviation:
-        type: number
-        description: Standardabweichung der mittleren Lösungsquote

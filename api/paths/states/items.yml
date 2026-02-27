@@ -1,5 +1,6 @@
 get:
-  description: Lösungshäufigkeiten je Item im Bundesland
+  operationId: getStateItems
+  summary: Lösungshäufigkeiten je Item im Bundesland
   tags:
     - states
   parameters:
@@ -7,6 +8,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/items.yml'
+      description: Lösungshäufigkeiten je Item im Bundesland
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/items.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
       description: Bundesland oder Lösungshäufigkeit je Item für das Bundesland nicht gefunden

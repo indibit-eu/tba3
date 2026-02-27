@@ -1,5 +1,6 @@
 get:
-  description: Aggregierte Lösungshäufigkeiten im Bundesland
+  operationId: getStateAggregations
+  summary: Aggregierte Werte (z.B. Lösungshäufigkeiten) im Bundesland
   tags:
     - states
   parameters:
@@ -9,6 +10,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/aggregations.yml'
+      description: Abhängig vom Typ berechnete Aggregation für das Bundesland
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/aggregations.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
-      description: Bundesland oder Lösungshäufigkeit je Merkmal für das Bundesland nicht gefunden
+      description: Bundesland oder Werte für das Bundesland nicht gefunden

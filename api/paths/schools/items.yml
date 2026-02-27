@@ -1,5 +1,6 @@
-description: Lösungshäufigkeiten je Item an der Schule
 get:
+  operationId: getSchoolItems
+  summary: Lösungshäufigkeiten je Item an der Schule
   tags:
     - schools
   parameters:
@@ -7,6 +8,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/items.yml'
+      description: Lösungshäufigkeiten je Item an der Schule
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/items.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
       description: Schule oder Lösungshäufigkeit je Item für die Schule nicht gefunden

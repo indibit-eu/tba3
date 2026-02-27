@@ -1,5 +1,6 @@
 get:
-  description: Aggregierte Lösungshäufigkeiten in der Lerngruppe
+  operationId: getGroupAggregations
+  summary: Aggregierte Werte (z.B. Lösungshäufigkeiten) in der Lerngruppe
   tags:
     - groups
   parameters:
@@ -9,6 +10,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/aggregations.yml'
+      description: Abhängig vom Typ berechnete Aggregation für die Lerngruppe
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/aggregations.yml'
     '400':
-      description: Lerngruppe oder Lösungshäufigkeiten für die Lerngruppe nicht gefunden
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
+    '404':
+      description: Lerngruppe oder Werte für die Lerngruppe nicht gefunden

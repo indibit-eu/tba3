@@ -1,5 +1,6 @@
 get:
-  description: Kompetenzstufenverteilung an der Schule
+  operationId: getSchoolCompetenceLevels
+  summary: Kompetenzstufenverteilung an der Schule
   tags:
     - schools
   parameters:
@@ -7,6 +8,12 @@ get:
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
-      $ref: '../../components/responses/competence-levels.yml'
+      description: Kompetenzstufenverteilung an der Schule
+      content:
+        'application/json':
+          schema:
+            $ref: '../../components/responses/competence-levels.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
     '404':
       description: Schule oder Kompetensstufenverteilung für die Schule nicht gefunden
