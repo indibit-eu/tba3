@@ -7,7 +7,7 @@ info:
     Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen
     (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten
     (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '1.0'
+  version: '1.1'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
@@ -99,6 +99,7 @@ paths:
         - schools
       parameters:
         - $ref: '#/components/parameters/schoolId'
+        - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -119,6 +120,7 @@ paths:
         - schools
       parameters:
         - $ref: '#/components/parameters/schoolId'
+        - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -161,6 +163,7 @@ paths:
         - states
       parameters:
         - $ref: '#/components/parameters/stateId'
+        - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -183,6 +186,7 @@ paths:
         - states
       parameters:
         - $ref: '#/components/parameters/stateId'
+        - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
       responses:
         '200':
@@ -291,13 +295,18 @@ components:
         Lerngruppe und Schüler:
           value: group,students
           description: Liefert Leistungsdaten auf Gruppen- und Schülerebene.
+        Land und Schulamtsbezirke:
+          value: state,district
+          description: >-
+            Liefert Leistungsdaten für Landes- und Bezirksebene (nur für /state
+            Endpunkte).
     comparison:
       in: query
       name: comparison
       explode: false
       schema:
         type: string
-      description: Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen
+      description: Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.
     aggregation:
       in: query
       name: aggregation
@@ -305,6 +314,15 @@ components:
       schema:
         type: string
       description: Aggregationsarten, die berechnet werden sollen
+      examples:
+        Kompetenzen:
+          value: competence
+          description: >-
+            Aggregiert Leistungsdaten nach zugewiesenen Kompetenzen der
+            einzelnen Items.
+        Geschlecht:
+          value: gender
+          description: Aggregiert Leistungsdaten nach Geschlecht der Schüler:innen.
     schoolId:
       in: path
       name: id

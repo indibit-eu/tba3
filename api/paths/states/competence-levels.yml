@@ -5,6 +5,7 @@ get:
     - states
   parameters:
     - $ref: '../../components/parameters.yml#/stateId'
+    - $ref: '../../components/parameters.yml#/type'
     - $ref: '../../components/parameters.yml#/comparison'
   responses:
     '200':
