@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from api.impl.transform_helpers import (
     _safe_round,
+    build_competence_aggregations,
     build_domain,
+    build_gender_aggregations,
     build_single_item_stats,
     build_subject,
 )
@@ -17,9 +19,6 @@ from api.models.competence_level_descriptive_statistics_descriptive_statistics i
 )
 from api.models.competence_level_statistics_inner import CompetenceLevelStatisticsInner
 from api.models.competence_levels_inner import CompetenceLevelsInner
-from api.models.descriptive_statistics_descriptive_statistics import (
-    DescriptiveStatisticsDescriptiveStatistics,
-)
 from api.models.items_inner import ItemsInner
 from generator.config import EquivalenceTableEntry
 from generator.core import GroupData
@@ -57,11 +56,12 @@ def build_group_items_response(group_data: GroupData) -> list[ItemsInner]:
 
 def build_group_aggregations_response(
     group_data: GroupData,
+    aggregation_types: set[str],
 ) -> list[AggregationsInner]:
     """Build aggregations endpoint response.
 
-    Returns one value group per domain, each containing a single
-    aggregation with statistics for that domain's items.
+    Returns one value group per domain, each containing aggregation entries
+    based on the requested aggregation types (competence, gender).
     """
     domain_items = group_data.booklet.items_by_domain()
     subject = group_data.booklet.subject
@@ -69,35 +69,25 @@ def build_group_aggregations_response(
     results: list[AggregationsInner] = []
 
     for domain_name, items in domain_items.items():
-        item_cols = [item.column_name for item in items]
-        iqb_ids = [item.iqbitem_id for item in items]
+        aggregations: list[AggregationsInnerAllOfAggregationsInner] = []
 
-        # Per-student mean score across domain items, then aggregate
-        domain_df = group_data.responses.select(item_cols)
-        student_means = domain_df.mean_horizontal()
-        frequency = int(domain_df.sum_horizontal().sum())
-
-        aggregation = AggregationsInnerAllOfAggregationsInner(
-            type="custom",
-            value=domain_name or subject,
-            descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
-                total=len(item_cols),
-                mean=_safe_round(student_means.mean()),
-                frequency=frequency,
-                standard_deviation=_safe_round(student_means.std()),
-            ),
-            included_iqb_ids=iqb_ids,
-        )
-
-        results.append(
-            AggregationsInner(
-                id=group_data.group_id,
-                name=f"Lerngruppe {group_data.group_id}",
-                domain=build_domain(domain_name),
-                subject=build_subject(subject),
-                aggregations=[aggregation],
+        if "competence" in aggregation_types:
+            aggregations.extend(
+                build_competence_aggregations(items, group_data.responses)
             )
-        )
+        if "gender" in aggregation_types:
+            aggregations.extend(build_gender_aggregations(items, group_data.responses))
+
+        if aggregations:
+            results.append(
+                AggregationsInner(
+                    id=group_data.group_id,
+                    name=f"Lerngruppe {group_data.group_id}",
+                    domain=build_domain(domain_name),
+                    subject=build_subject(subject),
+                    aggregations=aggregations,
+                )
+            )
 
     return results
 

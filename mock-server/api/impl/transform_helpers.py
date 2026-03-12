@@ -6,6 +6,9 @@ from typing import Any
 
 import polars as pl
 
+from api.models.aggregations_inner_all_of_aggregations_inner import (
+    AggregationsInnerAllOfAggregationsInner,
+)
 from api.models.competence import Competence
 from api.models.competence_level import CompetenceLevel
 from api.models.descriptive_statistics_descriptive_statistics import (
@@ -17,6 +20,17 @@ from api.models.item_parameters import ItemParameters
 from api.models.item_statistics_inner import ItemStatisticsInner
 from api.models.subject import Subject
 from generator.booklets import Item
+
+# Mapping from Item field names to aggregation type names.
+# Used by _build_competences(), build_competence_groups(),
+# and build_competence_aggregations().
+COMPETENCE_FIELD_MAP: list[tuple[str, str]] = [
+    ("competence_standard", "Kompetenz"),
+    ("general_mathematical_competence", "Allgemeine Kompetenz"),
+    ("core_idea", "Leitidee"),
+    ("cognitive_demand_level", "Anforderungsbereich"),
+    ("listening_or_reading_style", "Hör-/Lesestil"),
+]
 
 SUBJECT_NAMES: dict[str, str] = {
     "de": "Deutsch",
@@ -52,27 +66,15 @@ def _build_competences(item: Item) -> list[Competence] | None:
     """Build a list of Competence objects from an Item's competence fields."""
     competences: list[Competence] = []
 
-    if item.competence_standard:
-        for cs in item.competence_standard:
-            competences.append(Competence(type="Kompetenz", name=cs))
-
-    if item.general_mathematical_competence:
-        for gmc in item.general_mathematical_competence:
-            competences.append(Competence(type="Allgemeine Kompetenz", name=gmc))
-
-    if item.core_idea:
-        for ci in item.core_idea:
-            competences.append(Competence(type="Leitidee", name=ci))
-
-    if item.cognitive_demand_level:
-        competences.append(
-            Competence(type="Anforderungsbereich", name=item.cognitive_demand_level)
-        )
-
-    if item.listening_or_reading_style:
-        competences.append(
-            Competence(type="Hör-/Lesestil", name=item.listening_or_reading_style)
-        )
+    for field_name, type_name in COMPETENCE_FIELD_MAP:
+        field_val = getattr(item, field_name)
+        if field_val is None:
+            continue
+        if isinstance(field_val, list):
+            for val in field_val:
+                competences.append(Competence(type=type_name, name=val))
+        else:
+            competences.append(Competence(type=type_name, name=field_val))
 
     return competences if competences else None
 
@@ -102,6 +104,119 @@ def build_student_covariates(
     The dicts are assigned via __dict__ to bypass model validation.
     """
     return [{"type": col, "value": str(row[col])} for col in covariate_columns]
+
+
+def build_competence_groups(
+    items: list[Item],
+) -> dict[tuple[str, str], list[Item]]:
+    """Group items by (competence_type, competence_value).
+
+    Items with multiple values for a field appear in each group.
+    """
+    groups: dict[tuple[str, str], list[Item]] = {}
+    for item in items:
+        for field_name, type_name in COMPETENCE_FIELD_MAP:
+            field_val = getattr(item, field_name)
+            if field_val is None:
+                continue
+            if isinstance(field_val, list):
+                for val in field_val:
+                    groups.setdefault((type_name, val), []).append(item)
+            else:
+                groups.setdefault((type_name, field_val), []).append(item)
+    return groups
+
+
+def build_competence_aggregations(
+    items: list[Item],
+    responses: pl.DataFrame,
+) -> list[AggregationsInnerAllOfAggregationsInner]:
+    """Build competence aggregations for a set of items and their responses.
+
+    Creates one aggregation entry per individual competence value across all
+    competence types present in the items. Items with multiple competence
+    values count toward each value.
+
+    Args:
+        items: Items to aggregate (typically filtered to a single domain).
+        responses: DataFrame containing item response columns (0/1 scores).
+
+    Returns:
+        List of aggregation entries, one per (competence_type, competence_value).
+    """
+    comp_groups = build_competence_groups(items)
+    results: list[AggregationsInnerAllOfAggregationsInner] = []
+
+    for (type_name, value), group_items in sorted(comp_groups.items()):
+        item_cols = [item.column_name for item in group_items]
+        iqb_ids = sorted({item.iqbitem_id for item in group_items})
+
+        domain_df = responses.select(item_cols)
+        student_means = domain_df.mean_horizontal()
+        frequency = int(domain_df.sum_horizontal().sum())
+
+        results.append(
+            AggregationsInnerAllOfAggregationsInner(
+                type=type_name,
+                value=value,
+                descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
+                    total=len(responses),
+                    mean=_safe_round(student_means.mean()),
+                    frequency=frequency,
+                    standard_deviation=_safe_round(student_means.std()),
+                ),
+                included_iqb_ids=iqb_ids,
+            )
+        )
+
+    return results
+
+
+def build_gender_aggregations(
+    items: list[Item],
+    responses: pl.DataFrame,
+) -> list[AggregationsInnerAllOfAggregationsInner]:
+    """Build gender aggregations for a set of items and their responses.
+
+    Groups students by gender, then computes descriptive statistics per group.
+
+    Args:
+        items: Items in this domain.
+        responses: Full DataFrame with gender column and item response columns.
+
+    Returns:
+        List of aggregation entries, one per gender category found.
+    """
+    if "gender" not in responses.columns:
+        return []
+
+    item_cols = [item.column_name for item in items]
+    iqb_ids = sorted(item.iqbitem_id for item in items)
+
+    results: list[AggregationsInnerAllOfAggregationsInner] = []
+
+    for gender_val, group_df in responses.group_by("gender", maintain_order=False):
+        val = gender_val[0] if isinstance(gender_val, tuple) else gender_val
+        gender_str = str(val)
+        domain_df = group_df.select(item_cols)
+        student_means = domain_df.mean_horizontal()
+        frequency = int(domain_df.sum_horizontal().sum())
+
+        results.append(
+            AggregationsInnerAllOfAggregationsInner(
+                type="gender",
+                value=gender_str,
+                descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
+                    total=len(group_df),
+                    mean=_safe_round(student_means.mean()),
+                    frequency=frequency,
+                    standard_deviation=_safe_round(student_means.std()),
+                ),
+                included_iqb_ids=iqb_ids,
+            )
+        )
+
+    return sorted(results, key=lambda a: a.value)
 
 
 def build_single_item_stats(item: Item, responses: pl.DataFrame) -> ItemStatisticsInner:

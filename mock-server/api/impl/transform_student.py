@@ -6,6 +6,7 @@ import polars as pl
 
 from api.impl.transform_helpers import (
     _safe_round,
+    build_competence_groups,
     build_domain,
     build_item_parameters,
     build_student_covariates,
@@ -147,64 +148,94 @@ def build_student_items_response(
 
 def build_student_aggregations_response(
     group_data: GroupData,
+    aggregation_types: set[str],
 ) -> list[AggregationsInner]:
     """Build per-student aggregation value groups.
 
-    Each student gets one value group per domain, with a single aggregation
-    (total=n_items, frequency=sum_correct, mean=freq/total, std=0.0).
+    Each student gets one value group per domain, containing competence
+    aggregations. Gender aggregation is not supported at student level
+    and must be rejected by the caller before invoking this function.
     """
     domain_items = group_data.booklet.items_by_domain()
     subject = group_data.booklet.subject
-
-    # Pre-compute domain info and per-student domain sums
-    domain_info: list[tuple[str | None, int, list[str], str]] = []
-    sum_exprs: list[pl.Expr] = []
-
-    for domain_name, items in domain_items.items():
-        cols = [item.column_name for item in items]
-        iqb_ids = [item.iqbitem_id for item in items]
-        sum_col = f"_sum_{domain_name or '_all'}"
-        domain_info.append((domain_name, len(cols), iqb_ids, sum_col))
-        sum_exprs.append(pl.sum_horizontal(cols).alias(sum_col))
-
     cov_cols = group_data.covariate_columns
 
-    # Compute all domain sums in one Polars operation
-    domain_sums_df = group_data.responses.select(
+    # Pre-compute competence groups per domain
+    domain_comp_groups: list[
+        tuple[
+            str | None,
+            list[tuple[tuple[str, str], list[str], list[str]]],
+        ]
+    ] = []
+    sum_exprs: list[pl.Expr] = []
+    sum_col_map: dict[str, tuple[str, str, int, list[str]]] = {}
+
+    for domain_name, items in domain_items.items():
+        comp_groups = build_competence_groups(items)
+        group_info: list[tuple[tuple[str, str], list[str], list[str]]] = []
+
+        for key, group_items in sorted(comp_groups.items()):
+            item_cols = [item.column_name for item in group_items]
+            iqb_ids = sorted({item.iqbitem_id for item in group_items})
+            group_info.append((key, item_cols, iqb_ids))
+
+            # Create a sum expression for efficient per-student computation
+            sum_col = f"_sum_{domain_name or '_all'}_{key[0]}_{key[1]}"
+            sum_exprs.append(pl.sum_horizontal(item_cols).alias(sum_col))
+            sum_col_map[sum_col] = (key[0], key[1], len(item_cols), iqb_ids)
+
+        domain_comp_groups.append((domain_name, group_info))
+
+    if not sum_exprs:
+        return []
+
+    # Compute all sums in one Polars operation
+    computed_df = group_data.responses.select(
         pl.col("id"), pl.col("name"), *[pl.col(c) for c in cov_cols], *sum_exprs
     )
-    rows = domain_sums_df.to_dicts()
+    rows = computed_df.to_dicts()
 
     results: list[AggregationsInner] = []
 
-    for domain_name, total, iqb_ids, sum_col in domain_info:
+    for domain_name, group_info in domain_comp_groups:
+        if not group_info:
+            continue
+
         domain_model = build_domain(domain_name)
         subject_model = build_subject(subject)
 
         for row in rows:
-            frequency = int(row[sum_col])
-            mean = frequency / total if total > 0 else 0.0
+            aggregations: list[AggregationsInnerAllOfAggregationsInner] = []
 
-            aggregation = AggregationsInnerAllOfAggregationsInner(
-                type="custom",
-                value=domain_name or subject,
-                descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
-                    total=total,
-                    frequency=frequency,
-                    mean=_safe_round(mean),
-                    standard_deviation=0.0,
-                ),
-                included_iqb_ids=iqb_ids,
-            )
+            for key, _item_cols, iqb_ids in group_info:
+                sum_col = f"_sum_{domain_name or '_all'}_{key[0]}_{key[1]}"
+                total = sum_col_map[sum_col][2]
+                frequency = int(row[sum_col])
+                mean = frequency / total if total > 0 else 0.0
 
-            vg = AggregationsInner(
-                id=row["id"],
-                name=row["name"],
-                domain=domain_model,
-                subject=subject_model,
-                aggregations=[aggregation],
-            )
-            vg.__dict__["covariates"] = build_student_covariates(row, cov_cols)
-            results.append(vg)
+                aggregations.append(
+                    AggregationsInnerAllOfAggregationsInner(
+                        type=key[0],
+                        value=key[1],
+                        descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
+                            total=total,
+                            frequency=frequency,
+                            mean=_safe_round(mean),
+                            standard_deviation=0.0,
+                        ),
+                        included_iqb_ids=iqb_ids,
+                    )
+                )
+
+            if aggregations:
+                vg = AggregationsInner(
+                    id=row["id"],
+                    name=row["name"],
+                    domain=domain_model,
+                    subject=subject_model,
+                    aggregations=aggregations,
+                )
+                vg.__dict__["covariates"] = build_student_covariates(row, cov_cols)
+                results.append(vg)
 
     return results

@@ -51,11 +51,12 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
 )
 async def get_school_competence_levels(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
+    type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche ausgegeben werden sollen", alias="type"),
     comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[CompetenceLevelsInner]:
     if not BaseSchoolsApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BaseSchoolsApi.subclasses[0]().get_school_competence_levels(id, comparison)
+    return await BaseSchoolsApi.subclasses[0]().get_school_competence_levels(id, type, comparison)
 
 
 @router.get(
@@ -71,11 +72,12 @@ async def get_school_competence_levels(
 )
 async def get_school_items(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
+    type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche ausgegeben werden sollen", alias="type"),
     comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
 ) -> List[ItemsInner]:
     if not BaseSchoolsApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
-    return await BaseSchoolsApi.subclasses[0]().get_school_items(id, comparison)
+    return await BaseSchoolsApi.subclasses[0]().get_school_items(id, type, comparison)
 
 
 @router.get(

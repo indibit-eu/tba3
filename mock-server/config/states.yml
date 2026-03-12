@@ -31,3 +31,16 @@ states:
     ability_std: 1.0
     size: 800
     seed: "beispiel"
+    districts:
+      - id: "bezirk-nord"
+        name: "Bezirk Nord"
+        ability_mean: 0.2
+        ability_std: 0.9
+        size: 400
+        seed: "bezirk-nord"
+      - id: "bezirk-sued"
+        name: "Bezirk Sued"
+        ability_mean: -0.1
+        ability_std: 1.1
+        size: 400
+        seed: "bezirk-sued"

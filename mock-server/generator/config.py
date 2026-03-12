@@ -161,6 +161,22 @@ class SchoolsFileConfig(BaseModel):
         return self
 
 
+class DistrictConfig(BaseModel):
+    """Configuration for a single district within a state."""
+
+    id: str
+    name: str | None = None
+    ability_mean: float
+    ability_std: float = Field(gt=0)
+    size: int = Field(ge=1)
+    seed: str
+    covariates: dict[str, CovariateConfig] | None = None
+
+    def display_name(self) -> str:
+        """Return the display name, falling back to the ID."""
+        return self.name or f"Bezirk {self.id}"
+
+
 class StateConfig(BaseModel):
     """Configuration for a single state (generates one group per booklet)."""
 
@@ -172,6 +188,7 @@ class StateConfig(BaseModel):
     size: int = Field(ge=1)
     seed: str
     covariates: dict[str, CovariateConfig] | None = None
+    districts: list[DistrictConfig] | None = None
 
     def display_name(self) -> str:
         """Return the display name, falling back to the ID."""
@@ -180,6 +197,15 @@ class StateConfig(BaseModel):
     def booklet_keys(self) -> list[BookletKey]:
         """Parse all booklet strings into BookletKey objects."""
         return [BookletKey.from_str(b) for b in self.booklets]
+
+    @model_validator(mode="after")
+    def validate_unique_district_ids(self) -> Self:
+        """Ensure all district IDs are unique within a state."""
+        if self.districts:
+            duplicates = _find_duplicates([d.id for d in self.districts])
+            if duplicates:
+                raise ValueError(f"Duplicate district IDs: {duplicates}")
+        return self
 
 
 class StatesFileConfig(BaseModel):

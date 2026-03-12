@@ -1,6 +1,6 @@
-"""State-level transform functions (multi-booklet data -> API response models).
+"""State/district-level transform functions (multi-booklet data -> API response models).
 
-Each state generates one group per booklet. Results are output as one
+Each state/district generates one group per booklet. Results are output as one
 ValueGroup per booklet/domain, identified by booklet key.
 """
 
@@ -20,19 +20,24 @@ from generator.core import GroupData
 
 def build_state_competence_levels_response(
     groups_with_equiv: list[tuple[GroupData, list[EquivalenceTableEntry]]],
+    id: str | None = None,
+    name: str | None = None,
 ) -> list[CompetenceLevelsInner]:
-    """Build state-level competence-levels response.
+    """Build state/district-level competence-levels response.
 
-    One ValueGroup per booklet per domain, identified by booklet key.
+    One ValueGroup per booklet per domain. If entity_id/entity_name are given,
+    they are used as id/name; otherwise the booklet key is used.
     """
     results: list[CompetenceLevelsInner] = []
     for group_data, equiv_tables in groups_with_equiv:
         booklet_id = str(group_data.booklet.key)
+        vg_id = id if id is not None else booklet_id
+        vg_name = name if name is not None else booklet_id
         for vg in build_group_competence_levels_response(group_data, equiv_tables):
             results.append(
                 CompetenceLevelsInner(
-                    id=booklet_id,
-                    name=booklet_id,
+                    id=vg_id,
+                    name=vg_name,
                     domain=vg.domain,
                     subject=vg.subject,
                     competence_levels=vg.competence_levels,
@@ -43,19 +48,24 @@ def build_state_competence_levels_response(
 
 def build_state_items_response(
     groups: list[GroupData],
+    id: str | None = None,
+    name: str | None = None,
 ) -> list[ItemsInner]:
-    """Build state-level items response.
+    """Build state/district-level items response.
 
-    One ValueGroup per booklet per domain, identified by booklet key.
+    One ValueGroup per booklet per domain. If entity_id/entity_name are given,
+    they are used as id/name; otherwise the booklet key is used.
     """
     results: list[ItemsInner] = []
     for group_data in groups:
         booklet_id = str(group_data.booklet.key)
+        vg_id = id if id is not None else booklet_id
+        vg_name = name if name is not None else booklet_id
         for vg in build_group_items_response(group_data):
             results.append(
                 ItemsInner(
-                    id=booklet_id,
-                    name=booklet_id,
+                    id=vg_id,
+                    name=vg_name,
                     domain=vg.domain,
                     subject=vg.subject,
                     items=vg.items,
@@ -66,19 +76,25 @@ def build_state_items_response(
 
 def build_state_aggregations_response(
     groups: list[GroupData],
+    aggregation_types: set[str],
+    id: str | None = None,
+    name: str | None = None,
 ) -> list[AggregationsInner]:
-    """Build state-level aggregations response.
+    """Build state/district-level aggregations response.
 
-    One ValueGroup per booklet per domain, identified by booklet key.
+    One ValueGroup per booklet per domain. If entity_id/entity_name are given,
+    they are used as id/name; otherwise the booklet key is used.
     """
     results: list[AggregationsInner] = []
     for group_data in groups:
         booklet_id = str(group_data.booklet.key)
-        for vg in build_group_aggregations_response(group_data):
+        vg_id = id if id is not None else booklet_id
+        vg_name = name if name is not None else booklet_id
+        for vg in build_group_aggregations_response(group_data, aggregation_types):
             results.append(
                 AggregationsInner(
-                    id=booklet_id,
-                    name=booklet_id,
+                    id=vg_id,
+                    name=vg_name,
                     domain=vg.domain,
                     subject=vg.subject,
                     aggregations=vg.aggregations,

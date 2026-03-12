@@ -19,6 +19,7 @@ class BaseStatesApi:
     async def get_state_competence_levels(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
+        type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")],
         comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[CompetenceLevelsInner]:
         ...
@@ -27,6 +28,7 @@ class BaseStatesApi:
     async def get_state_items(
         self,
         id: Annotated[StrictStr, Field(description="Id des Bundeslandes")],
+        type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")],
         comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
     ) -> List[ItemsInner]:
         ...

@@ -10,6 +10,7 @@ from generator.booklet_registry import BookletRegistry
 from generator.booklets import BookletKey
 from generator.config import (
     CovariateConfig,
+    DistrictConfig,
     EquivalenceTableEntry,
     GroupConfig,
     GroupsFileConfig,
@@ -91,6 +92,74 @@ else:
 # --- Helper functions ---
 
 
+VALID_AGGREGATION_TYPES = {"competence", "gender"}
+STUDENT_VALID_AGGREGATION_TYPES = {"competence"}
+
+
+def parse_aggregation_param(aggregation: str | None) -> set[str]:
+    """Parse and validate the aggregation query parameter.
+
+    Args:
+        aggregation: Comma-separated aggregation types (e.g. "competence,gender").
+
+    Returns:
+        Set of validated aggregation type strings.
+
+    Raises:
+        HTTPException(400): If parameter is missing/empty or contains invalid values.
+    """
+    if not aggregation:
+        raise HTTPException(
+            status_code=400,
+            detail="aggregation parameter is required",
+        )
+    requested = {t.strip().lower() for t in aggregation.split(",") if t.strip()}
+    if not requested:
+        raise HTTPException(
+            status_code=400,
+            detail="aggregation parameter is required",
+        )
+    invalid = requested - VALID_AGGREGATION_TYPES
+    if invalid:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid aggregation type(s): {sorted(invalid)}. "
+            f"Valid values: {sorted(VALID_AGGREGATION_TYPES)}",
+        )
+    return requested
+
+
+def validate_student_aggregation_types(aggregation_types: set[str]) -> None:
+    """Raise 400 if aggregation types contain student-incompatible values."""
+    invalid = aggregation_types - STUDENT_VALID_AGGREGATION_TYPES
+    if invalid:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Aggregation type(s) not supported at student level: "
+            f"{sorted(invalid)}. "
+            f"Valid values: {sorted(STUDENT_VALID_AGGREGATION_TYPES)}",
+        )
+
+
+def parse_comparison_param(primary_id: str, comparison: str | None) -> list[str]:
+    """Parse comparison param and return deduplicated list including primary ID.
+
+    Args:
+        primary_id: The primary entity ID (always first in result).
+        comparison: Comma-separated entity IDs, or None.
+
+    Returns:
+        Ordered list of unique IDs, primary first.
+    """
+    ids = [primary_id]
+    if comparison:
+        for cid_raw in comparison.split(","):
+            cid = cid_raw.strip()
+            if cid and cid not in ids:
+                ids.append(cid)
+    return ids
+
+
 def resolve_requested_types(type_param: str | None) -> tuple[bool, bool]:
     """Parse type param and return (include_group, include_students).
 
@@ -105,6 +174,22 @@ def resolve_requested_types(type_param: str | None) -> tuple[bool, bool]:
     include_group = "students" not in requested or "group" in requested
     include_students = "students" in requested
     return include_group, include_students
+
+
+def resolve_state_requested_types(type_param: str | None) -> tuple[bool, bool]:
+    """Parse type param and return (include_state, include_district).
+
+    Default (no type param): include state only.
+    type=district: include district only.
+    type=state,district: include both.
+    """
+    if not type_param:
+        requested: set[str] = set()
+    else:
+        requested = {t.strip().lower() for t in type_param.split(",") if t.strip()}
+    include_state = "district" not in requested or "state" in requested
+    include_district = "district" in requested
+    return include_state, include_district
 
 
 def _merge_covariates(
@@ -269,6 +354,69 @@ def resolve_state(
 
         equiv_tables = [
             entry for (bk, _domain), entry in equiv_lookup.items() if bk == booklet_key
+        ]
+        results.append((group_data, equiv_tables))
+
+    return results
+
+
+def resolve_district(
+    state_cfg: StateConfig,
+    district_cfg: DistrictConfig,
+) -> list[tuple[GroupData, list[EquivalenceTableEntry]]]:
+    """Generate one group per booklet for a district within a state.
+
+    Uses the district's ability distribution and size, but the state's booklets.
+
+    Returns:
+        List of (GroupData, equiv_tables) tuples, one per booklet.
+
+    Raises:
+        HTTPException(404): If any booklet is not found.
+    """
+    default_covariates = (
+        states_config.defaults.covariates
+        if states_config and states_config.defaults
+        else None
+    )
+    state_covariates = state_cfg.covariates
+    # Merge: defaults -> state -> district
+    merged_state: dict[str, CovariateConfig] = {}
+    if default_covariates:
+        merged_state.update(default_covariates)
+    if state_covariates:
+        merged_state.update(state_covariates)
+    covariates = _merge_covariates(merged_state, district_cfg.covariates)
+
+    profile = ClassProfile(
+        name=district_cfg.display_name(),
+        ability_mean=district_cfg.ability_mean,
+        ability_std=district_cfg.ability_std,
+    )
+
+    results: list[tuple[GroupData, list[EquivalenceTableEntry]]] = []
+    for booklet_str in state_cfg.booklets:
+        booklet_key = BookletKey.from_str(booklet_str)
+        booklet = registry.get(booklet_key)
+        if booklet is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Booklet not found: {booklet_key}",
+            )
+
+        group_data = generate_group(
+            group_id=f"{state_cfg.id}:{district_cfg.id}:{booklet_str}",
+            booklet=booklet,
+            profile=profile,
+            student_count=district_cfg.size,
+            covariates=covariates,
+            seed=f"{district_cfg.seed}-{booklet_str}",
+        )
+
+        equiv_tables = [
+            entry
+            for (bk, _domain), entry in equiv_lookup.items()
+            if bk == booklet_key
         ]
         results.append((group_data, equiv_tables))
 

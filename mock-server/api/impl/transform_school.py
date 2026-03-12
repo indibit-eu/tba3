@@ -7,7 +7,9 @@ import polars as pl
 from api.impl.transform_group import build_group_competence_levels_response
 from api.impl.transform_helpers import (
     _safe_round,
+    build_competence_aggregations,
     build_domain,
+    build_gender_aggregations,
     build_single_item_stats,
     build_subject,
 )
@@ -20,9 +22,6 @@ from api.models.competence_level_descriptive_statistics_descriptive_statistics i
 )
 from api.models.competence_level_statistics_inner import CompetenceLevelStatisticsInner
 from api.models.competence_levels_inner import CompetenceLevelsInner
-from api.models.descriptive_statistics_descriptive_statistics import (
-    DescriptiveStatisticsDescriptiveStatistics,
-)
 from api.models.items_inner import ItemsInner
 from generator.booklets import BookletKey, DomainKey
 from generator.config import EquivalenceTableEntry
@@ -97,7 +96,7 @@ def build_school_competence_levels_response(
             CompetenceLevelsInner(
                 id=school_id,
                 name=school_name,
-                domain=build_domain(entries[0].domain),
+                domain=entries[0].domain,
                 subject=build_subject(key.subject),
                 competence_levels=comp_levels,
             )
@@ -159,60 +158,54 @@ def build_school_aggregations_response(
     school_id: str,
     school_name: str,
     groups: list[GroupData],
+    aggregation_types: set[str],
 ) -> list[AggregationsInner]:
     """Build school-level aggregations response.
 
-    For each domain across all groups, per-student means are computed
-    and aggregated. Returns one value group per domain.
+    Groups are grouped by booklet, responses merged across groups,
+    then competence/gender aggregations computed per domain.
     """
-    student_means: dict[DomainKey, list[float]] = {}
-    frequencies: dict[DomainKey, int] = {}
-    iqb_ids: dict[DomainKey, set[str]] = {}
-
+    by_booklet: dict[BookletKey, list[GroupData]] = {}
     for gd in groups:
-        items_by_domain = gd.booklet.items_by_domain()
+        by_booklet.setdefault(gd.booklet.key, []).append(gd)
 
-        for domain_name, items in items_by_domain.items():
-            key = DomainKey(subject=gd.booklet.subject, domain=domain_name)
-            item_cols = [item.column_name for item in items]
-
-            domain_df = gd.responses.select(item_cols)
-            means = domain_df.mean_horizontal().to_list()
-
-            student_means.setdefault(key, []).extend(means)
-
-            total_correct_row = domain_df.select(pl.all().sum()).row(0)
-            frequencies[key] = frequencies.get(key, 0) + sum(total_correct_row)
-
-            iqb_ids.setdefault(key, set()).update(item.iqbitem_id for item in items)
-
-    # Build school-level value groups (one per subject+domain)
     results: list[AggregationsInner] = []
-    for key, means in student_means.items():
-        means_series = pl.Series("m", means)
-        mean_val = means_series.mean()
-        std_val = means_series.std()
 
-        aggregation = AggregationsInnerAllOfAggregationsInner(
-            type="custom",
-            value=key.domain or key.subject,
-            descriptive_statistics=DescriptiveStatisticsDescriptiveStatistics(
-                total=len(iqb_ids.get(key, set())),
-                frequency=int(frequencies.get(key, 0)),
-                mean=_safe_round(mean_val),
-                standard_deviation=_safe_round(std_val),
-            ),
-            included_iqb_ids=sorted(iqb_ids.get(key, set())),
+    for _booklet_key, booklet_groups in by_booklet.items():
+        booklet = booklet_groups[0].booklet
+        subject = booklet.subject
+
+        # Merge responses from all groups for this booklet
+        all_item_cols = [item.column_name for item in booklet.items]
+        select_cols = all_item_cols.copy()
+        has_gender = "gender" in booklet_groups[0].responses.columns
+        if "gender" in aggregation_types and has_gender:
+            select_cols = ["gender"] + select_cols
+        merged_responses = pl.concat(
+            [gd.responses.select(select_cols) for gd in booklet_groups]
         )
 
-        results.append(
-            AggregationsInner(
-                id=school_id,
-                name=school_name,
-                domain=build_domain(key.domain),
-                subject=build_subject(key.subject),
-                aggregations=[aggregation],
-            )
-        )
+        domain_items = booklet.items_by_domain()
+
+        for domain_name, items in domain_items.items():
+            aggregations: list[AggregationsInnerAllOfAggregationsInner] = []
+
+            if "competence" in aggregation_types:
+                aggregations.extend(
+                    build_competence_aggregations(items, merged_responses)
+                )
+            if "gender" in aggregation_types:
+                aggregations.extend(build_gender_aggregations(items, merged_responses))
+
+            if aggregations:
+                results.append(
+                    AggregationsInner(
+                        id=school_id,
+                        name=school_name,
+                        domain=build_domain(domain_name),
+                        subject=build_subject(subject),
+                        aggregations=aggregations,
+                    )
+                )
 
     return results
