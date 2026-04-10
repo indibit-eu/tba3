@@ -39,6 +39,11 @@ Ein Berichtselement ist eine für sich alleine stehende Darstellung von Auswertu
 
 Weitere Begriffe, die in diesem Kontext erklärungsbedürftig scheinen, werden hier in Zukunft ebenfalls erläutert.
 
+## Dokumentation
+
+Für eine ausführliche Erklärung der Konzepte und Flexibilitäten der Schnittstelle siehe die [Konzept-Dokumentation im `/docs/`-Ordner](docs/konzepte.md).
+Konventionen für offen gestaltet Teile der Spezifikation finden sich in der [Endpunkt-Referenz im `/docs/`-Ordner](docs/endpunkt-referenz.md).
+
 ## Anpassung der Spezifikation
 
 Im Ordner `/api` liegen die Quelldateien für die Spezifikation, zur besseren Wartbarkeit und leichteren Erweiterung sind diese in einzelne Dateien aufgeteilt. Diese folgen dabei auch im Einzelnen jeweils dem OpenAPI Format. Mit dem Befehl `npx @redocly/openapi-cli@latest bundle api/api.yml -o tba3-spec.yml` kann eine kombinierte Datei erzeugt werden, die alle Teile enthält und sich so leichter in Clients wie SwaggerUI laden lässt.
