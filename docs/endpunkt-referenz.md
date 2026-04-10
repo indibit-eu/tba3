@@ -251,37 +251,59 @@ Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardm
 
 Der `comparison`-Parameter steuert, welche Vergleichs-Value-Groups zusätzlich zu den primären Ergebnissen zurückgeliefert werden. Mehrere Werte sind kommasepariert kombinierbar.
 
-**Vorgeschlagene Syntax:** Präfix `typ-id` oder nur `id`, kommasepariert — z.B. `comparison=group-3b,group-3c,landesmittelwert`
+**Vorgeschlagene Syntax:** Präfix `typ-id` oder nur `wert`, kommasepariert — z.B. `comparison=group-3b,group-3c,state-average`.
 Die Syntax ist im Backend leicht zu parsen und lässt beliebige Kombinationen zu.
 
-#### Lerngruppen-Ebene (`/groups/{id}/…`)
+#### Vorgeschlagene Comparison-Typen
 
-Typische Szenarien: Vergleich mit Parallelklassen, korrigiertem Landesmittelwert, Vorjahr.
+Die Comparison-Typen leiten sich aus den [`type`-Werten](#type-typ-einer-value-group) ab: Was als `type` in der Response existiert, ergibt in der Regel auch als Vergleichsgruppe Sinn.
+
+| Comparison       | Bedeutung                                                        | Beispiel                |
+|------------------|------------------------------------------------------------------|-------------------------|
+| `student-<id>`   | Bestimmte:r SuS                                                  | `student-12345`         |
+| `group-<id>`     | Bestimmte Lerngruppe                                             | `group-3b`              |
+| `group-parallel` | Alle Parallelklassen                                             | `group-parallel`        |
+| `school-<id>`    | Bestimmte Schule                                                 | `school-gs-musterstadt` |
+| `school-average` | Schulschnitt (Convenience für die Schule der angefragten Gruppe) | `school-average`        |
+| `district-<id>`  | Bestimmte Stadt/Gemeinde                                         | `district-nord`         |
+| `authority-<id>` | Bestimmtes Schulamt                                              | `authority-12345`       |
+| `state-average`  | Landesmittelwert                                                 | `state-average`         |
+| `year-<jahr>`    | Vergleich mit einem bestimmten Jahr                              | `year-2024`             |
+| `faircomparison` | Fairer Vergleichswert (merkmalsbereinigt)                        | `faircomparison`        |
+
+Jeder Bericht kann darüber hinaus eigene Werte einführen, z.B. Shortcuts, die mehrere Vergleichsgruppen bündeln:
+
+| Shortcut-Beispiel | Bedeutung                                |
+|-------------------|------------------------------------------|
+| `group-all`       | Alle Lerngruppen (z.B. einer Schule)     |
+| `year-last4`      | Die letzten vier Durchgänge              |
+
+#### Beispiele nach Ebene
+
+**Lerngruppen-Ebene (`/groups/{id}/…`):**
 
 | Szenario | Request-Beispiel |
 |---|---|
-| Parallelklasse(n) | `?comparison=group-3b` |
-| Korrigierter Landesmittelwert | `?comparison=landesmittelwert` |
+| Parallelklasse(n) | `?comparison=group-3b` oder `?comparison=group-parallel` |
+| Schulschnitt | `?comparison=school-average` |
+| Landesmittelwert | `?comparison=state-average` |
 | Vorjahreswerte | `?comparison=year-2024,year-2023` |
-| Kombiniert | `?comparison=landesmittelwert,year-2024` |
+| Kombiniert | `?comparison=state-average,year-2024` |
 
-#### Schul-Ebene (`/schools/{id}/…`)
-
-Typische Szenarien: Einzelne Klassen als Vergleich einblenden, Schuljahresvergleich.
+**Schul-Ebene (`/schools/{id}/…`):**
 
 | Szenario | Request-Beispiel |
 |---|---|
 | Klassen als Vergleich | `?comparison=group-3a,group-3b` |
+| Andere Schule | `?comparison=school-gs-musterstadt` |
 | Schuljahresvergleich | `?comparison=year-2024,year-2023` |
 
-#### Landes-Ebene (`/states/{id}/…`)
-
-Typische Szenarien: Bezirke, Pilotierungsgruppe.
+**Landes-Ebene (`/states/{id}/…`):**
 
 | Szenario | Request-Beispiel |
 |---|---|
-| Bezirke als Vergleich | `?comparison=bezirk-nord,bezirk-sued` |
-| Pilotierungsgruppe | `?comparison=pilotierung` |
+| Bezirke als Vergleich | `?comparison=district-nord,district-sued` |
+| Schulämter als Vergleich | `?comparison=authority-12345` |
 
 **Hinweis zum Mock-Server:** Der Mock-Server akzeptiert einfache kommaseparierte IDs ohne Typ-Präfix (z.B. `comparison=3b-deutsch`).
 
