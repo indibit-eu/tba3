@@ -111,6 +111,8 @@ Für den **Query-Parameter** `domain` werden Kürzel für Teilbereiche eines Fac
 
 **Wichtig: Query-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für den `domain`-**Query-Parameter** (z.B. `?domain=rs`). Das `domain`-Feld in der **Response** ist dagegen ein Objekt mit der langen Beschreibung, z.B. `{ name: "Rechtschreibung" }`. Das Backend setzt die lange Beschreibung kontextabhängig — sie kann je nach Jahrgangsstufe variieren (z.B. `rs` = "Rechtschreibung" in der Grundschule, "Orthografie" in der Sek I).
 
+Details und Beispiele zum Sonderfall Mathe in [Rezept: Leitideen in Mathematik](rezepte.md#leitideen-in-mathematik-domäne-vs-competences) beschrieben.
+
 ---
 
 ### `covariates`: Merkmale Personen(gruppen)
