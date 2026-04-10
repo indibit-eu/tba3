@@ -309,6 +309,8 @@ Jeder Bericht kann darüber hinaus eigene Werte einführen, z.B. Shortcuts, die 
 
 ---
 
+**Abgrenzung:** `comparison` liefert Werte für **andere Gruppen** (z.B. Parallelklasse, Landesmittelwert). `aggregation` liefert **andere Sichten auf dieselbe Gruppe** (z.B. aufgeschlüsselt nach Kompetenz oder Geschlecht).
+
 ### `aggregation`: Aggregationsarten
 
 > **Spec = freier String.** Welche Aggregationsarten ein Backend unterstützt, ist nicht durch die Spec vorgegeben.
