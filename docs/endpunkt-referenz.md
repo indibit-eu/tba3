@@ -269,10 +269,14 @@ Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardm
 
 > **Spec = freier String.** Die Werte und ihre Bedeutung definiert das Backend, nicht die Spec.
 
-Der `comparison`-Parameter steuert, welche Vergleichs-Value-Groups zusätzlich zu den primären Ergebnissen zurückgeliefert werden. Mehrere Werte sind kommasepariert kombinierbar.
+Der `comparison`-Parameter steuert, welche Vergleichs-Value-Groups zusätzlich zu den primären Ergebnissen zurückgeliefert werden.
+Mehrere Werte sind kommasepariert kombinierbar.
 
 **Vorgeschlagene Syntax:** Präfix `typ-id` oder nur `wert`, kommasepariert — z.B. `comparison=group-3b,group-3c,state-average`.
 Die Syntax ist im Backend leicht zu parsen und lässt beliebige Kombinationen zu.
+
+**Faustregel**: Wenn nur der `type` angegeben wird, entscheidet in der Regel das Backend, welche Vergleichsgruppen geliefert werden.
+Wenn konkrete Vergleichsgruppen erwünscht sind, werden diese mit `type-<id>` referenziert.
 
 #### Vorgeschlagene Comparison-Typen
 
