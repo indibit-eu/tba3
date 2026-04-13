@@ -292,9 +292,9 @@ die mehrere Vergleichsgruppen bündeln:
 
 | Shortcut-Beispiel       | Bedeutung                                                                                   |
 |-------------------------|---------------------------------------------------------------------------------------------|
-| `group-all`             | Alle Lerngruppen (z.B. einer Schule)                                                        |
+| `group`                 | Backend trifft Entscheidung, z.B. alle Lerngruppen einer Schule                             |
 | `group-parallel`        | Alle Parallelklassen                                                                        | 
-| `year-last4`            | Die letzten vier Durchgänge                                                                 |
+| `year`                  | Backend trifft Entscheidung, z.B. die letzten vier Durchgänge                               |
 | `faircomparison`        | Fairer Vergleichswert (merkmalsbereinigt) — allgemein, das Backend wählt die passende Ebene |
 | `group-faircomparison`  | Fairer Vergleichswert auf Gruppenebene                                                      |
 | `school-faircomparison` | Fairer Vergleichswert auf Schulebene                                                        |
