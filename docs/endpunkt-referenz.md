@@ -34,7 +34,7 @@ Jede Value-Group enthält ein `competenceLevels[]`-Array. Jeder Eintrag beschrei
 | Schule     | `/schools/{id}/competence-levels` | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolCompetenceLevels) |
 | Land       | `/states/{id}/competence-levels`  | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateCompetenceLevels)   |
 
-**Verhalten bei `type=students`:** Auf Schülerebene wird pro SuS nur die **erreichte** Kompetenzstufe zurückgegeben (nicht alle Stufen mit `frequency=0`).
+**Verhalten bei `type=student`:** Auf Schülerebene wird pro SuS nur die **erreichte** Kompetenzstufe zurückgegeben (nicht alle Stufen mit `frequency=0`).
 Das `competenceLevels[]`-Array enthält dann in der Regel genau einen Eintrag.
 
 ---
