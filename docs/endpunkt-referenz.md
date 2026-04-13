@@ -123,7 +123,12 @@ Für den **Query-Parameter** `domain` werden Kürzel für Teilbereiche eines Fac
 | Englisch    | `en`       | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
 | Französisch | `fr`       | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
 
-**Wichtig: Query-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für den `domain`-**Query-Parameter** (z.B. `?domain=rs`). Das `domain`-Feld in der **Response** ist dagegen ein Objekt mit der langen Beschreibung, z.B. `{ name: "Rechtschreibung" }`. Das Backend setzt die lange Beschreibung kontextabhängig — sie kann je nach Jahrgangsstufe variieren (z.B. `rs` = "Rechtschreibung" in der Grundschule, "Orthografie" in der Sek I).
+**Wichtig: Query-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für den `domain`-**Query-Parameter** (z.B. `?domain=rs`).
+Das `domain`-Feld in der **Response** ist dagegen ein Objekt mit der langen Beschreibung, z.B. `{ name: "Rechtschreibung" }`.
+Das Backend setzt die lange Beschreibung kontextabhängig — sie kann je nach Jahrgangsstufe variieren (z.B. `rs` = "Rechtschreibung" in der Grundschule, "Orthografie" in der Sek I).
+
+**Gruppierung nach Domäne:** Ob die Response nach Domäne gruppiert wird (eine Value-Group je Domäne) oder flach zurückkommt,
+hängt vom Endpunkt und Anwendungsfall ab. Details und Empfehlungen im [Rezept: Gruppierung nach Domäne](rezepte.md#gruppierung-nach-domäne-wann-sinnvoll).
 
 Details und Beispiele zum Sonderfall Mathe in [Rezept: Leitideen in Mathematik](rezepte.md#leitideen-in-mathematik-domäne-vs-competences) beschrieben.
 

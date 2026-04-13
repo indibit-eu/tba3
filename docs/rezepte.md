@@ -142,6 +142,47 @@ Die Value-Group hat hier keine `domain` – die Zuordnung zu Leitideen steckt in
 
 ---
 
+## Gruppierung nach Domäne: Wann sinnvoll?
+
+Die Spec erlaubt es, Responses nach Domäne zu gruppieren (eine Value-Group je Domäne) oder flach zurückzugeben (eine Value-Group für alles). Welcher Weg sinnvoll ist, hängt vom Endpunkt und Anwendungsfall ab.
+
+### `/competence-levels`: Immer nach Domäne gruppieren
+
+Kompetenzstufen werden konkret für eine Domäne berechnet (z.B. "Leseverstehen" oder "Rechtschreibung").
+Eine Value-Group ohne Domäne wäre hier nicht sinnvoll interpretierbar.
+Die Response sollte daher immer nach Domäne gruppiert sein.
+
+Ein Sonderfall ist Mathematik, wenn nach dem Globalmodell ausgewertet wird und keine Domänen-Gruppierung stattfindet –
+siehe [Rezept: Leitideen in Mathematik](#leitideen-in-mathematik-domäne-vs-competences).
+
+### `/items`: Je nach Darstellung
+
+**Ungruppiert** ergibt Sinn, wenn man alle Items eines Tests flach in einer Tabelle darstellen möchte –
+z.B. eine Schülertabelle mit allen Ergebnissen. `response.length` gibt dann direkt die Anzahl der Items.
+Die Domäne ist trotzdem am einzelnen Item über die `parameters` verfügbar.
+
+**Gruppiert** ergibt Sinn, wenn die Darstellung je Testdomäne aufgeteilt sein soll – z.B. separate Itemtabellen für "Leseverstehen" und "Rechtschreibung".
+
+### `/aggregations`: Je nach Darstellung
+
+**Ungruppiert** ergibt Sinn, wenn man z.B. Lösungsquoten je Aufgabe oder je Kompetenz berechnen und anzeigen möchte,
+ohne nach Domäne zu unterscheiden. Oder allen Aggregationen, die nicht inhaltlich mit dem Testheft zusammenhängen (z.B. Geschlecht).
+
+**Gruppiert** ergibt Sinn, wenn man dieselben Aggregationen zusätzlich nach Testdomäne getrennt darstellen möchte –
+z.B. Lösungsquoten je Kompetenz, einmal für "Hörverstehen" und einmal für "Leseverstehen".
+
+### Zusammenfassung
+
+| Endpunkt             | Gruppiert               | Ungruppiert              | Empfehlung                                                                           |
+|----------------------|-------------------------|--------------------------|--------------------------------------------------------------------------------------|
+| `/competence-levels` | KS je Domäne            | –                        | gruppiert (außer [Mathe-Sonderfall](#leitideen-in-mathematik-domäne-vs-competences)) |
+| `/items`             | Itemtabelle je Domäne   | Alle Items flach         | je nach Darstellung                                                                  |
+| `/aggregations`      | Aggregationen je Domäne | Alle Aggregationen flach | tendenziell ungruppiert                                                              |
+
+Beides ist spec-konform. Die Entscheidung trifft das Backend – idealerweise abgestimmt auf die Anforderungen des Berichts.
+
+---
+
 ## Aggregationen auf verschiedenen Ebenen kombinieren
 
 ### Hintergrund
