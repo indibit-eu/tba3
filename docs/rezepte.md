@@ -23,7 +23,7 @@ Auf SuS-Ebene sind Kovariaten eindeutig und werden direkt an der Value-Group mit
 
 ### Auf Gruppenebene: Aggregations statt Covariates
 
-Auf Gruppen- oder Schulebene ist eine Kovariate wie "Geschlecht" keine einzelne Ausprägung mehr, sondern eine Verteilung (z.B. 12 weiblich, 8 männlich, 1 divers). Das passt nicht in das `type/label/value`-Schema der Covariates, weil dort ein einzelner Wert erwartet wird.
+Auf Gruppen- oder Schulebene ist eine Kovariate wie "Geschlecht" keine einzelne Ausprägung mehr, sondern eine Verteilung (z.B. 12 weiblich, 8 männlich). Das passt nicht in das `type/label/value`-Schema der Covariates, weil dort ein einzelner Wert erwartet wird.
 
 Stattdessen eignet sich der `/aggregations`-Endpunkt: Er schlüsselt die Ergebnisse nach einer Dimension auf und liefert dabei automatisch die Häufigkeiten mit.
 
@@ -35,7 +35,7 @@ GET /groups/3a-deutsch/aggregations?aggregation=gender
 
 **Antwort**
 
-Die Antwort enthält pro Geschlecht eine Aggregation mit deskriptiver Statistik. Die `descriptiveStatistics` liefern sowohl die Anzahl der SuS in dieser Gruppe (`total` bzw. `frequency`) als auch die mittlere Lösungsquote.
+Die Antwort enthält pro Geschlecht eine Aggregation mit deskriptiver Statistik. Die `descriptiveStatistics` liefern sowohl die Anzahl der SuS in dieser Gruppe (`total`) als auch die mittlere Lösungsquote.
 
 ```json
 {
@@ -46,12 +46,12 @@ Die Antwort enthält pro Geschlecht eine Aggregation mit deskriptiver Statistik.
     {
       "type": "gender",
       "value": "female",
-      "descriptiveStatistics": { "total": 20, "frequency": 12, "mean": 0.72, "standardDeviation": 0.15 }
+      "descriptiveStatistics": { "total": 12, "frequency": 9, "mean": 0.75 }
     },
     {
       "type": "gender",
       "value": "male",
-      "descriptiveStatistics": { "total": 20, "frequency": 8, "mean": 0.68, "standardDeviation": 0.18 }
+      "descriptiveStatistics": { "total": 8, "frequency": 5, "mean": 0.63 }
     }
   ]
 }
@@ -59,7 +59,7 @@ Die Antwort enthält pro Geschlecht eine Aggregation mit deskriptiver Statistik.
 
 ### Auf Gruppenebene: Covariates als Einordnung der Gruppe
 
-Kovariaten können auch auf Gruppenebene sinnvoll sein – wenn man nicht die Verteilung innerhalb der Gruppe darstellen will, sondern die Gruppe als Ganzes nach einem Merkmal einordnen möchte.
+Kovariaten können auch auf Gruppenebene sinnvoll sein – wenn man nicht die Verteilung innerhalb der Gruppe darstellen will, sondern die Gruppe als Ganzes nach einer Merkmalverteilung einordnen/clustern möchte.
 
 **Beispiel:** Beim Vergleich mehrerer Klassen soll sichtbar sein, ob die Geschlechterverteilung einen Einfluss auf die Ergebnisse hat. Dafür wird jede Klasse mit einer aggregierten Kovariate versehen:
 
