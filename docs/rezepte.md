@@ -93,7 +93,7 @@ So lassen sich Gruppen nach diesem Merkmal vergleichen oder filtern, ohne die vo
 In Deutsch, Französisch und Englisch gibt es in der Regel zwei Domänen (z.B. Leseverstehen und Rechtschreibung), für die jeweils eigene Kompetenzstufen berechnet werden.
 Die Responses werden nach Domäne gruppiert – jede Domäne ergibt eine eigene Value-Group.
 
-In Mathematik ist das anders: Aktuell wird sowohl in V3 als auch V8 nach dem **Globalmodell** ausgewertet.
+In Mathematik ist das anders: Aktuell wird in vielen Fällen sowohl in V3 als auch V8 nach dem **Globalmodell** ausgewertet.
 Es gibt nur eine Kompetenzstufe für das gesamte Fach.
 Der Begriff "Leitidee" wird dabei für zwei verschiedene Konzepte verwendet:
 
