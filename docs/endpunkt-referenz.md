@@ -139,9 +139,11 @@ Vordefinierte Typen:
 |------------------|---------------------------------------------------|--------------------------------------------|
 | `gender`         | Geschlecht                                        | `male`, `female`, `diverse`                |
 | `languageAtHome` | Sprache zu Hause                                  | `german`, `other`, `english`, `french`     |
-| `other`          | Frei erweiterbar — `label` beschreibt das Merkmal | z.B. Schulform, SES, Migrationshintergrund |
+| Beliebig         | Frei erweiterbar — `label` beschreibt das Merkmal | z.B. Schulform, SES, Migrationshintergrund |
 
-Für nicht-vordefinierte Merkmale steht der `other`-Typ zur Verfügung. Ob weitere freie `type`-Werte (z.B. `SES`, `schoolType`) verwendet werden können, ist noch nicht abschließend festgelegt. Aktuell beschreibt das `label` das Merkmal näher.
+Weitere, eigene Kovariaten können im selben Schema ergänzt werden.
+Ein Rezept, wie man mit Kovariaten auf anderen Ebenen umgehen kann findet sich in
+[Umgang mit Kovariaten auf Schüler- und Gruppenebene](./rezepte.md#umgang-mit-kovariaten-auf-schüler--und-gruppenebene).
 
 ---
 

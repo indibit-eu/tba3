@@ -68,7 +68,7 @@ Kovariaten können auch auf Gruppenebene sinnvoll sein – wenn man nicht die Ve
   "name": "Klasse 3a",
   "type": "group",
   "covariates": [
-    { "type": "gender", "label": "Geschlechterverteilung", "value": "majority-female" }
+    { "type": "genderDistribution", "label": "Geschlechterverteilung", "value": "majority-female" }
   ],
   "competenceLevels": []
 }
@@ -78,11 +78,11 @@ So lassen sich Gruppen nach diesem Merkmal vergleichen oder filtern, ohne die vo
 
 ### Zusammenfassung
 
-| Ebene | Ziel | Mechanismus | Beispiel |
-|---|---|---|---|
-| SuS | Merkmal einer Person | Covariate an der Value-Group | `"value": "female"` |
-| Gruppe | Verteilung innerhalb der Gruppe sehen | `/aggregations`-Endpunkt | `?aggregation=gender` |
-| Gruppe | Gruppe als Ganzes einordnen | Covariate mit aggregiertem Wert | `"value": "majority-female"` |
+| Ebene  | Ziel                                  | Mechanismus                     | Beispiel                     |
+|--------|---------------------------------------|---------------------------------|------------------------------|
+| SuS    | Merkmal einer Person                  | Covariate an der Value-Group    | `"value": "female"`          |
+| Gruppe | Verteilung innerhalb der Gruppe sehen | `/aggregations`-Endpunkt        | `?aggregation=gender`        |
+| Gruppe | Gruppe als Ganzes einordnen           | Covariate mit aggregiertem Wert | `"value": "majority-female"` |
 
 ---
 
