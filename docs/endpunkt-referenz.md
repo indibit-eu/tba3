@@ -7,6 +7,15 @@ Grundbegriffe (Value-Group, 3-Schichten-Architektur) sind in [Konzepte und Archi
 
 ---
 
+## Sprachkonvention
+
+Die Schnittstelle ist in **Englisch** definiert: Feldnamen, Endpunkte und Schlüssel sind englisch (z.B. `competenceLevels`, `descriptiveStatistics`, `frequency`).
+
+**Werte** werden üblicherweise in **Deutsch** übergeben, da sie aus deutschsprachigen Systemen stammen (z.B. `"name": "Regelstandard"`, `"name": "Leseverstehen"`).
+Werte, deren Ausprägungen gemeinsam als Konvention definiert sind, können auch Englisch sein (z.B. `"value": "male"` bei Covariates).
+
+---
+
 ## Was die Spec definiert
 
 Die Spec definiert **9 Endpunkte**: 3 Ebenen × 3 Datentypen. Jeder Endpunkt gibt ein **Array von Value-Groups** zurück.
@@ -24,6 +33,9 @@ Jede Value-Group enthält ein `competenceLevels[]`-Array. Jeder Eintrag beschrei
 | Lerngruppe | `/groups/{id}/competence-levels`  | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupCompetenceLevels)   |
 | Schule     | `/schools/{id}/competence-levels` | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolCompetenceLevels) |
 | Land       | `/states/{id}/competence-levels`  | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateCompetenceLevels)   |
+
+**Verhalten bei `type=students`:** Auf Schülerebene wird pro SuS nur die **erreichte** Kompetenzstufe zurückgegeben (nicht alle Stufen mit `frequency=0`).
+Das `competenceLevels[]`-Array enthält dann in der Regel genau einen Eintrag.
 
 ---
 
@@ -238,10 +250,10 @@ Der `type`-Parameter bestimmt, welche Art von Value-Groups in der Antwort enthal
 Mehrere Werte können kommasepariert übergeben werden.
 Dann liefert der Endpunkt Value-Groups für jede der kombinierten Granularitätsstufen in einer einzigen Antwort.
 
-| Pfad | `type` | Ergebnis | Mock-Server |
-|---|---|---|---|
+| Pfad                                   | `type`           | Ergebnis                        | Mock-Server                                                                                      |
+|----------------------------------------|------------------|---------------------------------|--------------------------------------------------------------------------------------------------|
 | `/groups/3a-deutsch/competence-levels` | `group,students` | VGs für die Lerngruppe + je SuS | [Link](https://apps.indibit.eu/tba3-api/groups/3a-deutsch/competence-levels?type=group,students) |
-| `/states/beispielland/items` | `state,district` | VGs für das Land + je Bezirk | [Link](https://apps.indibit.eu/tba3-api/states/beispielland/items?type=state,district) |
+| `/states/beispielland/items`           | `state,district` | VGs für das Land + je Bezirk    | [Link](https://apps.indibit.eu/tba3-api/states/beispielland/items?type=state,district)           |
 
 Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardmäßig liefert.
 
