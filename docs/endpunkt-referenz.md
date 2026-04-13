@@ -292,14 +292,14 @@ Die Comparison-Typen leiten sich aus den [`type`-Werten](#type-typ-einer-value-g
 Jeder Bericht kann darüber hinaus eigene Werte einführen, z.B. für besondere Vergleichsgruppen oder Shortcuts,
 die mehrere Vergleichsgruppen bündeln:
 
-| Shortcut-Beispiel       | Bedeutung                                                                                   |
-|-------------------------|---------------------------------------------------------------------------------------------|
-| `group`                 | Backend trifft Entscheidung, z.B. alle Lerngruppen einer Schule                             |
-| `group-parallel`        | Alle Parallelklassen                                                                        | 
-| `year`                  | Backend trifft Entscheidung, z.B. die letzten vier Durchgänge                               |
-| `faircomparison`        | Fairer Vergleichswert (merkmalsbereinigt) — allgemein, das Backend wählt die passende Ebene |
-| `group-faircomparison`  | Fairer Vergleichswert auf Gruppenebene                                                      |
-| `school-faircomparison` | Fairer Vergleichswert auf Schulebene                                                        |
+| Shortcut-Beispiel       | Bedeutung                                                                       |
+|-------------------------|---------------------------------------------------------------------------------|
+| `group`                 | Backend trifft Entscheidung, z.B. alle Lerngruppen einer Schule                 |
+| `group-parallel`        | Alle Parallelklassen                                                            | 
+| `year`                  | Backend trifft Entscheidung, z.B. die letzten vier Durchgänge                   |
+| `faircomparison`        | Fairer Vergleichswert (merkmalsbereinigt). Das Backend wählt die passende Ebene |
+| `group-faircomparison`  | Fairer Vergleichswert auf Gruppenebene                                          |
+| `school-faircomparison` | Fairer Vergleichswert auf Schulebene                                            |
 
 #### Beispiele nach Ebene
 
