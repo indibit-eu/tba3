@@ -414,9 +414,7 @@ def resolve_district(
         )
 
         equiv_tables = [
-            entry
-            for (bk, _domain), entry in equiv_lookup.items()
-            if bk == booklet_key
+            entry for (bk, _domain), entry in equiv_lookup.items() if bk == booklet_key
         ]
         results.append((group_data, equiv_tables))
 

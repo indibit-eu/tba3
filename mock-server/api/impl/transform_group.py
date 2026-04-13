@@ -44,6 +44,7 @@ def build_group_items_response(group_data: GroupData) -> list[ItemsInner]:
         results.append(
             ItemsInner(
                 id=group_data.group_id,
+                type="group",
                 name=f"Lerngruppe {group_data.group_id}",
                 domain=build_domain(domain_name),
                 subject=build_subject(subject),
@@ -82,6 +83,7 @@ def build_group_aggregations_response(
             results.append(
                 AggregationsInner(
                     id=group_data.group_id,
+                    type="group",
                     name=f"Lerngruppe {group_data.group_id}",
                     domain=build_domain(domain_name),
                     subject=build_subject(subject),
@@ -150,6 +152,7 @@ def build_group_competence_levels_response(
         results.append(
             CompetenceLevelsInner(
                 id=group_data.group_id,
+                type="group",
                 name=group_data.profile.name,
                 domain=build_domain(entry.domain),
                 subject=build_subject(group_data.booklet.subject),

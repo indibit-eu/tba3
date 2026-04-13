@@ -9,6 +9,7 @@ import polars as pl
 from api.models.aggregations_inner_all_of_aggregations_inner import (
     AggregationsInnerAllOfAggregationsInner,
 )
+from api.models.characteristic import Characteristic
 from api.models.competence import Competence
 from api.models.competence_level import CompetenceLevel
 from api.models.descriptive_statistics_descriptive_statistics import (
@@ -96,14 +97,9 @@ def build_item_parameters(item: Item) -> ItemParameters:
 
 def build_student_covariates(
     row: dict[str, Any], covariate_columns: list[str]
-) -> list[dict[str, str]]:
-    """Build covariate dicts from a student's covariate values.
-
-    Returns plain dicts (not Characteristic models) because the generated
-    Characteristic oneOf wrapper is not serializable by Pydantic v2.
-    The dicts are assigned via __dict__ to bypass model validation.
-    """
-    return [{"type": col, "value": str(row[col])} for col in covariate_columns]
+) -> list[Characteristic]:
+    """Build Characteristic instances from a student's covariate values."""
+    return [Characteristic(type=col, value=str(row[col])) for col in covariate_columns]
 
 
 def build_competence_groups(

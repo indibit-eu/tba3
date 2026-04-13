@@ -74,6 +74,7 @@ def build_student_competence_levels_response(
 
             vg = CompetenceLevelsInner(
                 id=row["id"],
+                type="student",
                 name=row["name"],
                 domain=domain_model,
                 subject=subject_model,
@@ -135,6 +136,7 @@ def build_student_items_response(
 
             vg = ItemsInner(
                 id=student_row["id"],
+                type="student",
                 name=student_row["name"],
                 domain=domain_model,
                 subject=subject_model,
@@ -230,6 +232,7 @@ def build_student_aggregations_response(
             if aggregations:
                 vg = AggregationsInner(
                     id=row["id"],
+                    type="student",
                     name=row["name"],
                     domain=domain_model,
                     subject=subject_model,

@@ -28,6 +28,7 @@ from api.impl.transform_student import (
     build_student_items_response,
 )
 from api.models.aggregations_inner import AggregationsInner
+from api.models.characteristic import Characteristic
 from api.models.competence_levels_inner import CompetenceLevelsInner
 from api.models.items_inner import ItemsInner
 
@@ -67,9 +68,7 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
                 # Per-group
                 for group_data, equiv_tables in groups_with_equiv:
                     result.extend(
-                        build_group_competence_levels_response(
-                            group_data, equiv_tables
-                        )
+                        build_group_competence_levels_response(group_data, equiv_tables)
                     )
 
             if include_students:
@@ -77,10 +76,9 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
                     student_vgs = build_student_competence_levels_response(
                         group_data, equiv_tables
                     )
-                    group_cov = {
-                        "type": "group",
-                        "value": group_data.profile.name,
-                    }
+                    group_cov = Characteristic(
+                        type="group", value=group_data.profile.name
+                    )
                     for vg in student_vgs:
                         vg.__dict__["covariates"].append(group_cov)
                     result.extend(student_vgs)
@@ -105,9 +103,7 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
             if include_group:
                 # School-level aggregated (per booklet)
                 result.extend(
-                    build_school_items_response(
-                        sid, school_cfg.display_name(), groups
-                    )
+                    build_school_items_response(sid, school_cfg.display_name(), groups)
                 )
 
                 # Per-group
@@ -117,10 +113,9 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
             if include_students:
                 for group_data in groups:
                     student_vgs = build_student_items_response(group_data)
-                    group_cov = {
-                        "type": "group",
-                        "value": group_data.profile.name,
-                    }
+                    group_cov = Characteristic(
+                        type="group", value=group_data.profile.name
+                    )
                     for vg in student_vgs:
                         vg.__dict__["covariates"].append(group_cov)
                     result.extend(student_vgs)
@@ -157,9 +152,7 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
                 # Per-group
                 for group_data in groups:
                     result.extend(
-                        build_group_aggregations_response(
-                            group_data, aggregation_types
-                        )
+                        build_group_aggregations_response(group_data, aggregation_types)
                     )
 
             if include_students:
@@ -167,7 +160,9 @@ class SchoolsApiImpl(BaseSchoolsApi):  # type: ignore[no-untyped-call]
                     student_vgs = build_student_aggregations_response(
                         group_data, aggregation_types
                     )
-                    group_cov = {"type": "group", "value": group_data.profile.name}
+                    group_cov = Characteristic(
+                        type="group", value=group_data.profile.name
+                    )
                     for vg in student_vgs:
                         vg.__dict__["covariates"].append(group_cov)
                     result.extend(student_vgs)

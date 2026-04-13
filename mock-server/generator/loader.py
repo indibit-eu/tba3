@@ -132,7 +132,7 @@ def build_booklets_from_dataframe(df: pl.DataFrame) -> dict[BookletKey, Booklet]
         # Parse competence_standard from kompstd1/2/3
         kompstd_list = [
             v
-            for col in ("kompstd1", "kompstd2", "kompstd3")
+            for col in ("kompstd1", "kompstd2", "kompstd3", "K_kstd1", "K_kstd2", "K_kstd3", "L_kstd1", "L_kstd2", "L_kstd3")
             if (v := _parse_optional_str(row.get(col))) is not None
         ]
         competence_standard = kompstd_list if kompstd_list else None

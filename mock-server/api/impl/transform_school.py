@@ -95,6 +95,7 @@ def build_school_competence_levels_response(
         merged.append(
             CompetenceLevelsInner(
                 id=school_id,
+                type="school",
                 name=school_name,
                 domain=entries[0].domain,
                 subject=build_subject(key.subject),
@@ -144,6 +145,7 @@ def build_school_items_response(
             results.append(
                 ItemsInner(
                     id=school_id,
+                    type="school",
                     name=school_name,
                     domain=build_domain(domain_name),
                     subject=build_subject(subject),
@@ -201,6 +203,7 @@ def build_school_aggregations_response(
                 results.append(
                     AggregationsInner(
                         id=school_id,
+                        type="school",
                         name=school_name,
                         domain=build_domain(domain_name),
                         subject=build_subject(subject),

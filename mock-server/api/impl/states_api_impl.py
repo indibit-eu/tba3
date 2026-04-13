@@ -38,9 +38,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
         for sid in ids:
             state_cfg = state_lookup.get(sid)
             if state_cfg is None:
-                raise HTTPException(
-                    status_code=404, detail=f"State not found: {sid}"
-                )
+                raise HTTPException(status_code=404, detail=f"State not found: {sid}")
 
             if include_state:
                 groups_with_equiv = resolve_state(sid)
@@ -49,9 +47,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
                         status_code=404,
                         detail=f"No equivalence tables found for state: {sid}",
                     )
-                result.extend(
-                    build_state_competence_levels_response(groups_with_equiv)
-                )
+                result.extend(build_state_competence_levels_response(groups_with_equiv))
 
             if include_district:
                 for district in state_cfg.districts or []:
@@ -62,6 +58,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
                                 district_groups,
                                 id=district.id,
                                 name=district.display_name(),
+                                vg_type="district",
                             )
                         )
 
@@ -80,9 +77,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
         for sid in ids:
             state_cfg = state_lookup.get(sid)
             if state_cfg is None:
-                raise HTTPException(
-                    status_code=404, detail=f"State not found: {sid}"
-                )
+                raise HTTPException(status_code=404, detail=f"State not found: {sid}")
 
             if include_state:
                 groups_with_equiv = resolve_state(sid)
@@ -98,6 +93,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
                             groups,
                             id=district.id,
                             name=district.display_name(),
+                            vg_type="district",
                         )
                     )
 
@@ -118,9 +114,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
         for sid in ids:
             state_cfg = state_lookup.get(sid)
             if state_cfg is None:
-                raise HTTPException(
-                    status_code=404, detail=f"State not found: {sid}"
-                )
+                raise HTTPException(status_code=404, detail=f"State not found: {sid}")
 
             if include_state:
                 groups_with_equiv = resolve_state(sid)
@@ -139,6 +133,7 @@ class StatesApiImpl(BaseStatesApi):  # type: ignore[no-untyped-call]
                             aggregation_types,
                             id=district.id,
                             name=district.display_name(),
+                            vg_type="district",
                         )
                     )
 

@@ -3,7 +3,7 @@ info:
   title: TBA III
   summary: Schnittstelle für den Zugriff auf Auswertungsdaten von VERA
   description: Diese API ermöglicht den Zugriff auf Auswertungsdaten von VERA. Sie bietet Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '1.1'
+  version: '1.2'
   license:
     name: MIT
     url: https://opensource.org/license/MIT

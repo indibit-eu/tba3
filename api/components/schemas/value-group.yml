@@ -6,6 +6,13 @@ properties:
     type: string
     examples:
       - 32fbeb80-224a-4d13-a23c-0eec6c0d3ea7
+  type:
+    type: string
+    description: Art der Wertegruppe, z.B. `group`, `student`, `school`
+    examples:
+      - group
+      - student
+      - school
   name:
     type: string
     description: Bezeichnung der Wertegruppe
