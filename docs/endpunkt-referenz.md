@@ -71,6 +71,7 @@ Zur Orientierung die Grundstruktur einer Value-Group:
 Value-Group
 ├── id           (optional) — Eindeutige Kennung
 ├── name         (Pflicht)  — Bezeichnung, z.B. "Klasse 8a"
+├── type         (Pflicht)  — Typ einer Value Group
 ├── domain       (optional)
 │   ├── id       (optional)
 │   └── name     (Pflicht) — z.B. "Leseverstehen"
@@ -92,7 +93,8 @@ Konzeptionell sind alle diese Felder Metadaten über die Value-Group.
 
 ### `type`: Typ einer Value-Group
 
-Die Value-Group trägt ein optionales `type`-Feld, das die Granularität beschreibt. So kann ein Berichtselement erkennen, was eine Value-Group repräsentiert — auch ohne den ursprünglichen Request zu kennen.
+Die Value-Group hat ein `type`-Feld, das die Granularität beschreibt. So kann ein Berichtselement erkennen,
+was eine Value-Group repräsentiert — auch ohne den ursprünglichen Request zu kennen.
 
 | Wert        | Bedeutung      |
 |-------------|----------------|
@@ -184,6 +186,7 @@ Bekannte Beispiele:
 [
   {
     "name": "Klasse 3a",
+    "type": "group",
     "domain": { "name": "Leseverstehen" },
     "subject": { "name": "Deutsch" },
     "competenceLevels": [
@@ -206,6 +209,7 @@ Bekannte Beispiele:
   },
   {
     "name": "Klasse 3b",
+    "type": "group",
     "domain": { "name": "Leseverstehen" },
     "subject": { "name": "Deutsch" },
     "competenceLevels": [
@@ -252,7 +256,7 @@ Dann liefert der Endpunkt Value-Groups für jede der kombinierten Granularitäts
 
 | Pfad                                   | `type`           | Ergebnis                        | Mock-Server                                                                                      |
 |----------------------------------------|------------------|---------------------------------|--------------------------------------------------------------------------------------------------|
-| `/groups/3a-deutsch/competence-levels` | `group,students` | VGs für die Lerngruppe + je SuS | [Link](https://apps.indibit.eu/tba3-api/groups/3a-deutsch/competence-levels?type=group,students) |
+| `/groups/3a-deutsch/competence-levels` | `group,student`  | VGs für die Lerngruppe + je SuS | [Link](https://apps.indibit.eu/tba3-api/groups/3a-deutsch/competence-levels?type=group,students) |
 | `/states/beispielland/items`           | `state,district` | VGs für das Land + je Bezirk    | [Link](https://apps.indibit.eu/tba3-api/states/beispielland/items?type=state,district)           |
 
 Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardmäßig liefert.
