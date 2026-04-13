@@ -1,10 +1,29 @@
-oneOf:
-  - $ref: './characteristics/language-at-home-characteristic.yml'
-  - $ref: './characteristics/gender-characteristic.yml'
-  - $ref: './characteristics/other-characteristic.yml'
-discriminator:
-  propertyName: type
-  mapping:
-    languageAtHome: './characteristics/language-at-home-characteristic.yml'
-    gender: './characteristics/gender-characteristic.yml'
-    other: './characteristics/other-characteristic.yml'
+type: object
+required:
+  - type
+  - value
+properties:
+  type:
+    type: string
+    description: Type of characteristic
+    examples:
+      - languageAtHome
+      - gender
+      - SES
+      - schoolType
+  label:
+    type: string
+    description: Label for the characteristic
+    examples:
+      - Sprache zu Hause
+      - Geschlecht
+      - Sozioökonomischer Status
+      - Schulart
+  value:
+    type: string
+    description: Specific value of the characteristic
+    examples:
+      - german
+      - male
+      - low
+      - gymnasium

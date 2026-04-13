@@ -5,7 +5,6 @@ api/apis/schools_api.py
 api/apis/schools_api_base.py
 api/apis/states_api.py
 api/apis/states_api_base.py
-api/impl/__init__.py
 api/main.py
 api/models/__init__.py
 api/models/aggregation.py
@@ -23,13 +22,10 @@ api/models/descriptive_statistics_descriptive_statistics.py
 api/models/domain.py
 api/models/exercise.py
 api/models/extra_models.py
-api/models/gender_characteristic.py
 api/models/item.py
 api/models/item_parameters.py
 api/models/item_statistics_inner.py
 api/models/items_inner.py
-api/models/language_at_home_characteristic.py
-api/models/other_characteristic.py
 api/models/subject.py
 api/models/value_group.py
 api/models/value_group_properties_inner.py

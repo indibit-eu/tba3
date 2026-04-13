@@ -20,7 +20,7 @@ class BaseGroupsApi:
         self,
         id: Annotated[StrictStr, Field(description="Id der Lerngruppe")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.")],
     ) -> List[CompetenceLevelsInner]:
         ...
 
@@ -29,7 +29,7 @@ class BaseGroupsApi:
         self,
         id: Annotated[StrictStr, Field(description="Id der Lerngruppe")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.")],
     ) -> List[ItemsInner]:
         ...
 
@@ -39,6 +39,6 @@ class BaseGroupsApi:
         id: Annotated[StrictStr, Field(description="Id der Lerngruppe")],
         type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")],
         aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")],
-        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")],
+        comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.")],
     ) -> List[AggregationsInner]:
         ...

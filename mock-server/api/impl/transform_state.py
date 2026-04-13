@@ -22,6 +22,7 @@ def build_state_competence_levels_response(
     groups_with_equiv: list[tuple[GroupData, list[EquivalenceTableEntry]]],
     id: str | None = None,
     name: str | None = None,
+    vg_type: str = "state",
 ) -> list[CompetenceLevelsInner]:
     """Build state/district-level competence-levels response.
 
@@ -37,6 +38,7 @@ def build_state_competence_levels_response(
             results.append(
                 CompetenceLevelsInner(
                     id=vg_id,
+                    type=vg_type,
                     name=vg_name,
                     domain=vg.domain,
                     subject=vg.subject,
@@ -50,6 +52,7 @@ def build_state_items_response(
     groups: list[GroupData],
     id: str | None = None,
     name: str | None = None,
+    vg_type: str = "state",
 ) -> list[ItemsInner]:
     """Build state/district-level items response.
 
@@ -65,6 +68,7 @@ def build_state_items_response(
             results.append(
                 ItemsInner(
                     id=vg_id,
+                    type=vg_type,
                     name=vg_name,
                     domain=vg.domain,
                     subject=vg.subject,
@@ -79,6 +83,7 @@ def build_state_aggregations_response(
     aggregation_types: set[str],
     id: str | None = None,
     name: str | None = None,
+    vg_type: str = "state",
 ) -> list[AggregationsInner]:
     """Build state/district-level aggregations response.
 
@@ -94,6 +99,7 @@ def build_state_aggregations_response(
             results.append(
                 AggregationsInner(
                     id=vg_id,
+                    type=vg_type,
                     name=vg_name,
                     domain=vg.domain,
                     subject=vg.subject,

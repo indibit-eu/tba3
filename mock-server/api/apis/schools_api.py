@@ -52,7 +52,7 @@ for _, name, _ in pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + "."):
 async def get_school_competence_levels(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
     type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche ausgegeben werden sollen", alias="type"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.", alias="comparison"),
 ) -> List[CompetenceLevelsInner]:
     if not BaseSchoolsApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
@@ -73,7 +73,7 @@ async def get_school_competence_levels(
 async def get_school_items(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
     type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche ausgegeben werden sollen", alias="type"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.", alias="comparison"),
 ) -> List[ItemsInner]:
     if not BaseSchoolsApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
@@ -95,7 +95,7 @@ async def get_school_aggregations(
     id: Annotated[StrictStr, Field(description="Id der Schule")] = Path(..., description="Id der Schule"),
     type: Annotated[Optional[StrictStr], Field(description="Wertegruppen, welche ausgegeben werden sollen")] = Query(None, description="Wertegruppen, welche ausgegeben werden sollen", alias="type"),
     aggregation: Annotated[Optional[StrictStr], Field(description="Aggregationsarten, die berechnet werden sollen")] = Query(None, description="Aggregationsarten, die berechnet werden sollen", alias="aggregation"),
-    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen", alias="comparison"),
+    comparison: Annotated[Optional[StrictStr], Field(description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.")] = Query(None, description="Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.", alias="comparison"),
 ) -> List[AggregationsInner]:
     if not BaseSchoolsApi.subclasses:
         raise HTTPException(status_code=500, detail="Not implemented")
