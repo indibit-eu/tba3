@@ -140,3 +140,63 @@ GET /groups/8a-mathe/items
 
 Die Value-Group hat hier keine `domain` – die Zuordnung zu Leitideen steckt in den `competences` der einzelnen Items. Ein Frontend, das nach Leitidee gruppieren möchte, kann das lokal tun.
 
+---
+
+## Aggregationen auf verschiedenen Ebenen kombinieren
+
+### Hintergrund
+
+In der Praxis gibt es zwei unabhängige Hierarchien, auf denen Daten aggregiert werden können:
+
+1. **Bildungsstandard:** Items → Aufgaben → Kompetenzbereiche/Leitideen → Domänen → Fach
+2. **Gruppe:** SuS → Lerngruppe → Schule → Bezirk → Land
+
+Diese Hierarchien sind orthogonal zueinander: Eine Aggregation nach Kompetenzbereich kann sowohl auf Schülerebene als auch auf Klassenebene erfolgen.
+
+### Umsetzung über die Schnittstelle
+
+Die Kombination von `type` und `aggregation` bildet genau diese Verschachtelung ab:
+
+**Lösungshäufigkeiten nach Leitidee auf Klassenebene:**
+
+```
+GET /groups/8a-mathe/aggregations?aggregation=competence
+```
+
+Liefert pro Leitidee die mittlere Lösungsquote der Klasse.
+
+**Lösungshäufigkeiten nach Leitidee auf Klassen- und Schülerebene:**
+
+```
+GET /groups/8a-mathe/aggregations?type=group,students&aggregation=competence
+```
+
+Liefert pro Leitidee die mittlere Lösungsquote der Klasse **und** je SuS. Mit `comparison` lassen sich zusätzlich Referenzwerte (z.B. Pilotierung, Landesmittelwert) ergänzen:
+
+```
+GET /groups/8a-mathe/aggregations?type=group,students&aggregation=competence&comparison=state-average
+```
+
+### Aufteilen in mehrere Requests
+
+Man muss nicht alles in einen einzigen Request packen. Gerade bei der Kombination mehrerer `type`-Werte können die Responses sehr groß werden.
+Stattdessen kann man die Daten in kleinere, übersichtlichere Requests aufteilen – z.B. nach `type` getrennt:
+
+```
+GET /groups/8a-mathe/aggregations?type=group&aggregation=competence
+GET /groups/8a-mathe/aggregations?type=students&aggregation=competence
+```
+
+Das liefert die gleichen Daten wie ein kombinierter Request mit `type=group,students`, aber in kleineren, leichter verarbeitbaren Responses.
+Welcher Weg besser passt, hängt vom Anwendungsfall ab.
+
+### Zusammenfassung
+
+| Was                                        | Wie                                                                    |
+|--------------------------------------------|------------------------------------------------------------------------|
+| Bista-Ebene wählen (z.B. Kompetenzbereich) | `aggregation=competence`                                               |
+| Gruppen-Ebene wählen (z.B. Klasse + SuS)   | `type=group,students`                                                  |
+| Referenzwerte ergänzen                     | `comparison=state-average`                                             |
+| Alles kombinieren                          | `?type=group,students&aggregation=competence&comparison=state-average` |
+| Alternativ: aufteilen                      | Separate Requests je `type` für kleinere Responses                     |
+
