@@ -7,6 +7,15 @@ Grundbegriffe (Value-Group, 3-Schichten-Architektur) sind in [Konzepte und Archi
 
 ---
 
+## Sprachkonvention
+
+Die Schnittstelle ist in **Englisch** definiert: Feldnamen, Endpunkte und Schlüssel sind englisch (z.B. `competenceLevels`, `descriptiveStatistics`, `frequency`).
+
+**Werte** werden üblicherweise in **Deutsch** übergeben, da sie aus deutschsprachigen Systemen stammen (z.B. `"name": "Regelstandard"`, `"name": "Leseverstehen"`).
+Werte, deren Ausprägungen gemeinsam als Konvention definiert sind, können auch Englisch sein (z.B. `"value": "male"` bei Covariates).
+
+---
+
 ## Was die Spec definiert
 
 Die Spec definiert **9 Endpunkte**: 3 Ebenen × 3 Datentypen. Jeder Endpunkt gibt ein **Array von Value-Groups** zurück.
@@ -19,11 +28,14 @@ hängt von der Implementierung des Backends bzw. dem Query-Parameter `type` ab.
 
 Jede Value-Group enthält ein `competenceLevels[]`-Array. Jeder Eintrag beschreibt eine Kompetenzstufe (z.B. „Regelstandard") mit zugehöriger deskriptiver Statistik (Häufigkeit, Mittelwert, Gesamtzahl).
 
-| Ebene | Pfad | Value-Group enthält | Swagger-UI |
-|---|---|---|---|
-| Lerngruppe | `/groups/{id}/competence-levels` | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupCompetenceLevels) |
-| Schule | `/schools/{id}/competence-levels` | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolCompetenceLevels) |
-| Land | `/states/{id}/competence-levels` | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateCompetenceLevels) |
+| Ebene      | Pfad                              | Value-Group enthält                                      | Swagger-UI                                                                       |
+|------------|-----------------------------------|----------------------------------------------------------|----------------------------------------------------------------------------------|
+| Lerngruppe | `/groups/{id}/competence-levels`  | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupCompetenceLevels)   |
+| Schule     | `/schools/{id}/competence-levels` | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolCompetenceLevels) |
+| Land       | `/states/{id}/competence-levels`  | `competenceLevels[]` mit Stufen + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateCompetenceLevels)   |
+
+**Verhalten bei `type=student`:** Auf Schülerebene wird pro SuS nur die **erreichte** Kompetenzstufe zurückgegeben (nicht alle Stufen mit `frequency=0`).
+Das `competenceLevels[]`-Array enthält dann in der Regel genau einen Eintrag.
 
 ---
 
@@ -31,11 +43,11 @@ Jede Value-Group enthält ein `competenceLevels[]`-Array. Jeder Eintrag beschrei
 
 Jede Value-Group enthält ein `items[]`-Array. Jeder Eintrag beschreibt ein einzelnes Item (Testaufgabe) mit Lösungshäufigkeit und optionalen Item-Parametern.
 
-| Ebene | Pfad | Value-Group enthält | Swagger-UI |
-|---|---|---|---|
-| Lerngruppe | `/groups/{id}/items` | `items[]` mit Lösungshäufigkeiten je Item | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupItems) |
-| Schule | `/schools/{id}/items` | `items[]` mit Lösungshäufigkeiten je Item | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolItems) |
-| Land | `/states/{id}/items` | `items[]` mit Lösungshäufigkeiten je Item | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateItems) |
+| Ebene      | Pfad                  | Value-Group enthält                       | Swagger-UI                                                            |
+|------------|-----------------------|-------------------------------------------|-----------------------------------------------------------------------|
+| Lerngruppe | `/groups/{id}/items`  | `items[]` mit Lösungshäufigkeiten je Item | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupItems)   |
+| Schule     | `/schools/{id}/items` | `items[]` mit Lösungshäufigkeiten je Item | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolItems) |
+| Land       | `/states/{id}/items`  | `items[]` mit Lösungshäufigkeiten je Item | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateItems)   |
 
 ---
 
@@ -43,11 +55,11 @@ Jede Value-Group enthält ein `items[]`-Array. Jeder Eintrag beschreibt ein einz
 
 Jede Value-Group enthält ein `aggregations[]`-Array. Jeder Eintrag beschreibt eine Aggregation nach einem bestimmten Typ (z.B. nach Kompetenz oder Geschlecht) mit deskriptiver Statistik. Welche Aggregationsarten verfügbar sind, steuert der `aggregation`-Parameter (→ Query-Parameter).
 
-| Ebene | Pfad | Value-Group enthält | Swagger-UI |
-|---|---|---|---|
-| Lerngruppe | `/groups/{id}/aggregations` | `aggregations[]` mit Typ + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupAggregations) |
-| Schule | `/schools/{id}/aggregations` | `aggregations[]` mit Typ + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolAggregations) |
-| Land | `/states/{id}/aggregations` | `aggregations[]` mit Typ + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateAggregations) |
+| Ebene      | Pfad                         | Value-Group enthält                               | Swagger-UI                                                                   |
+|------------|------------------------------|---------------------------------------------------|------------------------------------------------------------------------------|
+| Lerngruppe | `/groups/{id}/aggregations`  | `aggregations[]` mit Typ + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/groups/getGroupAggregations)   |
+| Schule     | `/schools/{id}/aggregations` | `aggregations[]` mit Typ + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/schools/getSchoolAggregations) |
+| Land       | `/states/{id}/aggregations`  | `aggregations[]` mit Typ + deskriptiver Statistik | [Link](https://apps.indibit.eu/tba3-api/docs#/states/getStateAggregations)   |
 
 ---
 
@@ -59,6 +71,7 @@ Zur Orientierung die Grundstruktur einer Value-Group:
 Value-Group
 ├── id           (optional) — Eindeutige Kennung
 ├── name         (Pflicht)  — Bezeichnung, z.B. "Klasse 8a"
+├── type         (Pflicht)  — Typ einer Value Group
 ├── domain       (optional)
 │   ├── id       (optional)
 │   └── name     (Pflicht) — z.B. "Leseverstehen"
@@ -80,16 +93,17 @@ Konzeptionell sind alle diese Felder Metadaten über die Value-Group.
 
 ### `type`: Typ einer Value-Group
 
-Die Value-Group trägt ein optionales `type`-Feld, das die Granularität beschreibt. So kann ein Berichtselement erkennen, was eine Value-Group repräsentiert — auch ohne den ursprünglichen Request zu kennen.
+Die Value-Group hat ein `type`-Feld, das die Granularität beschreibt. So kann ein Berichtselement erkennen,
+was eine Value-Group repräsentiert — auch ohne den ursprünglichen Request zu kennen.
 
-| Wert | Bedeutung |
-|---|---|
-| `student` | Einzelne:r SuS |
-| `group` | Lerngruppe |
-| `school` | Schule |
-| `district` | Stadt/Gemeinde |
-| `authority` | Schulamt |
-| `state` | Bundesland |
+| Wert        | Bedeutung      |
+|-------------|----------------|
+| `student`   | Einzelne:r SuS |
+| `group`     | Lerngruppe     |
+| `school`    | Schule         |
+| `district`  | Stadt/Gemeinde |
+| `authority` | Schulamt       |
+| `state`     | Bundesland     |
 
 ---
 
@@ -102,14 +116,21 @@ Die Value-Group trägt ein optionales `type`-Feld, das die Granularität beschre
 
 Für den **Query-Parameter** `domain` werden Kürzel für Teilbereiche eines Fachs verwendet. Die Kürzel entsprechen den Domänen-Bezeichnungen aus den Itemkennwerttabellen des IQB ([Kompetenzstufenmodelle](https://www.iqb.hu-berlin.de/de/bista/entwicklung/kompetenzstufenmodelle/)).
 
-| Fach | Fachkürzel | Mögliche Domänen-Kürzel (Query-Parameter) |
-|---|---|---|
-| Deutsch | `de` | `rs` (Rechtschreibung/Orthografie), `le` (Lesen), `ho` (Zuhören/Sprechen und Zuhören), `sp` (Sprache und Sprachgebrauch/Sprachgebrauch) |
-| Mathematik | `ma` | V8 keine, V3  `zo` (Zahlen und Operationen), `rf` (Raum und Form), `gm` (Größen und Messen), `dh` (Daten, Häufigkeiten und Wahrscheinlichkeiten), `ms` (Muster und Strukturen) |
-| Englisch | `en` | `ho` (Hörverstehen), `le` (Leseverstehen) |
-| Französisch | `fr` | `ho` (Hörverstehen), `le` (Leseverstehen) |
+| Fach        | Fachkürzel | Mögliche Domänen-Kürzel (Query-Parameter)                                                                                                                                      |
+|-------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Deutsch     | `de`       | `rs` (Rechtschreibung/Orthografie), `le` (Lesen), `ho` (Zuhören/Sprechen und Zuhören), `sp` (Sprache und Sprachgebrauch/Sprachgebrauch)                                        |
+| Mathematik  | `ma`       | V8 keine, V3  `zo` (Zahlen und Operationen), `rf` (Raum und Form), `gm` (Größen und Messen), `dh` (Daten, Häufigkeiten und Wahrscheinlichkeiten), `ms` (Muster und Strukturen) |
+| Englisch    | `en`       | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
+| Französisch | `fr`       | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
 
-**Wichtig: Query-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für den `domain`-**Query-Parameter** (z.B. `?domain=rs`). Das `domain`-Feld in der **Response** ist dagegen ein Objekt mit der langen Beschreibung, z.B. `{ name: "Rechtschreibung" }`. Das Backend setzt die lange Beschreibung kontextabhängig — sie kann je nach Jahrgangsstufe variieren (z.B. `rs` = "Rechtschreibung" in der Grundschule, "Orthografie" in der Sek I).
+**Wichtig: Query-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für den `domain`-**Query-Parameter** (z.B. `?domain=rs`).
+Das `domain`-Feld in der **Response** ist dagegen ein Objekt mit der langen Beschreibung, z.B. `{ name: "Rechtschreibung" }`.
+Das Backend setzt die lange Beschreibung kontextabhängig — sie kann je nach Jahrgangsstufe variieren (z.B. `rs` = "Rechtschreibung" in der Grundschule, "Orthografie" in der Sek I).
+
+**Gruppierung nach Domäne:** Ob die Response nach Domäne gruppiert wird (eine Value-Group je Domäne) oder flach zurückkommt,
+hängt vom Endpunkt und Anwendungsfall ab. Details und Empfehlungen im [Rezept: Gruppierung nach Domäne](rezepte.md#gruppierung-nach-domäne-wann-sinnvoll).
+
+Details und Beispiele zum Sonderfall Mathe in [Rezept: Leitideen in Mathematik](rezepte.md#leitideen-in-mathematik-domäne-vs-competences) beschrieben.
 
 ---
 
@@ -119,13 +140,15 @@ Array von typisierten Merkmalen auf einer Value-Group. Jede Covariate hat `type`
 
 Vordefinierte Typen:
 
-| `type` | Beschreibung | Beispiel-`value`s |
-|---|---|---|
-| `gender` | Geschlecht | `male`, `female`, `diverse` |
-| `languageAtHome` | Sprache zu Hause | `german`, `other`, `english`, `french` |
-| `other` | Frei erweiterbar — `label` beschreibt das Merkmal | z.B. Schulform, SES, Migrationshintergrund |
+| `type`           | Beschreibung                                      | Beispiel-`value`s                          |
+|------------------|---------------------------------------------------|--------------------------------------------|
+| `gender`         | Geschlecht                                        | `male`, `female`, `diverse`                |
+| `languageAtHome` | Sprache zu Hause                                  | `german`, `other`, `english`, `french`     |
+| Beliebig         | Frei erweiterbar — `label` beschreibt das Merkmal | z.B. Schulform, SES, Migrationshintergrund |
 
-Für nicht-vordefinierte Merkmale steht der `other`-Typ zur Verfügung. Ob weitere freie `type`-Werte (z.B. `SES`, `schoolType`) verwendet werden können, ist noch nicht abschließend festgelegt. Aktuell beschreibt das `label` das Merkmal näher.
+Weitere, eigene Kovariaten können im selben Schema ergänzt werden.
+Ein Rezept, wie man mit Kovariaten auf anderen Ebenen umgehen kann findet sich in
+[Umgang mit Kovariaten auf Schüler- und Gruppenebene](./rezepte.md#umgang-mit-kovariaten-auf-schüler--und-gruppenebene).
 
 ---
 
@@ -170,6 +193,7 @@ Bekannte Beispiele:
 [
   {
     "name": "Klasse 3a",
+    "type": "group",
     "domain": { "name": "Leseverstehen" },
     "subject": { "name": "Deutsch" },
     "competenceLevels": [
@@ -192,6 +216,7 @@ Bekannte Beispiele:
   },
   {
     "name": "Klasse 3b",
+    "type": "group",
     "domain": { "name": "Leseverstehen" },
     "subject": { "name": "Deutsch" },
     "competenceLevels": [
@@ -236,10 +261,10 @@ Der `type`-Parameter bestimmt, welche Art von Value-Groups in der Antwort enthal
 Mehrere Werte können kommasepariert übergeben werden.
 Dann liefert der Endpunkt Value-Groups für jede der kombinierten Granularitätsstufen in einer einzigen Antwort.
 
-| Pfad | `type` | Ergebnis | Mock-Server |
-|---|---|---|---|
-| `/groups/3a-deutsch/competence-levels` | `group,students` | VGs für die Lerngruppe + je SuS | [Link](https://apps.indibit.eu/tba3-api/groups/3a-deutsch/competence-levels?type=group,students) |
-| `/states/beispielland/items` | `state,district` | VGs für das Land + je Bezirk | [Link](https://apps.indibit.eu/tba3-api/states/beispielland/items?type=state,district) |
+| Pfad                                   | `type`           | Ergebnis                        | Mock-Server                                                                                      |
+|----------------------------------------|------------------|---------------------------------|--------------------------------------------------------------------------------------------------|
+| `/groups/3a-deutsch/competence-levels` | `group,student`  | VGs für die Lerngruppe + je SuS | [Link](https://apps.indibit.eu/tba3-api/groups/3a-deutsch/competence-levels?type=group,students) |
+| `/states/beispielland/items`           | `state,district` | VGs für das Land + je Bezirk    | [Link](https://apps.indibit.eu/tba3-api/states/beispielland/items?type=state,district)           |
 
 Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardmäßig liefert.
 
@@ -249,43 +274,74 @@ Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardm
 
 > **Spec = freier String.** Die Werte und ihre Bedeutung definiert das Backend, nicht die Spec.
 
-Der `comparison`-Parameter steuert, welche Vergleichs-Value-Groups zusätzlich zu den primären Ergebnissen zurückgeliefert werden. Mehrere Werte sind kommasepariert kombinierbar.
+Der `comparison`-Parameter steuert, welche Vergleichs-Value-Groups zusätzlich zu den primären Ergebnissen zurückgeliefert werden.
+Mehrere Werte sind kommasepariert kombinierbar.
 
-**Vorgeschlagene Syntax:** Präfix `typ-id` oder nur `id`, kommasepariert — z.B. `comparison=group-3b,group-3c,landesmittelwert`
+**Vorgeschlagene Syntax:** Präfix `typ-id` oder nur `wert`, kommasepariert — z.B. `comparison=group-3b,group-3c,state-average`.
 Die Syntax ist im Backend leicht zu parsen und lässt beliebige Kombinationen zu.
 
-#### Lerngruppen-Ebene (`/groups/{id}/…`)
+**Faustregel**: Wenn nur der `type` angegeben wird, entscheidet in der Regel das Backend, welche Vergleichsgruppen geliefert werden.
+Wenn konkrete Vergleichsgruppen erwünscht sind, werden diese mit `type-<id>` referenziert.
 
-Typische Szenarien: Vergleich mit Parallelklassen, korrigiertem Landesmittelwert, Vorjahr.
+#### Vorgeschlagene Comparison-Typen
 
-| Szenario | Request-Beispiel |
-|---|---|
-| Parallelklasse(n) | `?comparison=group-3b` |
-| Korrigierter Landesmittelwert | `?comparison=landesmittelwert` |
-| Vorjahreswerte | `?comparison=year-2024,year-2023` |
-| Kombiniert | `?comparison=landesmittelwert,year-2024` |
+Die Comparison-Typen leiten sich aus den [`type`-Werten](#type-typ-einer-value-group) ab: Was als `type` in der Response existiert, ergibt in der Regel auch als Vergleichsgruppe Sinn.
 
-#### Schul-Ebene (`/schools/{id}/…`)
+| Comparison       | Bedeutung                                                        | Beispiel                |
+|------------------|------------------------------------------------------------------|-------------------------|
+| `student-<id>`   | Bestimmte:r SuS                                                  | `student-12345`         |
+| `group-<id>`     | Bestimmte Lerngruppe                                             | `group-3b`              |
+| `school-<id>`    | Bestimmte Schule                                                 | `school-gs-musterstadt` |
+| `school-average` | Schulschnitt (Convenience für die Schule der angefragten Gruppe) | `school-average`        |
+| `district-<id>`  | Bestimmte Stadt/Gemeinde                                         | `district-nord`         |
+| `authority-<id>` | Bestimmtes Schulamt                                              | `authority-12345`       |
+| `state-average`  | Landesmittelwert                                                 | `state-average`         |
+| `year-<jahr>`    | Vergleich mit einem bestimmten Jahr                              | `year-2024`             |
 
-Typische Szenarien: Einzelne Klassen als Vergleich einblenden, Schuljahresvergleich.
+Jeder Bericht kann darüber hinaus eigene Werte einführen, z.B. für besondere Vergleichsgruppen oder Shortcuts,
+die mehrere Vergleichsgruppen bündeln:
 
-| Szenario | Request-Beispiel |
-|---|---|
-| Klassen als Vergleich | `?comparison=group-3a,group-3b` |
-| Schuljahresvergleich | `?comparison=year-2024,year-2023` |
+| Shortcut-Beispiel       | Bedeutung                                                                       |
+|-------------------------|---------------------------------------------------------------------------------|
+| `group`                 | Backend trifft Entscheidung, z.B. alle Lerngruppen einer Schule                 |
+| `group-parallel`        | Alle Parallelklassen                                                            | 
+| `year`                  | Backend trifft Entscheidung, z.B. die letzten vier Durchgänge                   |
+| `faircomparison`        | Fairer Vergleichswert (merkmalsbereinigt). Das Backend wählt die passende Ebene |
+| `group-faircomparison`  | Fairer Vergleichswert auf Gruppenebene                                          |
+| `school-faircomparison` | Fairer Vergleichswert auf Schulebene                                            |
 
-#### Landes-Ebene (`/states/{id}/…`)
+#### Beispiele nach Ebene
 
-Typische Szenarien: Bezirke, Pilotierungsgruppe.
+**Lerngruppen-Ebene (`/groups/{id}/…`):**
 
-| Szenario | Request-Beispiel |
-|---|---|
-| Bezirke als Vergleich | `?comparison=bezirk-nord,bezirk-sued` |
-| Pilotierungsgruppe | `?comparison=pilotierung` |
+| Szenario          | Request-Beispiel                                                           |
+|-------------------|----------------------------------------------------------------------------|
+| Parallelklasse(n) | `?comparison=group-3b,group-3c,group-3d` oder `?comparison=group-parallel` |
+| Schulschnitt      | `?comparison=school-average`                                               |
+| Landesmittelwert  | `?comparison=state-average`                                                |
+| Vorjahreswerte    | `?comparison=year-2024,year-2023`                                          |
+| Kombiniert        | `?comparison=state-average,year-2024`                                      |
 
-**Hinweis zum Mock-Server:** Der Mock-Server akzeptiert einfache kommaseparierte IDs ohne Typ-Präfix (z.B. `comparison=3b-deutsch`).
+**Schul-Ebene (`/schools/{id}/…`):**
+
+| Szenario              | Request-Beispiel                                  |
+|-----------------------|---------------------------------------------------|
+| Klassen als Vergleich | `?comparison=group-3a,group-3b,group-3c,group-3d` |
+| Andere Schule         | `?comparison=school-gs-musterstadt`               |
+| Schuljahresvergleich  | `?comparison=year-2024,year-2023`                 |
+
+**Landes-Ebene (`/states/{id}/…`):**
+
+| Szenario                 | Request-Beispiel                          |
+|--------------------------|-------------------------------------------|
+| Bezirke als Vergleich    | `?comparison=district-nord,district-sued` |
+| Schulämter als Vergleich | `?comparison=authority-12345`             |
+
+**Hinweis zum Mock-Server:** Der Mock-Server akzeptiert aktuell einfache kommaseparierte IDs ohne Typ-Präfix (z.B. `comparison=3b-deutsch`).
 
 ---
+
+**Abgrenzung:** `comparison` liefert Werte für **andere Gruppen** (z.B. Parallelklasse, Landesmittelwert). `aggregation` liefert **andere Sichten auf dieselbe Gruppe** (z.B. aufgeschlüsselt nach Kompetenz oder Geschlecht).
 
 ### `aggregation`: Aggregationsarten
 
@@ -293,11 +349,11 @@ Typische Szenarien: Bezirke, Pilotierungsgruppe.
 
 Der `aggregation`-Parameter ist nur für den `/aggregations`-Endpunkt relevant. Er bestimmt, nach welchen Dimensionen die Ergebnisse aufgeschlüsselt werden.
 
-| Wert | Bedeutung | Mock-Server |
-|---|---|---|
-| `competence` | Nach Kompetenzen | Implementiert |
-| `gender` | Nach Geschlecht der SuS | Implementiert |
-| `exercise` | Nach Aufgabe | Nicht implementiert |
+| Wert         | Bedeutung               | Mock-Server         |
+|--------------|-------------------------|---------------------|
+| `competence` | Nach Kompetenzen        | Implementiert       |
+| `gender`     | Nach Geschlecht der SuS | Implementiert       |
+| `exercise`   | Nach Aufgabe            | Nicht implementiert |
 
 Mehrere Werte können kommasepariert kombiniert werden: `aggregation=competence,gender`
 
@@ -322,11 +378,12 @@ Das Fachkürzel ist ein sinnvoller Shortcut: `domain=rs,le` ist inhaltlich gleic
 
 ## Fehlerverhalten
 
-| HTTP-Status | Bedeutung | Beispiel |
-|---|---|---|
-| `200` mit leerem Array | Parameter wird verstanden, aber es gibt keine Daten dafür | `?domain=sp` liefert `[]`, weil keine Sprachgebrauch-Daten vorliegen |
-| `400 Bad Request` | Syntaktisch ungültige Anfrage (in Spec definiert) | Fehlender Pfad-Parameter |
-| `404 Not Found` | Pfad-ID (group, school, state) ist unbekannt | `/groups/unbekannt/competence-levels` |
-| `501 Not Implemented` | Backend erkennt einen Query-Parameter-Wert nicht oder unterstützt ihn nicht | `?comparison=pilotierung` → `{ "message": "comparison 'pilotierung' not supported" }` |
+| HTTP-Status            | Bedeutung                                                                   | Beispiel                                                                              |
+|------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| `200` mit leerem Array | Parameter wird verstanden, aber es gibt keine Daten dafür                   | `?domain=sp` liefert `[]`, weil keine Sprachgebrauch-Daten vorliegen                  |
+| `400 Bad Request`      | Syntaktisch ungültige Anfrage (in Spec definiert)                           |                                                                                       |
+| `404 Not Found`        | Pfad-ID (group, school, state) ist unbekannt                                | `/groups/unbekannt/competence-levels`                                                 |
+| `501 Not Implemented`  | Backend erkennt einen Query-Parameter-Wert nicht oder unterstützt ihn nicht | `?comparison=pilotierung` → `{ "message": "comparison 'pilotierung' not supported" }` |
 
-`501 Not Implemented` ist die vereinbarte Konvention, wenn ein Backend einen Parameter-Wert prinzipiell nicht unterstützt. Der Response-Body enthält eine erklärende Nachricht. Damit kann ein Frontend zwischen "keine Daten vorhanden" (200 + leeres Array) und "nicht unterstützt" (501) unterscheiden.
+`501 Not Implemented` ist die vereinbarte Konvention, wenn ein Backend einen Parameter-Wert prinzipiell nicht unterstützt.
+Der Response-Body enthält eine erklärende Nachricht. Damit kann ein Frontend zwischen "keine Daten vorhanden" (200 + leeres Array) und "nicht unterstützt" (501) unterscheiden.
