@@ -261,6 +261,10 @@ Konkrete JSON-Beispiele liegen unter [`./beispiele/`](./beispiele/):
 - [`material-list.json`](./beispiele/material-list.json) — Response von `GET /materials?scope=competence-level&competenceLevel=nameShort:Ia`
 - [`competence-levels-with-materials.json`](./beispiele/competence-levels-with-materials.json) — `/groups/{id}/competence-levels` mit eingebetteten `materials[]`-Referenzen pro Stufe
 - [`items-with-materials.json`](./beispiele/items-with-materials.json) — `/groups/{id}/items` mit Musterlösungs-Referenzen pro Item
+- [`msk-material-list.json`](./beispiele/msk-material-list.json) — MSK-orientierte Materialliste (Leitprinzipien, Vor-Check, Foerderbausteine, Online-Check)
+- [`msk-competence-levels-with-materials.json`](./beispiele/msk-competence-levels-with-materials.json) — Kompetenzstufenbeispiel fuer eine MSK-Foerdergruppe in Mathematik
+- [`msk-items-with-materials.json`](./beispiele/msk-items-with-materials.json) — Item-/Aufgabenbeispiel mit Vor-Check/Foerdereinheiten aus dem MSK-Kontext
+- [`msk-aggregations-with-materials.json`](./beispiele/msk-aggregations-with-materials.json) — Aggregationsbeispiel entlang der MSK-Leitprinzipien
 
 ---
 
