@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Klasse 3a",
+    "type": "group",
+    "domain": { "name": "Leseverstehen" },
+    "subject": { "name": "Deutsch" },
+    "materials": [
+      {
+        "id": "41d3f4b7-8c2b-4c11-8ad4-6e3c7e9c3a0b",
+        "title": "Durchführungshandreichung VERA-8 Deutsch 2024",
+        "kind": "didactic",
+        "audience": "teacher"
+      }
+    ],
+    "competenceLevels": [
+      {
+        "nameShort": "Ia",
+        "name": "Unter Mindeststandard",
+        "descriptiveStatistics": { "frequency": 3, "total": 20, "mean": 0.15 },
+        "materials": [
+          {
+            "id": "9a21ad44-3e8b-4a1e-9f76-2a1e8a6b0e5a",
+            "title": "Förderheft Leseverstehen — Stufe Ia",
+            "kind": "support",
+            "audience": "teacher"
+          }
+        ]
+      },
+      {
+        "nameShort": "II",
+        "name": "Mindeststandard",
+        "descriptiveStatistics": { "frequency": 5, "total": 20, "mean": 0.25 },
+        "materials": [
+          {
+            "id": "b1e7a9c4-2205-4cbd-9f61-1c7d5fa3b4c7",
+            "title": "Übungen zu Stufe II — Leseverstehen",
+            "kind": "support"
+          }
+        ]
+      },
+      {
+        "nameShort": "III",
+        "name": "Regelstandard",
+        "descriptiveStatistics": { "frequency": 10, "total": 20, "mean": 0.50 }
+      },
+      {
+        "nameShort": "IV",
+        "name": "Optimalstandard",
+        "descriptiveStatistics": { "frequency": 2, "total": 20, "mean": 0.10 }
+      }
+    ]
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Klasse 3a",
+    "type": "group",
+    "subject": { "name": "Deutsch" },
+    "items": [
+      {
+        "id": "b8d23653-3881-40de-a45a-d34e2dd191ed",
+        "name": "2.1",
+        "position": 1,
+        "iqbId": "AB1021",
+        "exercise": {
+          "name": "At the Summer Camp",
+          "materials": [
+            {
+              "id": "2c4f8e76-0b1d-4a3a-9a4f-0f35cda1b7e2",
+              "title": "Aufgabenkarte 'At the Summer Camp'",
+              "kind": "anchor-text"
+            }
+          ]
+        },
+        "descriptiveStatistics": { "frequency": 12, "total": 20, "mean": 0.60 },
+        "materials": [
+          {
+            "id": "c7e4eb11-2dbc-4c9b-bac0-7e3b7d2a5a91",
+            "title": "Musterlösung Item 2.1",
+            "kind": "solution",
+            "audience": "teacher"
+          },
+          {
+            "id": "f9b0a132-4c8a-41d2-94c7-8e3a5d9f6e12",
+            "title": "Typische Fehlermuster zu Item 2.1",
+            "kind": "diagnostic",
+            "audience": "teacher"
+          }
+        ]
+      },
+      {
+        "id": "6a37d9b0-3e4b-4c7a-9e5f-5b1a2c3d4e5f",
+        "name": "2.2",
+        "position": 2,
+        "iqbId": "AB1022",
+        "exercise": { "name": "At the Summer Camp" },
+        "descriptiveStatistics": { "frequency": 8, "total": 20, "mean": 0.40 }
+      }
+    ]
+  }
+]

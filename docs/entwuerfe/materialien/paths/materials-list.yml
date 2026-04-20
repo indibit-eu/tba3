@@ -1,0 +1,88 @@
+get:
+  operationId: getMaterials
+  summary: Materialien mit Bezug zu Auswertungsdaten abfragen
+  description: |
+    Liefert Materialien (Handreichungen, Fördermaterial, Musterlösungen, Audio, ...),
+    optional eingegrenzt auf bestimmte Bezugspunkte (Test, Aufgabe, Item,
+    Kompetenz/Leitidee, Kompetenzstufe) oder auf Material-Eigenschaften
+    (Art, Sprache, Zielgruppe).
+
+    Ohne Filter liefert das Backend **alle** ihm bekannten Materialien (optional paginiert
+    — Paginierung ist in dieser Spec-Version nicht standardisiert).
+  tags:
+    - materials
+  parameters:
+    - in: query
+      name: scope
+      schema: { type: string }
+      description: |
+        Kommasepariert. Filter auf Attachment-Scopes. Empfohlene Werte&#58;
+        `test`, `exercise`, `item`, `competence`, `competence-level`, `general`.
+      examples:
+        Kompetenzstufen:
+          value: competence-level
+        Aufgabe und Item:
+          value: exercise,item
+    - in: query
+      name: test
+      schema: { type: string }
+      description: Testheft-/Test-Kennung, für die Materialien geliefert werden sollen.
+    - in: query
+      name: exercise
+      schema: { type: string }
+      description: Aufgabe-ID.
+    - in: query
+      name: item
+      schema: { type: string }
+      description: |
+        Item-Kennung. Entweder interne `item.id` oder `iqbId:<IQBID>` um explizit die
+        IQB-Item-Id zu verwenden.
+      examples:
+        Interne ID:
+          value: b8d23653-3881-40de-a45a-d34e2dd191ed
+        IQB ID:
+          value: iqbId:AB1021
+    - in: query
+      name: competence
+      schema: { type: string }
+      description: |
+        Kompetenz-ID (auch Leitidee). Falls das Backend mit Kürzeln arbeitet, kann
+        `name:<Kürzel>` verwendet werden (z. B. `name:L1`).
+    - in: query
+      name: competenceLevel
+      schema: { type: string }
+      description: |
+        Kompetenzstufen-ID oder `nameShort:<Kürzel>` (z. B. `nameShort:Ia`).
+    - in: query
+      name: subject
+      schema: { type: string }
+      description: Fachkürzel (z. B. `de`, `ma`).
+    - in: query
+      name: domain
+      schema: { type: string }
+      description: Domänen-Kürzel (z. B. `le`, `rs`).
+    - in: query
+      name: kind
+      schema: { type: string }
+      description: Kommasepariert. Filter auf Material-Arten.
+    - in: query
+      name: language
+      schema: { type: string }
+      description: BCP47-Sprachcode.
+    - in: query
+      name: audience
+      schema: { type: string }
+      description: Zielgruppe (`teacher`, `student`, `parents`, ...).
+  responses:
+    '200':
+      description: Liste passender Materialien (evtl. leer)
+      content:
+        'application/json':
+          schema:
+            type: array
+            items:
+              $ref: '../schemas/material.yml'
+    '400':
+      description: Ungültige Anfrage, z.B. ungültige Werte für die Parameter
+    '501':
+      description: Backend unterstützt einen der Filter prinzipiell nicht
