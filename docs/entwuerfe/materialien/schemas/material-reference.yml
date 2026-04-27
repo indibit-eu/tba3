@@ -1,0 +1,24 @@
+type: object
+description: |
+  Kompakte Referenz auf ein Material, wie sie in Auswertungs­responses eingebettet wird.
+  Das vollständige Material ist über `GET /materials/{id}` erreichbar.
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: Verweis auf `Material.id`
+    examples:
+      - 9a21ad44-3e8b-4a1e-9f76-2a1e8a6b0e5a
+  title:
+    type: string
+    description: Zur Anzeige ohne zusätzliches Nachladen
+  kind:
+    type: string
+    description: Für Icon/Filter ohne Nachladen (siehe Material.kind)
+  url:
+    type: string
+    format: uri
+    description: Direktlink, wenn ohne Vorverarbeitung nutzbar
+  audience:
+    type: string

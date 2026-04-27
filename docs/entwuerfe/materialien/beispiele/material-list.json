@@ -1,0 +1,79 @@
+[
+  {
+    "id": "9a21ad44-3e8b-4a1e-9f76-2a1e8a6b0e5a",
+    "title": "Förderheft Leseverstehen — Stufe Ia",
+    "description": "Differenzierte Übungen zum sinnentnehmenden Lesen auf Stufe Ia.",
+    "kind": "support",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/foerderheft-lesen-ia.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "license": "IQB Nutzungsbedingungen",
+    "tags": ["Lesen", "Förderung"],
+    "attachments": [
+      {
+        "scope": "competence-level",
+        "refId": "18488a76-0cb6-4d16-9f7b-d2c69f73e058",
+        "refName": "Ia",
+        "refKind": "nameShort",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      },
+      {
+        "scope": "competence",
+        "refId": "https://w3id.org/kim/schulfaecher/s1002",
+        "refName": "Leitidee Lesen",
+        "refKind": "curriculumUri",
+        "subject": { "name": "Deutsch" }
+      }
+    ],
+    "externalMetadata": [
+      {
+        "schema": "amb",
+        "url": "https://wirlernenonline.de/entry/9a21ad44.jsonld",
+        "mediaType": "application/ld+json"
+      }
+    ]
+  },
+  {
+    "id": "c7e4eb11-2dbc-4c9b-bac0-7e3b7d2a5a91",
+    "title": "Musterlösung Item 2.1",
+    "kind": "solution",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/musterloesung-ab1021.pdf",
+    "audience": "teacher",
+    "attachments": [
+      {
+        "scope": "item",
+        "refId": "AB1021",
+        "refKind": "iqbId"
+      }
+    ]
+  },
+  {
+    "id": "41d3f4b7-8c2b-4c11-8ad4-6e3c7e9c3a0b",
+    "title": "Durchführungshandreichung VERA-8 Deutsch 2024",
+    "kind": "didactic",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/vera8-de-2024-handreichung.pdf",
+    "audience": "teacher",
+    "attachments": [
+      { "scope": "test", "refId": "V8-2024-DE-TH01" }
+    ]
+  },
+  {
+    "id": "d02fe6f7-3a14-4e0c-8d77-9fd3a1f4b2c3",
+    "title": "Eltern-Infoblatt zur Rückmeldung",
+    "kind": "info",
+    "format": "text/html",
+    "language": "de",
+    "content": "<h1>Was bedeutet das Testergebnis Ihres Kindes?</h1><p>…</p>",
+    "audience": "parents",
+    "attachments": [
+      { "scope": "general" }
+    ]
+  }
+]

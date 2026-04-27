@@ -1,0 +1,81 @@
+type: object
+description: |
+  Verknüpfung eines Materials mit einem Bezugspunkt in der Auswertungsstruktur.
+  `refId` ist außer bei `scope=general` zwingend.
+required:
+  - scope
+properties:
+  scope:
+    type: string
+    description: |
+      Art des Bezugspunkts. Offener String. Empfohlene Werte:
+      - `test`             - Material bezieht sich auf einen (Test-)Gesamtkontext
+      - `exercise`         - Bezug zu einer Aufgabe (`exercise.id`)
+      - `item`             - Bezug zu einem Item / einer Lösungshäufigkeit
+      - `competence`       - Bezug zu einer Kompetenz oder Leitidee (`competence.id`)
+      - `competence-level` - Bezug zu einer Kompetenzstufe (`competence-level.id`)
+      - `general`          - Allgemein, kein spezifischer Bezugspunkt
+    examples:
+      - competence-level
+      - exercise
+      - item
+      - competence
+      - test
+      - general
+  refId:
+    type: string
+    description: |
+      ID der verknüpften Entität. Pflicht außer bei `scope=general`.
+      Für `test` ist die testspezifische Kennung gemeint (z. B. Testheft-Id,
+      wie auch in `value-group.properties.booklet` üblich).
+    examples:
+      - 4ddfdc3e-79fd-47be-bbc0-341f403ac5db
+      - V8-2024-DE-TH01
+      - AB1021
+      - L1
+  refName:
+    type: string
+    description: |
+      Optionale menschenlesbare Kennung, falls hilfreich zur Anzeige oder wenn keine
+      stabile ID vorliegt (z. B. Kurzkennung der Kompetenzstufe, Itemname).
+    examples:
+      - 'Ia'
+      - '2.5.1'
+      - 'Leitidee Zahl'
+  refKind:
+    type: string
+    description: |
+      Qualifier bei mehrdeutigen ID-Räumen. Empfohlene Werte:
+      - `iqbId`        - `refId` ist eine IQB-Itemkennung
+      - `nameShort`    - `refId` ist das Kürzel (z. B. einer Kompetenzstufe)
+      - `internalId`   - `refId` ist eine backendinterne UUID
+      - `curriculumUri` - `refId` ist eine URI aus einem Kompetenz-/Curriculum-Vokabular
+        (z. B. aus dem KMK-/IQB-Bildungsstandards-Vokabular oder einem Landeslehrplan).
+        Diese URIs passen 1:1 in LRMI/AMB `alignmentObject.targetUrl` und erleichtern
+        den Übergang zu externen Metadaten erheblich.
+    examples:
+      - iqbId
+      - nameShort
+      - internalId
+      - curriculumUri
+  subject:
+    description: |
+      Optional&#58; Fach, auf das sich das Material bezieht. Struktur wie in
+      `value-group.subject`.
+    $ref: '../../../../api/components/schemas/subject.yml'
+  domain:
+    description: |
+      Optional&#58; Domäne, auf die sich das Material bezieht. Struktur wie in
+      `value-group.domain`.
+    $ref: '../../../../api/components/schemas/domain.yml'
+  properties:
+    type: array
+    description: Freie Key-Value-Metadaten zur Verknüpfung (z. B. Relevanz, Reihenfolge).
+    items:
+      type: object
+      required: ['key', 'value']
+      properties:
+        key:
+          type: string
+        value:
+          type: string

@@ -1,0 +1,81 @@
+[
+  {
+    "id": "6a-mathe-msk",
+    "name": "6a Mathematik (MSK-Foerdergruppe)",
+    "type": "group",
+    "subject": { "id": "ma", "name": "Mathematik" },
+    "domain": { "id": "nz", "name": "Natuerliche Zahlen" },
+    "items": [
+      {
+        "id": "msk-item-vc-01",
+        "name": "VC1",
+        "position": 1,
+        "iqbId": "MSK-NZ-VC-01",
+        "exercise": {
+          "id": "msk-ex-nz-vorcheck",
+          "name": "Vor-Check Natuerliche Zahlen",
+          "materials": [
+            {
+              "id": "msk-sek-natuerliche-zahlen-vorcheck-003",
+              "title": "Vor-Check: Natuerliche Zahlen (Klasse 3-5)",
+              "kind": "diagnostic"
+            }
+          ]
+        },
+        "descriptiveStatistics": { "frequency": 9, "total": 24, "mean": 0.38 },
+        "materials": [
+          {
+            "id": "msk-online-check-dashboard-005",
+            "title": "Hinweise zum Online-Check und Dashboards",
+            "kind": "info",
+            "audience": "teacher"
+          }
+        ]
+      },
+      {
+        "id": "msk-item-zs-01",
+        "name": "ZS1",
+        "position": 2,
+        "iqbId": "MSK-NZ-ZS-01",
+        "exercise": {
+          "id": "msk-ex-zahlenstrahl",
+          "name": "Foerdereinheit Zahlenstrahl",
+          "materials": [
+            {
+              "id": "msk-sek-foerderbaustein-zahlenstrahl-004",
+              "title": "Foerderbaustein Zahlenstrahl (Sek I)",
+              "kind": "support"
+            }
+          ]
+        },
+        "descriptiveStatistics": { "frequency": 11, "total": 24, "mean": 0.46 },
+        "materials": [
+          {
+            "id": "msk-sek-foerderbaustein-zahlenstrahl-004",
+            "title": "Foerderbaustein Zahlenstrahl (Sek I)",
+            "kind": "support",
+            "audience": "teacher"
+          }
+        ]
+      },
+      {
+        "id": "msk-item-zr-01",
+        "name": "ZR1",
+        "position": 3,
+        "iqbId": "MSK-NZ-ZR-01",
+        "exercise": {
+          "id": "msk-ex-zahlen-ziffern",
+          "name": "Foerdereinheit Zahlen- und Ziffernrechnen"
+        },
+        "descriptiveStatistics": { "frequency": 7, "total": 24, "mean": 0.29 },
+        "materials": [
+          {
+            "id": "msk-general-prinzipien-001",
+            "title": "MSK-Leitprinzipien im Unterricht",
+            "kind": "didactic"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+get:
+  operationId: getMaterialById
+  summary: Einzelnes Material abrufen
+  description: |
+    Liefert das vollständige Material-Objekt zu einer ID. Wird vor allem genutzt, wenn
+    in Auswertungs­responses nur kompakte `MaterialReference`-Objekte eingebettet waren
+    und das Frontend Details nachladen möchte.
+  tags:
+    - materials
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema: { type: string }
+      description: Material-ID
+  responses:
+    '200':
+      description: Material
+      content:
+        'application/json':
+          schema:
+            $ref: '../schemas/material.yml'
+    '404':
+      description: Material nicht gefunden
