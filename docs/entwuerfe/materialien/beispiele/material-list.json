@@ -1,0 +1,229 @@
+[
+  {
+    "id": "9a21ad44-3e8b-4a1e-9f76-2a1e8a6b0e5a",
+    "title": "Förderheft Leseverstehen — Stufe Ia",
+    "description": "Differenzierte Übungen zum sinnentnehmenden Lesen auf Stufe Ia.",
+    "kind": "support",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/foerderheft-lesen-ia.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "license": "IQB Nutzungsbedingungen",
+    "tags": ["Lesen", "Förderung"],
+    "attachments": [
+      {
+        "scope": "competence-level",
+        "refId": "18488a76-0cb6-4d16-9f7b-d2c69f73e058",
+        "refName": "Ia",
+        "refKind": "nameShort",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      },
+      {
+        "scope": "competence",
+        "refId": "https://w3id.org/kim/schulfaecher/s1002",
+        "refName": "Leitidee Lesen",
+        "refKind": "curriculumUri",
+        "subject": { "name": "Deutsch" }
+      }
+    ],
+    "externalMetadata": [
+      {
+        "schema": "amb",
+        "url": "https://wirlernenonline.de/entry/9a21ad44.jsonld",
+        "mediaType": "application/ld+json"
+      }
+    ]
+  },
+  {
+    "id": "c7e4eb11-2dbc-4c9b-bac0-7e3b7d2a5a91",
+    "title": "Musterlösung Item 2.1",
+    "kind": "solution",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/musterloesung-ab1021.pdf",
+    "audience": "teacher",
+    "attachments": [
+      {
+        "scope": "item",
+        "refId": "AB1021",
+        "refKind": "iqbId"
+      }
+    ]
+  },
+  {
+    "id": "41d3f4b7-8c2b-4c11-8ad4-6e3c7e9c3a0b",
+    "title": "Durchführungshandreichung VERA-8 Deutsch 2024",
+    "kind": "didactic",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/vera8-de-2024-handreichung.pdf",
+    "audience": "teacher",
+    "attachments": [
+      { "scope": "test", "refId": "V8-2024-DE-TH01" }
+    ]
+  },
+  {
+    "id": "d02fe6f7-3a14-4e0c-8d77-9fd3a1f4b2c3",
+    "title": "Eltern-Infoblatt zur Rückmeldung",
+    "kind": "info",
+    "format": "text/html",
+    "language": "de",
+    "content": "<h1>Was bedeutet das Testergebnis Ihres Kindes?</h1><p>…</p>",
+    "audience": "parents",
+    "attachments": [
+      { "scope": "general" }
+    ]
+  },
+  {
+    "id": "2c4f8e76-0b1d-4a3a-9a4f-0f35cda1b7e2",
+    "title": "Aufgabenkarte 'At the Summer Camp'",
+    "description": "Originaltext und Abbildungen zur Aufgabe 'At the Summer Camp' (Items 2.1 und 2.2).",
+    "kind": "anchor-text",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/vera8-de-aufgabe-summer-camp.pdf",
+    "source": "IQB",
+    "license": "IQB Nutzungsbedingungen",
+    "attachments": [
+      {
+        "scope": "exercise",
+        "refId": "ex-at-the-summer-camp-001",
+        "refName": "At the Summer Camp",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      }
+    ]
+  },
+  {
+    "id": "f9b0a132-4c8a-41d2-94c7-8e3a5d9f6e12",
+    "title": "Typische Fehlermuster zu Item 2.1",
+    "description": "Häufige Schülerantworten, Bewertungshinweise und diagnostische Einordnung.",
+    "kind": "diagnostic",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/fehlermuster-ab1021.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "attachments": [
+      {
+        "scope": "item",
+        "refId": "AB1021",
+        "refKind": "iqbId"
+      }
+    ]
+  },
+  {
+    "id": "e3f4a5b6-c7d8-49e0-af1b-2c3d4e5f6a7b",
+    "title": "Musterlösung Item 2.2",
+    "kind": "solution",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/musterloesung-ab1022.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "attachments": [
+      {
+        "scope": "item",
+        "refId": "AB1022",
+        "refKind": "iqbId"
+      }
+    ]
+  },
+  {
+    "id": "b1e7a9c4-2205-4cbd-9f61-1c7d5fa3b4c7",
+    "title": "Übungen zu Stufe II — Leseverstehen",
+    "description": "Aufgaben für Lernende auf Mindeststandard-Niveau mit didaktischen Hinweisen für Lehrkräfte.",
+    "kind": "support",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/uebungen-stufe-ii-lesen.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "attachments": [
+      {
+        "scope": "competence-level",
+        "refId": "II",
+        "refKind": "nameShort",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      }
+    ]
+  },
+  {
+    "id": "a7b8c9d0-e1f2-4a3b-8c4d-5e6f7a8b9c0d",
+    "title": "Vertiefungsaufgaben Leseverstehen — Stufe III",
+    "description": "Ergänzende Leseaufgaben für Schülerinnen und Schüler auf Regelstandard-Niveau.",
+    "kind": "example",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/vertiefung-stufe-iii-lesen.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "attachments": [
+      {
+        "scope": "competence-level",
+        "refId": "III",
+        "refKind": "nameShort",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      }
+    ]
+  },
+  {
+    "id": "f1e2d3c4-b5a6-4978-8b9c-0d1e2f3a4b5c",
+    "title": "Enrichment: Anspruchsvolle Leseaufgaben — Stufe IV",
+    "description": "Transferaufgaben und anspruchsvolle Lesetexte für leistungsstarke Lernende.",
+    "kind": "example",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://materials.example.org/enrichment-stufe-iv-lesen.pdf",
+    "audience": "teacher",
+    "source": "IQB",
+    "attachments": [
+      {
+        "scope": "competence-level",
+        "refId": "IV",
+        "refKind": "nameShort",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      }
+    ]
+  },
+  {
+    "id": "b2c3d4e5-f6a7-48b9-9c0d-1e2f3a4b5c6d",
+    "title": "Lesetipps für starke Leserinnen und Leser",
+    "kind": "info",
+    "format": "text/html",
+    "language": "de",
+    "content": "<h1>Du liest sehr gut!</h1><p>Hier findest du Bücher und Texte, die dich herausfordern …</p>",
+    "audience": "student",
+    "attachments": [
+      {
+        "scope": "competence-level",
+        "refId": "IV",
+        "refKind": "nameShort",
+        "subject": { "name": "Deutsch" },
+        "domain": { "name": "Leseverstehen" }
+      }
+    ]
+  },
+  {
+    "id": "c5d6e7f8-a9b0-4c1d-ae2f-3a4b5c6d7e8f",
+    "title": "Erklärvideo: Wie lese ich die VERA-Ergebnisrückmeldung?",
+    "description": "Kurzfilm (ca. 4 min) für Lehrkräfte zur Interpretation des Kompetenzstufenberichts.",
+    "kind": "video",
+    "format": "video/mp4",
+    "language": "de",
+    "url": "https://materials.example.org/vera8-erklaervideo-ergebnisbericht.mp4",
+    "thumbnailUrl": "https://materials.example.org/vera8-erklaervideo-thumb.jpg",
+    "duration": 240,
+    "audience": "teacher",
+    "source": "IQB",
+    "tags": ["VERA", "Auswertung", "Kompetenzstufen"],
+    "attachments": [
+      { "scope": "general" }
+    ]
+  }
+]

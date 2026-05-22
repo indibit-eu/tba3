@@ -1,0 +1,168 @@
+type: object
+description: |
+  Ein eigenständiges Material (Handreichung, Fördermaterial, Lesetext, Musterlösung, ...),
+  das über `attachments[]` einem oder mehreren Bezugspunkten der Auswertung
+  (Test, Leitidee/Kompetenz, Aufgabe, Item, Kompetenzstufe, allgemein) zugeordnet ist.
+required:
+  - id
+  - title
+  - kind
+  - attachments
+properties:
+  id:
+    type: string
+    description: Eindeutige Kennung des Materials
+    examples:
+      - 9a21ad44-3e8b-4a1e-9f76-2a1e8a6b0e5a
+  title:
+    type: string
+    description: Kurzer, sprechender Titel
+    examples:
+      - 'Förderheft Leseverstehen Stufe Ia'
+      - 'Transkript Hörverstehen Aufgabe 3'
+  description:
+    type: string
+    description: Längere, optionale Beschreibung
+  kind:
+    type: string
+    description: |
+      Art des Materials. Offener String. Empfohlene Werte (Stufe-2-Konvention):
+      `support`, `diagnostic`, `didactic`, `anchor-text`, `solution`, `example`,
+      `audio`, `video`, `transcript`, `info`, `other`.
+
+      Die Werte sind bewusst bewusst überschaubar gehalten. Wer feinere Klassifikation
+      braucht, kann zusätzlich `externalMetadata[]` nutzen und dort auf ein
+      AMB-/LRMI-`learningResourceType`-Vokabular (z. B. `https://w3id.org/kim/hcrt/`)
+      verweisen. Siehe README &sect; 8 für die Mapping-Tabelle.
+    examples:
+      - support
+      - diagnostic
+      - anchor-text
+      - solution
+  format:
+    type: string
+    description: MIME-Typ bzw. technisches Format
+    examples:
+      - application/pdf
+      - text/html
+      - video/mp4
+      - audio/mpeg
+  language:
+    type: string
+    description: Sprache des Materials als BCP47-Kennung
+    examples:
+      - de
+      - de-DE
+      - en
+  url:
+    type: string
+    format: uri
+    description: |
+      Direkter Link zum Material. Entweder `url` **oder** `content` muss gesetzt sein.
+      Das Backend kann pre-signed URLs verwenden oder Auth voraussetzen.
+    examples:
+      - https://materials.example.org/foerderheft-lesen-ia.pdf
+  content:
+    type: string
+    description: |
+      Inline-Inhalt für kleine Materialien (kurze Hinweise, Erklärtexte).
+      Format ist durch `format` angegeben (z. B. `text/html`, `text/markdown`).
+  thumbnailUrl:
+    type: string
+    format: uri
+  size:
+    type: integer
+    description: Größe in Bytes
+    minimum: 0
+  duration:
+    type: integer
+    description: Laufzeit in Sekunden (für Audio/Video)
+    minimum: 0
+  license:
+    type: string
+    description: SPDX-Kennung oder Freitext-Lizenzhinweis
+    examples:
+      - CC-BY-4.0
+      - IQB Nutzungsbedingungen
+  source:
+    type: string
+    description: Herkunft / Autor / Institution
+    examples:
+      - IQB
+      - VERA
+      - Schulträger Musterstadt
+  version:
+    type: string
+  audience:
+    type: string
+    description: Zielgruppe. Empfohlene Werte&#58; `teacher`, `student`, `parents`, `other`.
+    examples:
+      - teacher
+      - student
+      - parents
+  tags:
+    type: array
+    description: Freie Schlagworte
+    items:
+      type: string
+  properties:
+    type: array
+    description: Freie Key-Value-Metadaten (analog zu value-group.yml)
+    items:
+      type: object
+      required: ['key', 'value']
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+  attachments:
+    type: array
+    description: |
+      Bezugspunkte des Materials. Mindestens ein Eintrag. Ein Material kann gleichzeitig
+      an mehrere Entitäten hängen (z. B. eine Kompetenzstufe UND eine Leitidee).
+    minItems: 1
+    items:
+      $ref: './material-attachment.yml'
+  externalMetadata:
+    type: array
+    description: |
+      Optionale Verweise auf externe Metadatensätze (LRMI, AMB, LOM, schema.org, ...),
+      unter denen dieses Material in einem anderen Metadatenschema vollständig beschrieben
+      ist. Dient der Interoperabilität mit OER-Repositories (edu-sharing,
+      WirLernenOnline, Bildungsserver, ...). **Keine Duplikation** der TBA3-Kernfelder —
+      wer die reichen Metadaten braucht, dereferenziert `url` und liest das Zielschema.
+    items:
+      type: object
+      required: ['schema', 'url']
+      properties:
+        schema:
+          type: string
+          description: |
+            Kennung des referenzierten Metadatenschemas. Empfohlene Werte:
+            - `amb`        - Allgemeines Metadatenprofil für Bildungsressourcen (DINI-AG KIM)
+            - `lrmi`       - Learning Resource Metadata Initiative (schema.org)
+            - `lom`        - IEEE LOM 1484.12.1
+            - `lom-de`     - deutsches Anwendungsprofil von LOM
+            - `schema.org` - generisches schema.org
+          examples:
+            - amb
+            - lrmi
+            - lom
+        url:
+          type: string
+          format: uri
+          description: URL, unter der der externe Metadatensatz abrufbar ist (JSON-LD, XML, ...)
+          examples:
+            - https://wirlernenonline.de/entry/abc123.jsonld
+        inlineId:
+          type: string
+          description: |
+            Falls das Zielschema eine eigenständige, URL-unabhängige Kennung verwendet
+            (z. B. LOM `identifier.entry`), kann diese hier transportiert werden.
+        mediaType:
+          type: string
+          description: MIME-Typ des Metadatensatzes, z. B. `application/ld+json`, `application/xml`.
+          examples:
+            - application/ld+json
+            - application/xml

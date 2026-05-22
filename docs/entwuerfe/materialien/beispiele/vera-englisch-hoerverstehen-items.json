@@ -1,0 +1,132 @@
+[
+  {
+    "name": "Klasse 8c",
+    "type": "group",
+    "subject": { "id": "en", "name": "Englisch" },
+    "domain": { "id": "hv", "name": "Hörverstehen" },
+    "materials": [
+      {
+        "id": "7a8b9c0d-e1f2-4a3b-8c4d-5e6f7a8b9c0d",
+        "title": "Durchführungshandreichung VERA-8 Englisch 2024",
+        "kind": "didactic",
+        "audience": "teacher"
+      },
+      {
+        "id": "8b9c0d1e-f2a3-4b4c-9d5e-6f7a8b9c0d1e",
+        "title": "Technischer Hinweis: Audiowiedergabe im Klassenraum",
+        "kind": "info",
+        "audience": "teacher"
+      }
+    ],
+    "items": [
+      {
+        "id": "9c0d1e2f-a3b4-4c5d-ae6f-7a8b9c0d1e2f",
+        "name": "3.1",
+        "position": 1,
+        "iqbId": "HV-EN-3001",
+        "exercise": {
+          "id": "ex-holiday-plans-001",
+          "name": "Holiday Plans",
+          "materials": [
+            {
+              "id": "0d1e2f3a-b4c5-4d6e-bf7a-8b9c0d1e2f3a",
+              "title": "Hörtext: 'Holiday Plans'",
+              "kind": "audio"
+            },
+            {
+              "id": "1e2f3a4b-c5d6-4e7f-c08b-9c0d1e2f3a4b",
+              "title": "Transkript: 'Holiday Plans'",
+              "kind": "transcript",
+              "audience": "teacher"
+            }
+          ]
+        },
+        "descriptiveStatistics": { "frequency": 14, "total": 25, "mean": 0.56 },
+        "materials": [
+          {
+            "id": "2f3a4b5c-d6e7-4f80-d19c-0d1e2f3a4b5c",
+            "title": "Musterlösung Item 3.1",
+            "kind": "solution",
+            "audience": "teacher"
+          }
+        ]
+      },
+      {
+        "id": "3a4b5c6d-e7f8-4a91-e2ad-1e2f3a4b5c6d",
+        "name": "3.2",
+        "position": 2,
+        "iqbId": "HV-EN-3002",
+        "exercise": {
+          "id": "ex-holiday-plans-001",
+          "name": "Holiday Plans",
+          "materials": [
+            {
+              "id": "0d1e2f3a-b4c5-4d6e-bf7a-8b9c0d1e2f3a",
+              "title": "Hörtext: 'Holiday Plans'",
+              "kind": "audio"
+            },
+            {
+              "id": "1e2f3a4b-c5d6-4e7f-c08b-9c0d1e2f3a4b",
+              "title": "Transkript: 'Holiday Plans'",
+              "kind": "transcript",
+              "audience": "teacher"
+            }
+          ]
+        },
+        "descriptiveStatistics": { "frequency": 11, "total": 25, "mean": 0.44 },
+        "materials": [
+          {
+            "id": "4b5c6d7e-f8a9-4b02-f3be-2f3a4b5c6d7e",
+            "title": "Musterlösung Item 3.2",
+            "kind": "solution",
+            "audience": "teacher"
+          },
+          {
+            "id": "5c6d7e8f-a9b0-4c13-04cf-3a4b5c6d7e8f",
+            "title": "Typische Fehlermuster zu Item 3.2",
+            "kind": "diagnostic",
+            "audience": "teacher"
+          }
+        ]
+      },
+      {
+        "id": "6d7e8f9a-b0c1-4d24-15d0-4b5c6d7e8f9a",
+        "name": "4.1",
+        "position": 3,
+        "iqbId": "HV-EN-4001",
+        "exercise": {
+          "id": "ex-city-tour-002",
+          "name": "City Tour",
+          "materials": [
+            {
+              "id": "7e8f9a0b-c1d2-4e35-26e1-5c6d7e8f9a0b",
+              "title": "Hörtext: 'City Tour'",
+              "kind": "audio"
+            },
+            {
+              "id": "8f9a0b1c-d2e3-4f46-37f2-6d7e8f9a0b1c",
+              "title": "Transkript: 'City Tour'",
+              "kind": "transcript",
+              "audience": "teacher"
+            },
+            {
+              "id": "9a0b1c2d-e3f4-4057-480a-7e8f9a0b1c2d",
+              "title": "Beispielaufgaben zum Aufgabenformat 'City Tour'",
+              "kind": "example",
+              "audience": "teacher"
+            }
+          ]
+        },
+        "descriptiveStatistics": { "frequency": 9, "total": 25, "mean": 0.36 },
+        "materials": [
+          {
+            "id": "0b1c2d3e-f4a5-4168-591b-8f9a0b1c2d3e",
+            "title": "Musterlösung Item 4.1",
+            "kind": "solution",
+            "audience": "teacher"
+          }
+        ]
+      }
+    ]
+  }
+]

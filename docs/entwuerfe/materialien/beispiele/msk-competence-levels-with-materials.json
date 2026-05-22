@@ -1,0 +1,59 @@
+[
+  {
+    "id": "6a-mathe-msk",
+    "name": "6a Mathematik (MSK-Foerdergruppe)",
+    "type": "group",
+    "subject": { "id": "ma", "name": "Mathematik" },
+    "domain": { "id": "nz", "name": "Natuerliche Zahlen" },
+    "materials": [
+      {
+        "id": "msk-general-prinzipien-001",
+        "title": "MSK-Leitprinzipien im Unterricht",
+        "kind": "didactic",
+        "audience": "teacher"
+      }
+    ],
+    "competenceLevels": [
+      {
+        "id": "msk-level-basis",
+        "nameShort": "B",
+        "name": "Basiskompetenz unsicher",
+        "description": "Lernende benoetigen diagnosegeleitete Foerderung mit starker Kommunikationsunterstuetzung.",
+        "descriptiveStatistics": { "frequency": 8, "total": 24, "mean": 0.33 },
+        "materials": [
+          {
+            "id": "msk-sek-natuerliche-zahlen-vorcheck-003",
+            "title": "Vor-Check: Natuerliche Zahlen (Klasse 3-5)",
+            "kind": "diagnostic"
+          },
+          {
+            "id": "msk-sek-foerderbaustein-zahlenstrahl-004",
+            "title": "Foerderbaustein Zahlenstrahl (Sek I)",
+            "kind": "support"
+          }
+        ]
+      },
+      {
+        "id": "msk-level-aufbau",
+        "nameShort": "A",
+        "name": "Basiskompetenz im Aufbau",
+        "description": "Lernende zeigen erste Verstehensansaetze und profitieren von gestuften Lernpfaden.",
+        "descriptiveStatistics": { "frequency": 10, "total": 24, "mean": 0.42 },
+        "materials": [
+          {
+            "id": "msk-sek-foerderbaustein-zahlenstrahl-004",
+            "title": "Foerderbaustein Zahlenstrahl (Sek I)",
+            "kind": "support"
+          }
+        ]
+      },
+      {
+        "id": "msk-level-sicher",
+        "nameShort": "S",
+        "name": "Basiskompetenz sicher",
+        "description": "Lernende koennen Inhalte stabil anwenden und als Lernpartner unterstuetzen.",
+        "descriptiveStatistics": { "frequency": 6, "total": 24, "mean": 0.25 }
+      }
+    ]
+  }
+]

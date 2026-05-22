@@ -1,0 +1,89 @@
+[
+  {
+    "id": "msk-general-prinzipien-001",
+    "title": "MSK-Leitprinzipien im Unterricht",
+    "description": "Kurzfassung der drei MSK-Leitprinzipien: Diagnosegeleitetheit, Verstehensorientierung und Kommunikationsfoerderung.",
+    "kind": "didactic",
+    "format": "text/html",
+    "language": "de",
+    "content": "<h2>Leitprinzipien</h2><ul><li>Diagnosegeleitetheit</li><li>Verstehensorientierung</li><li>Kommunikationsfoerderung</li></ul>",
+    "audience": "teacher",
+    "source": "Mathe sicher koennen (DZLM)",
+    "tags": ["MSK", "Leitideen", "Unterrichtsentwicklung"],
+    "attachments": [
+      {
+        "scope": "general"
+      }
+    ]
+  },
+  {
+    "id": "msk-sek-natuerliche-zahlen-vorcheck-003",
+    "title": "Vor-Check: Natuerliche Zahlen (Klasse 3-5)",
+    "kind": "diagnostic",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://mathe-sicher-koennen.dzlm.de/material-sek",
+    "audience": "teacher",
+    "source": "Mathe sicher koennen (DZLM)",
+    "tags": ["Vor-Check", "Natuerliche Zahlen", "Diagnose"],
+    "attachments": [
+      {
+        "scope": "exercise",
+        "refId": "msk-ex-nz-vorcheck",
+        "refName": "Vor-Check Natuerliche Zahlen"
+      },
+      {
+        "scope": "competence",
+        "refId": "msk-diagnosegeleitetheit",
+        "refName": "Diagnosegeleitetheit"
+      }
+    ]
+  },
+  {
+    "id": "msk-sek-foerderbaustein-zahlenstrahl-004",
+    "title": "Foerderbaustein Zahlenstrahl (Sek I)",
+    "description": "Foerdereinheit mit Lernpfad und gestuften Lernzielen fuer den sicheren Umgang mit dem Zahlenstrahl.",
+    "kind": "support",
+    "format": "application/pdf",
+    "language": "de",
+    "url": "https://mathe-sicher-koennen.dzlm.de/material-sek",
+    "audience": "teacher",
+    "source": "Mathe sicher koennen (DZLM)",
+    "tags": ["Foerderbaustein", "Zahlenstrahl", "Sek I"],
+    "attachments": [
+      {
+        "scope": "exercise",
+        "refId": "msk-ex-zahlenstrahl",
+        "refName": "Foerdereinheit Zahlenstrahl"
+      },
+      {
+        "scope": "item",
+        "refId": "MSK-NZ-ZS-01",
+        "refKind": "iqbId",
+        "refName": "Aufgabe Zahlenstrahl 1"
+      },
+      {
+        "scope": "competence-level",
+        "refId": "msk-level-basis",
+        "refName": "Basiskompetenz unsicher"
+      }
+    ]
+  },
+  {
+    "id": "msk-online-check-dashboard-005",
+    "title": "Hinweise zum Online-Check und Dashboards",
+    "kind": "info",
+    "format": "text/html",
+    "language": "de",
+    "url": "https://mathe-sicher-koennen.dzlm.de/online-check",
+    "audience": "teacher",
+    "source": "Mathe sicher koennen (DZLM)",
+    "tags": ["Online-Check", "Dashboard", "Auswertung"],
+    "attachments": [
+      {
+        "scope": "test",
+        "refId": "MSK-SEK-NZ-2026"
+      }
+    ]
+  }
+]
