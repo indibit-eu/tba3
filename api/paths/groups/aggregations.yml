@@ -8,6 +8,7 @@ get:
     - $ref: '../../components/parameters.yml#/type'
     - $ref: '../../components/parameters.yml#/aggregation'
     - $ref: '../../components/parameters.yml#/comparison'
+    - $ref: '../../components/parameters.yml#/filter'
   responses:
     '200':
       description: Abhängig vom Typ berechnete Aggregation für die Lerngruppe

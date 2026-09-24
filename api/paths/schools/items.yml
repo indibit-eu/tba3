@@ -7,6 +7,7 @@ get:
     - $ref: '../../components/parameters.yml#/schoolId'
     - $ref: '../../components/parameters.yml#/type'
     - $ref: '../../components/parameters.yml#/comparison'
+    - $ref: '../../components/parameters.yml#/filter'
   responses:
     '200':
       description: Lösungshäufigkeiten je Item an der Schule
