@@ -324,8 +324,8 @@ components:
         type: string
       description: >-
         Schränkt die Ergebnisse ein, z.B. auf eine Teilgruppe unterhalb der
-        angefragten Ebene oder auf einen Kontext wie Testprojekt oder Domäne.
-        Syntax `typ-id`, mehrere Werte kommasepariert.
+        angefragten Ebene oder auf einen Kontext wie Testprojekt, Fach oder
+        Domäne. Syntax `typ-id`, mehrere Werte kommasepariert.
       examples:
         Schüler:in:
           value: student-1234
@@ -355,15 +355,17 @@ components:
         Testprojekt:
           value: testproject-v8-2024
           description: Nur Ergebnisse aus dem Testprojekt / Durchgang v8-2024.
+        Fach:
+          value: subject-de
+          description: Nur Ergebnisse für das Fach Deutsch.
         Domäne:
           value: domain-le
           description: Nur Ergebnisse für die Domäne Lesen.
         Kombiniert:
-          value: testproject-v8-2024,student-1234
+          value: subject-en,domain-le
           description: >-
             Verschiedene Präfixe werden kombiniert (hier mit einem UND). Nur
-            Ergebnisse aus dem Testprojekt v8-2024 für die Schülerin bzw. den
-            Schüler 1234.
+            Ergebnisse für die Domäne Leseverstehen im Fach Englisch.
     aggregation:
       in: query
       name: aggregation
