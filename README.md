@@ -44,6 +44,15 @@ Weitere Begriffe, die in diesem Kontext erklärungsbedürftig scheinen, werden h
 Für eine ausführliche Erklärung der Konzepte und Flexibilitäten der Schnittstelle siehe die [Konzept-Dokumentation im `/docs/`-Ordner](docs/konzepte.md).
 Konventionen für offen gestaltet Teile der Spezifikation finden sich in der [Endpunkt-Referenz im `/docs/`-Ordner](docs/endpunkt-referenz.md).
 
+## Versionshinweise
+
+### 2.0
+
+- Neuer Query-Parameter `filter` auf allen Endpunkten. Damit lassen sich die Ergebnisse auf Teilgruppen (z.B. `student-<id>`, `authority-<id>`) oder einen Kontext (z.B. `testproject-<id>`, `subject-<kürzel>`, `domain-<kürzel>`) einschränken.
+  Ebenen zwischen Schule und Land werden darüber auf `/states` abgebildet. Details in der [Endpunkt-Referenz](docs/endpunkt-referenz.md#filter-ergebnisse-einschränken).
+- **Breaking:** Der Query-Parameter `domain` entfällt. Aus `?domain=le` wird `?filter=domain-le`, aus dem Fachkürzel-Shortcut `?domain=de` wird `?filter=subject-de`.
+- **Breaking (Konvention):** Der `type`-Wert für einzelne Schüler:innen heißt `student` statt `students`.
+
 ## Anpassung der Spezifikation
 
 Im Ordner `/api` liegen die Quelldateien für die Spezifikation, zur besseren Wartbarkeit und leichteren Erweiterung sind diese in einzelne Dateien aufgeteilt. Diese folgen dabei auch im Einzelnen jeweils dem OpenAPI Format. Mit dem Befehl `npx @redocly/openapi-cli@latest bundle api/api.yml -o tba3-spec.yml` kann eine kombinierte Datei erzeugt werden, die alle Teile enthält und sich so leichter in Clients wie SwaggerUI laden lässt.

@@ -22,6 +22,10 @@ Die Spec definiert **9 Endpunkte**: 3 Ebenen × 3 Datentypen. Jeder Endpunkt gib
 Was eine einzelne Value-Group repräsentiert (eine Lerngruppe, ein:e SuS, eine Schule, ein Vergleichswert …),
 hängt von der Implementierung des Backends bzw. dem Query-Parameter `type` ab.
 
+Ebenen zwischen Schule und Land (z.B. Schulamt oder Bezirk) sind je Bundesland unterschiedlich und haben daher keine eigenen Endpunkte.
+Sie können über `/states/{id}/…` in Kombination mit den Query-Parametern `type` und `filter` abgefragt (→ [`filter`](#filter-ergebnisse-einschränken)) werden.
+Damit sind beliebige Zwischenebenen möglich, je nachdem, welche Ebenen es in einem Land gibt.
+
 ---
 
 ### Kompetenzstufenverteilung (`/competence-levels`)
@@ -114,16 +118,16 @@ was eine Value-Group repräsentiert — auch ohne den ursprünglichen Request zu
 `subject` ist ein Objekt mit `id` (optional) und `name` (Pflicht), z.B. `{ name: "Deutsch" }`.
 `domain` ist ebenfalls ein Objekt mit `id` (optional) und `name` (Pflicht). Der `name` enthält die lange Beschreibung der Domäne, z.B. `{ name: "Leseverstehen" }`.
 
-Für den **Query-Parameter** `domain` werden Kürzel für Teilbereiche eines Fachs verwendet. Die Kürzel entsprechen den Domänen-Bezeichnungen aus den Itemkennwerttabellen des IQB ([Kompetenzstufenmodelle](https://www.iqb.hu-berlin.de/de/bista/entwicklung/kompetenzstufenmodelle/)).
+Für die **Filter** `subject-<kürzel>` und `domain-<kürzel>` werden Kürzel für Fächer bzw. Teilbereiche eines Fachs verwendet. Die Domänen-Kürzel entsprechen den Domänen-Bezeichnungen aus den Itemkennwerttabellen des IQB ([Kompetenzstufenmodelle](https://www.iqb.hu-berlin.de/de/bista/entwicklung/kompetenzstufenmodelle/)).
 
-| Fach        | Fachkürzel | Mögliche Domänen-Kürzel (Query-Parameter)                                                                                                                                      |
-|-------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Deutsch     | `de`       | `rs` (Rechtschreibung/Orthografie), `le` (Lesen), `ho` (Zuhören/Sprechen und Zuhören), `sp` (Sprache und Sprachgebrauch/Sprachgebrauch)                                        |
-| Mathematik  | `ma`       | V8 keine, V3  `zo` (Zahlen und Operationen), `rf` (Raum und Form), `gm` (Größen und Messen), `dh` (Daten, Häufigkeiten und Wahrscheinlichkeiten), `ms` (Muster und Strukturen) |
-| Englisch    | `en`       | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
-| Französisch | `fr`       | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
+| Fach        | Fachkürzel (Filter) | Mögliche Domänen-Kürzel (Filter)                                                                                                                                               |
+|-------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Deutsch     | `de`                | `rs` (Rechtschreibung/Orthografie), `le` (Lesen), `ho` (Zuhören/Sprechen und Zuhören), `sp` (Sprache und Sprachgebrauch/Sprachgebrauch)                                        |
+| Mathematik  | `ma`                | V8 keine, V3  `zo` (Zahlen und Operationen), `rf` (Raum und Form), `gm` (Größen und Messen), `dh` (Daten, Häufigkeiten und Wahrscheinlichkeiten), `ms` (Muster und Strukturen) |
+| Englisch    | `en`                | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
+| Französisch | `fr`                | `ho` (Hörverstehen), `le` (Leseverstehen)                                                                                                                                      |
 
-**Wichtig: Query-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für den `domain`-**Query-Parameter** (z.B. `?domain=rs`).
+**Wichtig: Filter-Kürzel vs. Response-Objekt.** Die Kürzel in der Tabelle oben sind Werte für die **Filter** `subject-<kürzel>` und `domain-<kürzel>` (z.B. `?filter=subject-de,domain-rs`).
 Das `domain`-Feld in der **Response** ist dagegen ein Objekt mit der langen Beschreibung, z.B. `{ name: "Rechtschreibung" }`.
 Das Backend setzt die lange Beschreibung kontextabhängig — sie kann je nach Jahrgangsstufe variieren (z.B. `rs` = "Rechtschreibung" in der Grundschule, "Orthografie" in der Sek I).
 
@@ -270,6 +274,79 @@ Ohne `type`-Parameter entscheidet das Backend, welche Granularität es standardm
 
 ---
 
+### `filter`: Ergebnisse einschränken
+
+> **Spec = freier String.** Welche Filter ein Backend unterstützt, ist nicht durch die Spec vorgegeben.
+
+Der `filter`-Parameter schränkt die Ergebnisse ein. `type` bestimmt, *welche Art* von Value-Groups geliefert wird, `filter` bestimmt, *welche davon*.
+
+**Vorgeschlagene Syntax:** Präfix `typ-id`, kommasepariert — analog zu [`comparison`](#comparison-vergleichswerte), z.B. `filter=testproject-v8-2024,authority-schulamt-nord`.
+
+Typisch sind zwei Arten von Filtern:
+
+- **Teilgruppen-Filter** schränken auf eine Organisationsebene unterhalb des angefragten Endpunkts ein (z.B. `student-<id>`, `authority-<id>`).
+- **Kontext-Filter** schränken auf einen fachlichen oder organisatorischen Kontext ein, unabhängig von der Ebene (z.B. `testproject-<id>`, `domain-<kürzel>`).
+
+#### Teilgruppen-Filter
+
+**Faustregel:** Sinnvoll sind Filter auf die Ebenen **unterhalb** des angefragten Endpunkts. Die Präfixe leiten sich aus den [`type`-Werten](#type-typ-einer-value-group) ab.
+
+| Endpunkt     | Sinnvolle `type`s                    | Sinnvolle Teilgruppen-Filter                                                                  |
+|--------------|--------------------------------------|-----------------------------------------------------------------------------------------------|
+| `/groups/…`  | `student`                            | `student-<id>`                                                                                |
+| `/schools/…` | `student`, `group`                   | `student-<id>`, `group-<id>` und weitere Orga-Ebenen der Schule (z.B. Schulzweig, Fachschaft) |
+| `/states/…`  | `authority`, `district`, `school`, … | `authority-<id>`, `district-<id>`, `school-<id>`, …                                           |
+
+Beispiele:
+
+| Request                                                                             | Ergebnis                                                    |
+|-------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| `/groups/3a-deutsch/competence-levels?type=student&filter=student-1234`             | Kompetenzstufe für genau eine:n SuS der Lerngruppe          |
+| `/schools/gs-musterstadt/items?type=group&filter=group-3a-deutsch`                  | Lösungshäufigkeiten für genau eine Lerngruppe der Schule    |
+| `/states/beispielland/competence-levels?type=authority&filter=district-bezirk-nord` | Kompetenzstufenverteilungen aller Schulämter im Bezirk Nord |
+| `/states/beispielland/competence-levels?type=school&filter=authority-schulamt-nord` | Kompetenzstufenverteilungen aller Schulen im Schulamt Nord  |
+
+Welche Zwischenebenen es gibt, ist von Land zu Land unterschiedlich.
+Ein Backend unterstützt deshalb nur die Filter für die Ebenen, die es auch kennt (→ [Fehlerverhalten](#fehlerverhalten)).
+
+Filter und `type` auf derselben Ebene sind ebenfalls möglich: `type=authority&filter=authority-schulamt-nord` liefert genau ein Schulamt.
+
+#### Kontext-Filter
+
+| Filter             | Bedeutung                                     | Beispiel                   |
+|--------------------|-----------------------------------------------|----------------------------|
+| `testproject-<id>` | Bestimmtes Testprojekt / bestimmter Durchgang | `testproject-v8-2024`      |
+| `subject-<kürzel>` | Bestimmtes Fach                               | `subject-de`, `subject-ma` |
+| `domain-<kürzel>`  | Bestimmte Domäne                              | `domain-le`, `domain-ho`   |
+
+Die Kürzel für `subject` und `domain` sind unter [Response-Inhalte → subject und domain](#subject-und-domain-fach-und-domäne) beschrieben.
+Ohne `subject`- oder `domain`-Filter liefert das Backend Ergebnisse über alle Fächer bzw. Domänen.
+
+#### Kombination mehrerer Filter
+
+Wie mehrere Filter kombiniert werden, entscheidet am Ende das Backend. Vorgeschlagen wird:
+
+- **Gleiches Präfix → ODER:** `filter=group-3a-deutsch,group-3b-deutsch` liefert beide Lerngruppen.
+- **Verschiedene Präfixe → UND:** `filter=testproject-v8-2024,student-1234` liefert die Ergebnisse von SuS 1234 im Testprojekt V8 2024.
+
+so können auch mehrdeutige Domänen-Kürzel eindeutig angefragt werden: `le` gibt es in Deutsch, Englisch und Französisch.
+`filter=subject-en,domain-le` liefert nur Leseverstehen in Englisch.
+
+#### Wirkung auf Vergleichswerte
+
+Auch das entscheidet im Konkreten das Backend. **Faustregel:**
+
+- **Kontext-Filter** gelten für die gesamte Antwort, also auch für die Vergleichswerte.
+- **Teilgruppen-Filter** gelten nur für die primären Value-Groups. `?type=student&filter=student-1234&comparison=group-3b` liefert SuS 1234 und die vollständige Vergleichsgruppe 3b.
+
+**Hinweis zum Mock-Server:** Der Mock-Server hat den `filter`-Parameter noch nicht implementiert.
+
+---
+
+**Abgrenzung:** `filter` schränkt die angefragten Value-Groups ein. `comparison` liefert **zusätzliche** Value-Groups für andere Gruppen.
+
+---
+
 ### `comparison`: Vergleichswerte
 
 > **Spec = freier String.** Die Werte und ihre Bedeutung definiert das Backend, nicht die Spec.
@@ -363,27 +440,19 @@ Mock-Server-Beispiele:
 
 ---
 
-### `domain`: Domäne filtern
-
-> **Spec = freier String.** Der Parameter ist in `api/components/parameters.yml` definiert, aber noch nicht an Endpunkte gebunden.
-
-Der `domain`-Parameter filtert die Ergebnisse nach Domäne. Ohne diesen Parameter liefert das Backend Ergebnisse über alle Domänen.
-Die Werte und Kürzel sind unter [Response-Inhalte → subject und domain](#subject-und-domain-fach-und-domäne) beschrieben.
-
-Das Fachkürzel ist ein sinnvoller Shortcut: `domain=rs,le` ist inhaltlich gleich zu `domain=de`, wenn in einem Jahr z.B. die Domänen _Orthografie_ und _Leseverstehen_ getestet werden.
-
-**Hinweis zum Mock-Server:** Der Mock-Server liefert `domain`-Felder auf Value-Groups zurück, hat aber keinen serverseitigen Filter implementiert — der Parameter wird ignoriert.
-
----
-
 ## Fehlerverhalten
 
 | HTTP-Status            | Bedeutung                                                                   | Beispiel                                                                              |
 |------------------------|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
-| `200` mit leerem Array | Parameter wird verstanden, aber es gibt keine Daten dafür                   | `?domain=sp` liefert `[]`, weil keine Sprachgebrauch-Daten vorliegen                  |
+| `200` mit leerem Array | Parameter wird verstanden, aber es gibt keine Daten dafür                   | `?filter=domain-sp` liefert `[]`, weil keine Sprachgebrauch-Daten vorliegen           |
 | `400 Bad Request`      | Syntaktisch ungültige Anfrage (in Spec definiert)                           |                                                                                       |
 | `404 Not Found`        | Pfad-ID (group, school, state) ist unbekannt                                | `/groups/unbekannt/competence-levels`                                                 |
 | `501 Not Implemented`  | Backend erkennt einen Query-Parameter-Wert nicht oder unterstützt ihn nicht | `?comparison=pilotierung` → `{ "message": "comparison 'pilotierung' not supported" }` |
 
 `501 Not Implemented` ist die vereinbarte Konvention, wenn ein Backend einen Parameter-Wert prinzipiell nicht unterstützt.
 Der Response-Body enthält eine erklärende Nachricht. Damit kann ein Frontend zwischen "keine Daten vorhanden" (200 + leeres Array) und "nicht unterstützt" (501) unterscheiden.
+
+Für `filter` gilt entsprechend:
+
+- **Präfix wird nicht unterstützt** → `501`, z.B. `?filter=district-bezirk-nord` bei einem Backend, das keine Bezirke kennt.
+- **Präfix wird unterstützt, die Id ist aber unbekannt** → `200` mit leerem Array. `404` bleibt für unbekannte Pfad-IDs reserviert.

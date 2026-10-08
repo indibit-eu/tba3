@@ -7,7 +7,7 @@ info:
     Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen
     (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten
     (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '1.2'
+  version: '2.0'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
@@ -33,6 +33,7 @@ paths:
         - $ref: '#/components/parameters/groupId'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Kompetenzstufenverteilung in der Lerngruppe
@@ -56,6 +57,7 @@ paths:
         - $ref: '#/components/parameters/groupId'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Lösungshäufigkeiten je Item in der Lerngruppe
@@ -80,6 +82,7 @@ paths:
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/aggregation'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Abhängig vom Typ berechnete Aggregation für die Lerngruppe
@@ -101,6 +104,7 @@ paths:
         - $ref: '#/components/parameters/schoolId'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Kompetenzstufenverteilung an der Schule
@@ -122,6 +126,7 @@ paths:
         - $ref: '#/components/parameters/schoolId'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Lösungshäufigkeiten je Item an der Schule
@@ -144,6 +149,7 @@ paths:
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/aggregation'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Abhängig vom Typ berechnete Aggregation für die Schule
@@ -165,6 +171,7 @@ paths:
         - $ref: '#/components/parameters/stateId'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Kompetenzstufenverteilung im Bundesland
@@ -188,6 +195,7 @@ paths:
         - $ref: '#/components/parameters/stateId'
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Lösungshäufigkeiten je Item im Bundesland
@@ -212,6 +220,7 @@ paths:
         - $ref: '#/components/parameters/type'
         - $ref: '#/components/parameters/aggregation'
         - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
       responses:
         '200':
           description: Abhängig vom Typ berechnete Aggregation für das Bundesland
@@ -290,10 +299,10 @@ components:
           value: ''
           description: Liefert Leistungsdaten auf Gruppenebene (Standard).
         Schüler:
-          value: students
+          value: student
           description: Liefert Leistungsdaten auf Schülerebene.
         Lerngruppe und Schüler:
-          value: group,students
+          value: group,student
           description: Liefert Leistungsdaten auf Gruppen- und Schülerebene.
         Land und Schulamtsbezirke:
           value: state,district
@@ -307,6 +316,56 @@ components:
       schema:
         type: string
       description: Filter für bestimmte Vergleichsgruppen, die ausgegeben werden sollen.
+    filter:
+      in: query
+      name: filter
+      explode: false
+      schema:
+        type: string
+      description: >-
+        Schränkt die Ergebnisse ein, z.B. auf eine Teilgruppe unterhalb der
+        angefragten Ebene oder auf einen Kontext wie Testprojekt, Fach oder
+        Domäne. Syntax `typ-id`, mehrere Werte kommasepariert.
+      examples:
+        Schüler:in:
+          value: student-1234
+          description: >-
+            Nur Ergebnisse für die Schülerin bzw. den Schüler mit der Id 1234
+            (z.B. auf /groups mit type=student).
+        Lerngruppe:
+          value: group-3a-deutsch
+          description: >-
+            Nur Ergebnisse für die Lerngruppe 3a-deutsch (z.B. auf /schools mit
+            type=group).
+        Schule:
+          value: school-gym-beispielstadt
+          description: >-
+            Nur Ergebnisse für die Schule gym-beispielstadt (z.B. auf /states
+            mit type=school).
+        Schulamt:
+          value: authority-schulamt-nord
+          description: >-
+            Nur Ergebnisse innerhalb des Schulamts schulamt-nord (z.B. auf
+            /states mit type=school).
+        Bezirk:
+          value: district-bezirk-nord
+          description: >-
+            Nur Ergebnisse innerhalb des Bezirks bezirk-nord (z.B. auf /states
+            mit type=authority).
+        Testprojekt:
+          value: testproject-v8-2024
+          description: Nur Ergebnisse aus dem Testprojekt / Durchgang v8-2024.
+        Fach:
+          value: subject-de
+          description: Nur Ergebnisse für das Fach Deutsch.
+        Domäne:
+          value: domain-le
+          description: Nur Ergebnisse für die Domäne Lesen.
+        Kombiniert:
+          value: subject-en,domain-le
+          description: >-
+            Verschiedene Präfixe werden kombiniert (hier mit einem UND). Nur
+            Ergebnisse für die Domäne Leseverstehen im Fach Englisch.
     aggregation:
       in: query
       name: aggregation
