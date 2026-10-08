@@ -119,9 +119,9 @@ Covariates und Properties sind Erweiterungspunkte, über die systemspezifische K
 ## Offenheit vs. Standardisierung
 
 Die Spannung zwischen den beiden Teilen der Schnittstelle zeigt sich vor allem beim **inhaltlichen Vertrag**:
-Die Query-Parameter `type`, `comparison`, `aggregation` und `domain` sind als freie Strings definiert.
-Für `type` gibt es z.B. schon Beispiele in Spezifikation und Mock-Server (`students`, `group,students`, `state,district`), aber kein festes Enum.
-Ein Bericht+Backend-Paar kann eigene Werte einführen. Für `comparison`, `aggregation` und `domain` gibt es ebenfalls keine Vorgaben.
+Die Query-Parameter `type`, `comparison`, `aggregation` und `filter` sind als freie Strings definiert.
+Für `type` gibt es z.B. schon Beispiele in Spezifikation und Mock-Server (`student`, `group,student`, `state,district`), aber kein festes Enum.
+Ein Bericht+Backend-Paar kann eigene Werte einführen. Für `comparison`, `aggregation` und `filter` gibt es ebenfalls keine Vorgaben.
 Auch `properties` sind frei erweiterbar, und Kovariaten erlauben `other`-Typen.
 
 Diese Offenheit gibt jedem Backend maximale Flexibilität bei der Implementierung.
@@ -138,7 +138,7 @@ Aus dieser Spannung zwischen Flexibilität und Interoperabilität ergeben sich v
 
 |                             | Stufe 1: OpenAPI-Spec-konform                                             | Stufe 2: Spec + Konventionen                                                                                     | Stufe 3: Vollständig ausspezifiziert                                                |
 |-----------------------------|---------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| **Was ist standardisiert?** | Endpunkte, Antwortformat, Datentypen                                      | + dokumentierte Konventionen für `comparison`, `aggregation`, `type`, `domain` (ggf. `covariates`, `properties`) | Endliche Liste aller Berichtselemente, Spec deckt jeden Anwendungsfall ab           |
+| **Was ist standardisiert?** | Endpunkte, Antwortformat, Datentypen                                      | + dokumentierte Konventionen für `comparison`, `aggregation`, `type`, `filter` (ggf. `covariates`, `properties`) | Endliche Liste aller Berichtselemente, Spec deckt jeden Anwendungsfall ab           |
 | **Was ist austauschbar?**   | Einfache/allgemeine Berichtselemente, z.B. eine Kompetenzstufenverteilung | + komplexere Elemente (z.B. Kompetenzstufenverteilung mit Vergleichsgruppen)                                     | Alle Berichtselemente vollständig austauschbar                                      |
 | **Implementierungsaufwand** | Gering: Grunddaten werden ohnehin berechnet                               | Mittel: Query-Param-Parsing, mehr Berechnungskombinationen                                                       | Explodierend: alle Berichtselemente × alle optionalen Kombinationen × alle Backends |
 | **Flexibilität**            | Maximal: jeder implementiert nur eigene Use-Cases                         | Hoch: eigene Erweiterungen bleiben möglich                                                                       | Gering: jede Änderung betrifft alle Partner                                         |
@@ -154,7 +154,7 @@ benötigen bei der Verwendung mit einem anderen Backend eventuell Anpassungen, d
 ### Stufe 2: OpenAPI-Spec + Konventionen (Empfehlung)
 
 Aufbauend auf Stufe 1 dokumentieren wir im Projekt Konventionen für bekannte Anwendungsfälle für Query-Parameter und offenen Response-Bestandteilen:
-Welche Werte für `comparison`, `aggregation`, `type` und `domain` verwendet werden und was sie bedeuten.
+Welche Werte für `comparison`, `aggregation`, `type` und `filter` verwendet werden und was sie bedeuten.
 Beziehungsweise welche Kovariaten und Properties existieren können und was diese jeweils bedeuten.
 Backends liefern für nicht unterstützte Konventionen ein `501 Not Implemented` zurück.
 

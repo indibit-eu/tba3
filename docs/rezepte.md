@@ -209,13 +209,13 @@ Liefert pro Leitidee die mittlere Lösungsquote der Klasse.
 **Lösungshäufigkeiten nach Leitidee auf Klassen- und Schülerebene:**
 
 ```
-GET /groups/8a-mathe/aggregations?type=group,students&aggregation=competence
+GET /groups/8a-mathe/aggregations?type=group,student&aggregation=competence
 ```
 
 Liefert pro Leitidee die mittlere Lösungsquote der Klasse **und** je SuS. Mit `comparison` lassen sich zusätzlich Referenzwerte (z.B. Pilotierung, Landesmittelwert) ergänzen:
 
 ```
-GET /groups/8a-mathe/aggregations?type=group,students&aggregation=competence&comparison=state-average
+GET /groups/8a-mathe/aggregations?type=group,student&aggregation=competence&comparison=state-average
 ```
 
 ### Aufteilen in mehrere Requests
@@ -225,10 +225,10 @@ Stattdessen kann man die Daten in kleinere, übersichtlichere Requests aufteilen
 
 ```
 GET /groups/8a-mathe/aggregations?type=group&aggregation=competence
-GET /groups/8a-mathe/aggregations?type=students&aggregation=competence
+GET /groups/8a-mathe/aggregations?type=student&aggregation=competence
 ```
 
-Das liefert die gleichen Daten wie ein kombinierter Request mit `type=group,students`, aber in kleineren, leichter verarbeitbaren Responses.
+Das liefert die gleichen Daten wie ein kombinierter Request mit `type=group,student`, aber in kleineren, leichter verarbeitbaren Responses.
 Welcher Weg besser passt, hängt vom Anwendungsfall ab.
 
 ### Zusammenfassung
@@ -236,8 +236,8 @@ Welcher Weg besser passt, hängt vom Anwendungsfall ab.
 | Was                                        | Wie                                                                    |
 |--------------------------------------------|------------------------------------------------------------------------|
 | Bista-Ebene wählen (z.B. Kompetenzbereich) | `aggregation=competence`                                               |
-| Gruppen-Ebene wählen (z.B. Klasse + SuS)   | `type=group,students`                                                  |
+| Gruppen-Ebene wählen (z.B. Klasse + SuS)   | `type=group,student`                                                   |
 | Referenzwerte ergänzen                     | `comparison=state-average`                                             |
-| Alles kombinieren                          | `?type=group,students&aggregation=competence&comparison=state-average` |
+| Alles kombinieren                          | `?type=group,student&aggregation=competence&comparison=state-average`  |
 | Alternativ: aufteilen                      | Separate Requests je `type` für kleinere Responses                     |
 
