@@ -1,0 +1,28 @@
+type: object
+description: Kennwerte für eine weitere Ergebnisausprägung (neben "richtig"), bezogen auf dasselbe `total` wie die übergeordnete deskriptive Statistik.
+required:
+  - type
+  - frequency
+  - mean
+properties:
+  type:
+    type: string
+    description: Ergebnisausprägung. Freier String, Werte werden vom Backend festgelegt und dokumentiert.
+    examples:
+      - wrong
+      - skipped
+  frequency:
+    type: integer
+    description: Absolute Anzahl der Items mit dieser Ergebnisausprägung
+    examples:
+      - 1
+  mean:
+    type: number
+    description: Anteil der Items mit dieser Ergebnisausprägung an der Gesamtzahl (`total`)
+    minimum: 0
+    maximum: 1
+    examples:
+      - 0.25
+  standardDeviation:
+    type: number
+    description: Standardabweichung des Anteils dieser Ergebnisausprägung

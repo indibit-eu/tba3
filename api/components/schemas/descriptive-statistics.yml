@@ -12,7 +12,7 @@ properties:
     properties:
       total:
         type: integer
-        description: Gesamtzahl der Items
+        description: Gesamtzahl der Items (Bezugsgröße für alle Ausprägungen, auch in `other`)
         examples:
           - 4
       mean:
@@ -30,3 +30,12 @@ properties:
       standardDeviation:
         type: number
         description: Standardabweichung der mittleren Lösungsquote
+      other:
+        type: array
+        description: >-
+          Optionale Kennwerte für weitere Ergebnisausprägungen neben "richtig" (z.B. falsch, ausgelassen).
+          `frequency` und `mean` der Einträge beziehen sich auf dasselbe `total`.
+          Idealerweise ergeben die Felder für "richtig" zusammen mit allen Einträgen in `other` das `total`; es dürfen aber auch nur einzelne Ausprägungen übermittelt werden.
+          Fehlt `other`, liegen keine Informationen zu weiteren Ausprägungen vor.
+        items:
+          $ref: './descriptive-statistics-other.yml'
