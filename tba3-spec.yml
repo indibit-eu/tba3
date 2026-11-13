@@ -7,7 +7,7 @@ info:
     Endpunkte für die Abfrage von Leistungsdaten auf verschiedenen Ebenen
     (Lerngruppe, Schule, Bundesland) und für verschiedene Arten von Daten
     (Kompetenzstufen, Item-Statistiken, Aggregationen).
-  version: '1.2'
+  version: '1.3'
   license:
     name: MIT
     url: https://opensource.org/license/MIT
@@ -653,6 +653,41 @@ components:
         parameters:
           description: Itemkennwerte des IQB für das Item
           $ref: '#/components/schemas/item-parameters'
+    descriptive-statistics-other:
+      type: object
+      description: >-
+        Kennwerte für eine weitere Ergebnisausprägung (neben "richtig"), bezogen
+        auf dasselbe `total` wie die übergeordnete deskriptive Statistik.
+      required:
+        - type
+        - frequency
+        - mean
+      properties:
+        type:
+          type: string
+          description: >-
+            Ergebnisausprägung. Freier String, Werte werden vom Backend
+            festgelegt und dokumentiert.
+          examples:
+            - wrong
+            - skipped
+        frequency:
+          type: integer
+          description: Absolute Anzahl der Items mit dieser Ergebnisausprägung
+          examples:
+            - 1
+        mean:
+          type: number
+          description: >-
+            Anteil der Items mit dieser Ergebnisausprägung an der Gesamtzahl
+            (`total`)
+          minimum: 0
+          maximum: 1
+          examples:
+            - 0.25
+        standardDeviation:
+          type: number
+          description: Standardabweichung des Anteils dieser Ergebnisausprägung
     descriptive-statistics:
       type: object
       required:
@@ -668,7 +703,9 @@ components:
           properties:
             total:
               type: integer
-              description: Gesamtzahl der Items
+              description: >-
+                Gesamtzahl der Items (Bezugsgröße für alle Ausprägungen, auch in
+                `other`)
               examples:
                 - 4
             mean:
@@ -686,6 +723,18 @@ components:
             standardDeviation:
               type: number
               description: Standardabweichung der mittleren Lösungsquote
+            other:
+              type: array
+              description: >-
+                Optionale Kennwerte für weitere Ergebnisausprägungen neben
+                "richtig" (z.B. falsch, ausgelassen). `frequency` und `mean` der
+                Einträge beziehen sich auf dasselbe `total`. Idealerweise
+                ergeben die Felder für "richtig" zusammen mit allen Einträgen in
+                `other` das `total`; es dürfen aber auch nur einzelne
+                Ausprägungen übermittelt werden. Fehlt `other`, liegen keine
+                Informationen zu weiteren Ausprägungen vor.
+              items:
+                $ref: '#/components/schemas/descriptive-statistics-other'
     item-statistics:
       type: array
       description: Statistiken für einzelne Items in der Wertegruppe
